@@ -1,0 +1,20 @@
+version: '3'
+services:
+  c2pub-db:
+    image: mongo:4.4.17
+    volumes:
+      - c2pub_data:/data/db
+    ports:
+      - 2721:27017
+  c2pub-be:
+    container_name: c2pub-be
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '8701:8700'
+    volumes:
+      - .:/src:cached
+
+volumes:
+  c2pub_data:
