@@ -1,21 +1,24 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateTaxDto {
+export class CreateAccountDto {
   @ApiPropertyOptional({ default: 'TVA' })
   @IsString()
   code: string;
 
-  @ApiPropertyOptional({ default: '20%' })
-  @IsString()
-  value: number;
-
-  @ApiPropertyOptional({ default: 'SPOT' })
+  @ApiPropertyOptional({ default: 'TVA' })
   @IsString()
   name: string;
 
-  @ApiProperty({ example: 'art desc' })
+  @ApiPropertyOptional({ default: 0 })
+  @IsString()
+  value: number;
+
+  @ApiProperty({ example: 'tax desc' })
   @IsNotEmpty()
   @IsEmail()
   description: string;
+
+  @ApiPropertyOptional()
+  category?: string;
 }

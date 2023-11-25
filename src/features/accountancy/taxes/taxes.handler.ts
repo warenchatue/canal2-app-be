@@ -4,9 +4,9 @@ import { BaseHandler } from 'src/common/shared/base-handler';
 import { Tax } from './entities/tax.entity';
 
 @Injectable()
-export class TaxsHandler extends BaseHandler {
+export class TaxesHandler extends BaseHandler {
   constructor() {
-    super(TaxsHandler.name);
+    super(TaxesHandler.name);
   }
 
   @OnEvent('tax.created')

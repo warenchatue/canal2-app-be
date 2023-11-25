@@ -3,17 +3,19 @@ import { Module } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { CONNECTION_TYPE, DB_CERT, DB_HOST } from './common/vars';
+import { AccountsModule } from './features/accountancy/accounts/accounts.module';
+import { TaxesModule } from './features/accountancy/taxes/taxes.module';
+import { AnnouncersModule } from './features/announcers/announcers.module';
+import { ArticlesModule } from './features/articles/articles.module';
 import { AuthModule } from './features/auth/auth.module';
 import { CountriesModule } from './features/countries/countries.module';
 import { HoursModule } from './features/hours/hours.module';
+import { PackagesModule } from './features/orders/orders.module';
+import { OrgsModule } from './features/orgs/orgs.module';
+import { PlanningsModule } from './features/plannings/plannings.module';
+import { SpotsModule } from './features/products/products.module';
 import { RolesModule } from './features/roles/roles.module';
 import { UsersModule } from './features/users/users.module';
-import { AnnouncersModule } from './features/announcers/announcers.module';
-import { PackagesModule } from './features/orders/orders.module';
-import { SpotsModule } from './features/products/products.module';
-import { PlanningsModule } from './features/plannings/plannings.module';
-import { ArticlesModule } from './features/articles/articles.module';
-import { OrgsModule } from './features/orgs/orgs.module';
 
 const features = [
   AuthModule,
@@ -27,6 +29,8 @@ const features = [
   PlanningsModule,
   ArticlesModule,
   OrgsModule,
+  AccountsModule,
+  TaxesModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {

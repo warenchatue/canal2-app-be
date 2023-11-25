@@ -11,10 +11,10 @@ export class Tax extends BaseSchema {
   name: string;
 
   @Prop()
-  description: string;
+  value: string;
 
-  // @Prop({ type: sc.Types.ObjectId, ref: () => Country })
-  // category: sc.Types.ObjectId | string;
+  @Prop()
+  description: string;
 }
 
 export type TaxDocument = Tax & Document;
