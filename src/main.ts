@@ -14,7 +14,7 @@ async function bootstrap() {
   // Enable Cors
   app.enableCors();
 
-  // Api versionning
+  // Api versioning
   app.enableVersioning();
 
   // OpenAPI documentation

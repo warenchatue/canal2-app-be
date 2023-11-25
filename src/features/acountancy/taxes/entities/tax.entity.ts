@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, PopulateOptions, Schema as sc } from 'mongoose';
+import { Document, PopulateOptions } from 'mongoose';
 import { BaseSchema } from 'src/common/shared/base-schema';
-import { Country } from 'src/features/countries/entities/country.entity';
 
 @Schema({ timestamps: true })
-export class Article extends BaseSchema {
+export class Tax extends BaseSchema {
   @Prop()
   code: string;
 
@@ -18,10 +17,10 @@ export class Article extends BaseSchema {
   // category: sc.Types.ObjectId | string;
 }
 
-export type ArticleDocument = Article & Document;
-export const ArticleSchema = SchemaFactory.createForClass(Article);
+export type TaxDocument = Tax & Document;
+export const TaxSchema = SchemaFactory.createForClass(Tax);
 
-export const ARTICLE_POPULATION = {
-  model: 'Article',
+export const TAX_POPULATION = {
+  model: 'Tax',
   select: ['name', 'description'],
 } as PopulateOptions;

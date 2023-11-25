@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateArticleDto } from './dto/create-article.dto';
-import { Article, ArticleDocument } from './entities/article.entity';
+import { CreateTaxDto } from './dto/create-tax.dto';
+import { Tax, TaxDocument } from './entities/tax.entity';
 import * as bcrypt from 'bcrypt';
-import { UpdateArticleDto } from './dto/update-article.dto';
+import { UpdateTaxDto } from './dto/update-tax.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DeletableMixin } from 'src/common/mixins/deletable.mixin';
@@ -11,28 +11,28 @@ import { SALT_ROUND } from 'src/common/vars';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
-export class ArticlesService extends DeletableMixin<Article> {
+export class TaxsService extends DeletableMixin<Tax> {
   constructor(
-    @InjectModel(Article.name)
-    private readonly articles: Model<ArticleDocument>,
+    @InjectModel(Tax.name)
+    private readonly taxes: Model<TaxDocument>,
     private readonly event: EventEmitter2,
   ) {
     super();
   }
 
-  create(dto: CreateArticleDto) {
-    return this.articles.create({
+  create(dto: CreateTaxDto) {
+    return this.taxes.create({
       ...dto,
     });
   }
 
   findOne(_id: string) {
-    return this.articles.findById(_id).orFail().exec();
+    return this.taxes.findById(_id).orFail().exec();
   }
 
   find(states = [State.active]) {
     return (
-      this.articles
+      this.taxes
         .find()
         .where('state')
         .in(states)
@@ -47,11 +47,11 @@ export class ArticlesService extends DeletableMixin<Article> {
   }
 
   findAll() {
-    return this.articles.find().exec();
+    return this.taxes.find().exec();
   }
 
-  async update(_id: string, dto: UpdateArticleDto) {
-    return await this.articles
+  async update(_id: string, dto: UpdateTaxDto) {
+    return await this.taxes
       .findByIdAndUpdate(_id, { $set: dto }, { new: true })
       .orFail()
       .exec();

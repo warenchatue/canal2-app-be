@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateArticleDto } from './dto/create-article.dto';
-import { Article, ArticleDocument } from './entities/article.entity';
+import { CreateAccountDto } from './dto/create-account.dto';
+import { Account, AccountDocument } from './entities/account.entity';
 import * as bcrypt from 'bcrypt';
-import { UpdateArticleDto } from './dto/update-article.dto';
+import { UpdateAccountDto } from './dto/update-account.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DeletableMixin } from 'src/common/mixins/deletable.mixin';
@@ -11,28 +11,28 @@ import { SALT_ROUND } from 'src/common/vars';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
-export class ArticlesService extends DeletableMixin<Article> {
+export class AccountsService extends DeletableMixin<Account> {
   constructor(
-    @InjectModel(Article.name)
-    private readonly articles: Model<ArticleDocument>,
+    @InjectModel(Account.name)
+    private readonly accounts: Model<AccountDocument>,
     private readonly event: EventEmitter2,
   ) {
     super();
   }
 
-  create(dto: CreateArticleDto) {
-    return this.articles.create({
+  create(dto: CreateAccountDto) {
+    return this.accounts.create({
       ...dto,
     });
   }
 
   findOne(_id: string) {
-    return this.articles.findById(_id).orFail().exec();
+    return this.accounts.findById(_id).orFail().exec();
   }
 
   find(states = [State.active]) {
     return (
-      this.articles
+      this.accounts
         .find()
         .where('state')
         .in(states)
@@ -47,11 +47,11 @@ export class ArticlesService extends DeletableMixin<Article> {
   }
 
   findAll() {
-    return this.articles.find().exec();
+    return this.accounts.find().exec();
   }
 
-  async update(_id: string, dto: UpdateArticleDto) {
-    return await this.articles
+  async update(_id: string, dto: UpdateAccountDto) {
+    return await this.accounts
       .findByIdAndUpdate(_id, { $set: dto }, { new: true })
       .orFail()
       .exec();

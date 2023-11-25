@@ -16,28 +16,28 @@ import * as _ from 'lodash';
 import { sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { URequest } from 'src/common/shared/request';
-import { UseJwt } from '../auth/auth.decorator';
-import { UpdateArticleDto } from './dto/update-article.dto';
-import { ArticlesService } from './articles.service';
-import { CreateArticleDto } from './dto/create-article.dto';
+import { UseJwt } from '../../auth/auth.decorator';
+import { UpdateTaxDto } from './dto/update-tax.dto';
+import { TaxsService } from './taxes.service';
+import { CreateTaxDto } from './dto/create-tax.dto';
 // import { FirebaseService } from '../firebase/firebase.service';
 
-@Controller('articles')
+@Controller('taxes')
 @UseInterceptors(ClassSerializerInterceptor)
-@ApiTags('Articles')
-export class ArticlesController extends BaseController {
-  private logger = new Logger(ArticlesController.name);
+@ApiTags('Taxes')
+export class TaxsController extends BaseController {
+  private logger = new Logger(TaxsController.name);
 
-  constructor(private readonly articlesServices: ArticlesService) {
+  constructor(private readonly taxesServices: TaxsService) {
     super();
   }
 
-  async updateArticle(
-    @Body() dto: UpdateArticleDto,
+  async updateTax(
+    @Body() dto: UpdateTaxDto,
     @Req() { user }: URequest,
   ) {
     return await this.run(
-      async () => await this.articlesServices.update(user._id, dto),
+      async () => await this.taxesServices.update(user._id, dto),
     );
   }
 
@@ -46,7 +46,7 @@ export class ArticlesController extends BaseController {
   @Get()
   async getAll() {
     return await this.run(async () => {
-      const result = await this.articlesServices.find();
+      const result = await this.taxesServices.find();
       const final_result = result.map((e) => {
         const json = e.toJSON();
         json['_id'] = json['_id'].toString();
@@ -60,10 +60,10 @@ export class ArticlesController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Get(':articleId')
-  async getAccount(@Param('articleId') articleId: string) {
+  @Get(':taxId')
+  async getAccount(@Param('taxId') taxId: string) {
     return await this.run(async () => {
-      const result = (await this.articlesServices.findOne(articleId)).toJSON();
+      const result = (await this.taxesServices.findOne(taxId)).toJSON();
       console.log(result);
       return result;
     });
@@ -72,10 +72,10 @@ export class ArticlesController extends BaseController {
   @ApiBearerAuth()
   @UseJwt()
   @Post()
-  async createArticle(@Body() dto: CreateArticleDto) {
+  async createTax(@Body() dto: CreateTaxDto) {
     try {
-      const article = await (await this.articlesServices.create(dto)).toJSON();
-      return article;
+      const tax = await (await this.taxesServices.create(dto)).toJSON();
+      return tax;
     } catch (error) {
       sendError(error);
     }
@@ -83,16 +83,16 @@ export class ArticlesController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Put(':articleId')
+  @Put(':taxId')
   async updateAccount(
-    @Param('articleId') accountId: string,
-    @Body() dto: UpdateArticleDto,
+    @Param('taxId') accountId: string,
+    @Body() dto: UpdateTaxDto,
   ) {
     try {
-      const article = await (
-        await this.articlesServices.update(accountId, dto)
+      const tax = await (
+        await this.taxesServices.update(accountId, dto)
       ).toJSON();
-      return article;
+      return tax;
     } catch (error) {
       sendError(error);
     }
@@ -100,13 +100,13 @@ export class ArticlesController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Delete(':articleId')
-  async deleteArticle(
-    @Param('articleId') articleId: string,
+  @Delete(':taxId')
+  async deleteTax(
+    @Param('taxId') taxId: string,
     @Req() { user }: URequest,
   ) {
     return await this.run(async () => {
-      return await this.articlesServices.deleteOne(articleId);
+      return await this.taxesServices.deleteOne(taxId);
     });
   }
 }

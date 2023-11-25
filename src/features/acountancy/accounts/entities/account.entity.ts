@@ -4,7 +4,7 @@ import { BaseSchema } from 'src/common/shared/base-schema';
 import { Country } from 'src/features/countries/entities/country.entity';
 
 @Schema({ timestamps: true })
-export class Article extends BaseSchema {
+export class Account extends BaseSchema {
   @Prop()
   code: string;
 
@@ -18,10 +18,10 @@ export class Article extends BaseSchema {
   // category: sc.Types.ObjectId | string;
 }
 
-export type ArticleDocument = Article & Document;
-export const ArticleSchema = SchemaFactory.createForClass(Article);
+export type AccountDocument = Account & Document;
+export const AccountSchema = SchemaFactory.createForClass(Account);
 
-export const ARTICLE_POPULATION = {
-  model: 'Article',
+export const ACCOUNT_POPULATION = {
+  model: 'Account',
   select: ['name', 'description'],
 } as PopulateOptions;

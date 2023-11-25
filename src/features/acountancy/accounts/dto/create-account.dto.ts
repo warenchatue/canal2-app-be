@@ -7,7 +7,7 @@ import {
   IsString,
 } from 'class-validator';
 
-export class CreateArticleDto {
+export class CreateAccountDto {
   @ApiPropertyOptional({ default: 'SPOT' })
   @IsString()
   code: string;

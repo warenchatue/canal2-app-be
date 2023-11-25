@@ -1,16 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateArticleDto {
-  @ApiPropertyOptional({ default: 'SPOT' })
+export class CreateTaxDto {
+  @ApiPropertyOptional({ default: 'TVA' })
   @IsString()
   code: string;
+
+  @ApiPropertyOptional({ default: '20%' })
+  @IsString()
+  value: number;
 
   @ApiPropertyOptional({ default: 'SPOT' })
   @IsString()
@@ -20,7 +18,4 @@ export class CreateArticleDto {
   @IsNotEmpty()
   @IsEmail()
   description: string;
-
-  @ApiPropertyOptional()
-  category?: string;
 }
