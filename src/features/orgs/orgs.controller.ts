@@ -52,8 +52,7 @@ export class OrgsController extends BaseController {
   @Get()
   async findAll(@Req() { user }: URequest, @Query() query: FindQueryDto<Org>) {
     return this.run(async () => {
-      const userId = user._id;
-      const result = await this.orgsService.findByUser(userId, query);
+      const result = await this.orgsService.findAll();
       return result;
     });
   }

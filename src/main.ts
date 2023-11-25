@@ -19,7 +19,7 @@ async function bootstrap() {
 
   // OpenAPI documentation
   const config = new DocumentBuilder()
-    .setTitle('2Spot API')
+    .setTitle('DinoES API')
     .setVersion(version)
     .addBearerAuth()
     .setDescription('The Canal2 Spot System API')

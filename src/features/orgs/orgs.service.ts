@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectModel } from '@nestjs/mongoose';
 import { AnyKeys, AnyObject, FilterQuery, Model } from 'mongoose';
-import { paginate } from 'nestjs-paginate-mongo';
-import { FindQueryDto } from 'src/common/dto/find-query.dto';
 import { DeletableMixin } from 'src/common/mixins/deletable.mixin';
 import { State } from 'src/common/shared/base-schema';
 import { CreateOrgDto } from './dto/create-org.dto';
@@ -36,90 +34,17 @@ export class OrgsService extends DeletableMixin<Org> {
     return populate ? query.populate(POPULATION_DATA).exec() : query.exec();
   }
 
-  findAll(query: FindQueryDto<Org>) {
-    const { states, perPage, page } = query;
-    return paginate(
-      this.orgs
-        .find()
-        .where('state')
-        .in(states ?? [State.active]),
-      { page, perPage },
-    );
-  }
-
-  findByUser(accountId: string, query: FindQueryDto<Org>) {
-    const { states, perPage, page } = query;
-    return paginate(
-      this.orgs
-        .find({
-          $or: [
-            { administrators: accountId },
-            { owner: accountId },
-            { members: accountId },
-          ],
-        })
-        .where('state')
-        .in(states ?? [State.active]),
-      { page, perPage },
-    );
-  }
-
-  findAllByUser(accountId: string, query: FindQueryDto<Org>) {
-    const { states, perPage, page } = query;
-    return paginate(
-      this.orgs
-        .find({
-          $or: [
-            { administrators: accountId },
-            { owner: accountId },
-            { members: accountId },
-          ],
-        })
-        .where('state')
-        .in(states ?? [State.active])
-        .populate({
-          path: 'owner',
-          select: ['_id', 'firstName', 'lastName', 'phone'],
-        }),
-      { page, perPage },
-    );
-  }
-
-  findAllByUserNP(accountId: string) {
+  findAll() {
     return this.orgs
-      .find({
-        $or: [
-          { administrators: accountId },
-          { owner: accountId },
-          { members: accountId },
-        ],
-      })
+      .find()
+      .populate([
+        {
+          path: 'country',
+          model: 'Country',
+        },
+      ])
       .where('state')
-      .in([State.active])
-      .populate({
-        path: 'owner',
-        select: ['_id', 'firstName', 'lastName', 'phone'],
-      });
-  }
-
-  async isAdminOf(accountId: string, orgId: string): Promise<boolean> {
-    try {
-      await this.orgs
-        .findOne({
-          $and: [
-            { _id: orgId },
-            {
-              $or: [{ administrators: accountId }, { owner: accountId }],
-            },
-          ],
-        })
-        .orFail()
-        .exec();
-      return true;
-    } catch (ex) {
-      console.log(ex);
-      return false;
-    }
+      .in([State.active]);
   }
 
   async isMemberOf(
@@ -190,71 +115,8 @@ export class OrgsService extends DeletableMixin<Org> {
       .exec();
   }
 
-  pushAnnouncement(_id: string, announcementId: string) {
-    return this.orgs
-      .findByIdAndUpdate(
-        _id,
-        { $push: { announcements: announcementId } },
-        { new: true },
-      )
-      .orFail()
-      .exec();
-  }
-
-  findAnnouncements(_id: string) {
-    return this.orgs
-      .findById(_id)
-      .select('announcements')
-      .populate('announcements')
-      .orFail()
-      .exec();
-  }
-
   updateOrg(_id: string, dto: UpdateOrgDto) {
     return this.orgs.findByIdAndUpdate(_id, { $set: dto });
-  }
-
-  pushUnconfirmed(_id: string, members: string[]) {
-    return this.orgs
-      .findByIdAndUpdate(
-        _id,
-        { $push: { unconfirmed: members } },
-        { new: true },
-      )
-      .orFail()
-      .exec();
-  }
-
-  confirmMembership(_id: string, member: string) {
-    return this.orgs
-      .findByIdAndUpdate(
-        _id,
-        { $pull: { unconfirmed: member }, $push: { members: member } },
-        { new: true },
-      )
-      .orFail()
-      .exec();
-  }
-
-  denyMembership(_id: string, member: string) {
-    return this.orgs
-      .findByIdAndUpdate(_id, { $pull: { unconfirmed: member } }, { new: true })
-      .orFail()
-      .exec();
-  }
-
-  async isUnconfirmedOf(accountId: string, orgId: string) {
-    try {
-      await this.orgs
-        .findOne({
-          $and: [{ _id: orgId }, { unconfirmed: accountId }],
-        })
-        .orFail()
-        .exec();
-      return true;
-    } catch (ex) {
-      return false;
-    }
   }
 
   pull(_id: string, dto: AnyKeys<OrgDocument> & AnyObject) {
@@ -274,9 +136,9 @@ export class OrgsService extends DeletableMixin<Org> {
   async findMembersIds(_id: string) {
     const result = await this.orgs
       .findById(_id)
-      .select(['members', 'owner', 'administrators'])
+      .select(['members', 'owner'])
       .orFail()
       .exec();
-    return [result.owner, ...result.members, ...result.administrators];
+    return [result.owner, ...result.members];
   }
 }

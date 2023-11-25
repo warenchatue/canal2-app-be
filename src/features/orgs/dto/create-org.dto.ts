@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateOrgDto {
   @ApiProperty({ example: 'My org', required: true })
@@ -7,7 +7,7 @@ export class CreateOrgDto {
   @IsString()
   name: string;
 
-  @ApiProperty({ example: 'my-org', required: true })
+  @ApiProperty({ example: 'my-org', required: false })
   @IsNotEmpty()
   @IsString()
   slug: string;
@@ -19,6 +19,23 @@ export class CreateOrgDto {
   @ApiProperty({ example: 'http://', required: false })
   @IsString()
   website?: string;
+
+  @ApiProperty({ example: 'NC-XX', required: false })
+  @IsString()
+  nc?: string;
+
+  @ApiProperty({ example: 'RC-XX', required: false })
+  @IsString()
+  rc?: string;
+
+  @IsString()
+  address?: string;
+
+  @IsString()
+  phone?: string;
+
+  @IsString()
+  city?: string;
 
   @ApiProperty({ example: '{}', required: false })
   country?: any;
