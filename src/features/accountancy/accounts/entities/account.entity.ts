@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, PopulateOptions, Schema as sc } from 'mongoose';
+import { Document, PopulateOptions } from 'mongoose';
 import { BaseSchema } from 'src/common/shared/base-schema';
-import { Country } from 'src/features/countries/entities/country.entity';
 
 @Schema({ timestamps: true })
 export class Account extends BaseSchema {
@@ -9,7 +8,10 @@ export class Account extends BaseSchema {
   code: string;
 
   @Prop()
-  name: string;
+  label: string;
+
+  @Prop()
+  position: string;
 
   @Prop()
   description: string;

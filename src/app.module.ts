@@ -9,7 +9,7 @@ import { AnnouncersModule } from './features/announcers/announcers.module';
 import { ArticlesModule } from './features/articles/articles.module';
 import { AuthModule } from './features/auth/auth.module';
 import { CountriesModule } from './features/countries/countries.module';
-import { HoursModule } from './features/hours/hours.module';
+import { HoursModule } from './features/pub/hours/hours.module';
 import { PackagesModule } from './features/orders/orders.module';
 import { OrgsModule } from './features/orgs/orgs.module';
 import { PlanningsModule } from './features/plannings/plannings.module';

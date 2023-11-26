@@ -16,7 +16,7 @@ import * as _ from 'lodash';
 import { sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { URequest } from 'src/common/shared/request';
-import { UseJwt } from '../auth/auth.decorator';
+import { UseJwt } from '../../auth/auth.decorator';
 import { HoursService } from './hours.service';
 import { UpdateHourDto } from './dto/update-hour.dto';
 import { CreateHourDto } from './dto/create-hour.dto';

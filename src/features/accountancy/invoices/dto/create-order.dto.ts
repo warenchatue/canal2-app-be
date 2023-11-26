@@ -4,13 +4,14 @@ import {
   IsArray,
   IsBoolean,
   IsNotEmpty,
+  IsNumber,
   IsString,
   Max,
   Min,
 } from 'class-validator';
 import { toBoolean } from 'src/common/helpers';
 export class CreateOrderDto {
-  @ApiProperty({ example: 'My awesome order' })
+  @ApiProperty({ example: 'My awesome package' })
   @IsNotEmpty()
   @IsString()
   @Min(5)
@@ -19,6 +20,35 @@ export class CreateOrderDto {
 
   @ApiPropertyOptional({ example: 'XAFG_7587' })
   code: string;
+
+  @ApiProperty({ example: 25 })
+  @IsNotEmpty()
+  @IsNumber()
+  numberSpots: number;
+
+  @ApiProperty({ example: 25 })
+  @IsNotEmpty()
+  @IsNumber()
+  numberPaid: number;
+
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  numberProducts: number;
+
+  @ApiPropertyOptional({ example: 25 })
+  numberPlay?: number;
+
+  @ApiProperty()
+  @IsString()
+  period: string;
+
+  @ApiPropertyOptional()
+  @IsArray()
+  products?: string[];
+
+  @ApiPropertyOptional()
+  @IsArray()
+  plannings?: string[];
 
   @ApiProperty()
   @IsString()
@@ -31,6 +61,22 @@ export class CreateOrderDto {
   @ApiPropertyOptional()
   @IsString()
   orderValidator: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  billValidator: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  planningValidator: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  planningValidatorSignature: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  adminValidator: string;
 
   @ApiPropertyOptional()
   requiredAdminValidator: boolean;
@@ -52,6 +98,11 @@ export class CreateOrderDto {
   @IsBoolean()
   closed: boolean;
 
+  @ApiPropertyOptional({ default: false })
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  planningValidated: boolean;
+
   @ApiPropertyOptional({ example: 'My awesome package description' })
   @IsString()
   @Min(15)
@@ -62,13 +113,9 @@ export class CreateOrderDto {
   @IsString()
   contractUrl?: string;
 
-  @ApiPropertyOptional({ example: '' })
-  invoice?: string;
-
-  @ApiPropertyOptional()
-  @IsArray()
-  package?: string;
-
   @ApiPropertyOptional({ example: '{}' })
   items?: any[];
+
+  @ApiPropertyOptional({ example: '{}' })
+  invoice?: any;
 }

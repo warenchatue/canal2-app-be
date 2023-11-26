@@ -11,6 +11,6 @@ export class AccountsHandler extends BaseHandler {
 
   @OnEvent('article.created')
   handleTaxCreated(payload: Account) {
-    this.logger.log(`Tax ${payload.name} created.`);
+    this.logger.log(`Tax ${payload.label} created.`);
   }
 }

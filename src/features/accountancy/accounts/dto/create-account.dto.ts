@@ -2,17 +2,17 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateAccountDto {
-  @ApiPropertyOptional({ default: 'TVA' })
+  @ApiPropertyOptional({ default: '7011' })
   @IsString()
   code: string;
 
-  @ApiPropertyOptional({ default: 'TVA' })
+  @ApiPropertyOptional({ default: 'Fournisseur' })
   @IsString()
-  name: string;
+  label: string;
 
   @ApiPropertyOptional({ default: 0 })
   @IsString()
-  value: number;
+  position: number;
 
   @ApiProperty({ example: 'tax desc' })
   @IsNotEmpty()
