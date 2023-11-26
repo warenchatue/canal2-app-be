@@ -10,9 +10,9 @@ import { ArticlesModule } from './features/articles/articles.module';
 import { AuthModule } from './features/auth/auth.module';
 import { CountriesModule } from './features/countries/countries.module';
 import { HoursModule } from './features/pub/hours/hours.module';
-import { PackagesModule } from './features/orders/orders.module';
+import { OrdersModule } from './features/orders/orders.module';
 import { OrgsModule } from './features/orgs/orgs.module';
-import { PlanningsModule } from './features/plannings/plannings.module';
+import { PlanningsModule } from './features/pub/plannings/plannings.module';
 import { SpotsModule } from './features/products/products.module';
 import { RolesModule } from './features/roles/roles.module';
 import { UsersModule } from './features/users/users.module';
@@ -24,7 +24,7 @@ const features = [
   CountriesModule,
   HoursModule,
   AnnouncersModule,
-  PackagesModule,
+  OrdersModule,
   SpotsModule,
   PlanningsModule,
   ArticlesModule,

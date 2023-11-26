@@ -15,13 +15,13 @@ import { FindQueryDto } from 'src/common/dto/find-query.dto';
 import { sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { UseJwt } from '../../auth/auth.decorator';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
-import { OrderDocument } from './entities/order.entity';
-import { OrdersService } from './orders.service';
-import { PlanningsService } from '../../plannings/plannings.service';
+import { CreatePackageDto } from './dto/create-package.dto';
+import { UpdatePackageDto } from './dto/update-package.dto';
+import { PackageDocument } from './entities/package.entity';
+import { PackagesService } from './packages.service';
+import { PlanningsService } from '../../pub/plannings/plannings.service';
 import { ProductService } from '../../products/products.service';
-import { ORDER_CREATED_EVENT } from './orders.handler';
+import { ORDER_CREATED_EVENT } from './packages.handler';
 
 @ApiBearerAuth()
 @ApiTags('Packages')
@@ -29,7 +29,7 @@ import { ORDER_CREATED_EVENT } from './orders.handler';
 @Controller('packages')
 export class PackageController extends BaseController {
   constructor(
-    private readonly packagesService: OrdersService,
+    private readonly packagesService: PackagesService,
     private readonly planningsService: PlanningsService,
     private readonly productService: ProductService,
     private readonly event: EventEmitter2,
@@ -38,13 +38,13 @@ export class PackageController extends BaseController {
   }
 
   @Post()
-  async create(@Body() dto: CreateOrderDto, @Req() { user }) {
+  async create(@Body() dto: CreatePackageDto, @Req() { user }) {
     try {
       return await this.run(async () => {
-        const result = await this.packagesService.create(
-          { ...dto, creator: user._id },
-          dto.announcer,
-        );
+        const result = await this.packagesService.create({
+          ...dto,
+          creator: user._id,
+        });
 
         this.event.emit(ORDER_CREATED_EVENT, {
           code: dto.code,
@@ -62,15 +62,13 @@ export class PackageController extends BaseController {
   @Get()
   async getAllPackages(
     @Req() { user },
-    @Query() { states }: FindQueryDto<OrderDocument>,
+    @Query() { states }: FindQueryDto<PackageDocument>,
   ) {
     try {
       const data = await this.packagesService.find();
       const totalItems = data.length;
-      const totalAnnouncers = data.map((e) => {
-        return e.announcer['_id'];
-      });
-      const totalAnnouncersSet = new Set(totalAnnouncers);
+      const totalAnnouncers = 0;
+      // const totalAnnouncersSet = new Set(totalAnnouncers);
       let totalSpots = 0;
       const allSpots = data.map((e) => {
         return e.plannings.length;
@@ -94,7 +92,7 @@ export class PackageController extends BaseController {
       return {
         metaData: {
           totalItems,
-          totalAnnouncers: totalAnnouncersSet.size,
+          totalAnnouncers: totalAnnouncers,
           totalSpots,
           totalFiles,
         },
@@ -117,7 +115,7 @@ export class PackageController extends BaseController {
   @Put(':packageId')
   async updatePackage(
     @Param('packageId') packageId: string,
-    @Body() dto: UpdateOrderDto,
+    @Body() dto: UpdatePackageDto,
     @Req() { user },
   ) {
     try {
@@ -148,16 +146,16 @@ export class PackageController extends BaseController {
   @Delete(':packageId')
   async deletePackage(@Param('packageId') packageId: string, @Req() { user }) {
     try {
-      const order = await this.packagesService.findOne(packageId);
-      for (let index = 0; index < order.plannings.length; index++) {
+      const orderPackage = await this.packagesService.findOne(packageId);
+      for (let index = 0; index < orderPackage.plannings.length; index++) {
         await this.planningsService.deleteOne(
-          order.plannings[index]['_id'].toString(),
+          orderPackage.plannings[index]['_id'].toString(),
         );
       }
 
-      for (let index = 0; index < order.products.length; index++) {
+      for (let index = 0; index < orderPackage.products.length; index++) {
         await this.productService.deleteOne(
-          order.products[index]['_id'].toString(),
+          orderPackage.products[index]['_id'].toString(),
         );
       }
       return await this.packagesService.deleteOne(packageId);

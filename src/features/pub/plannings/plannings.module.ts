@@ -4,7 +4,7 @@ import { PlanningsService } from './plannings.service';
 import { PlanningsController } from './plannings.controller';
 import { PlanningsHandler } from './plannings.handler';
 import { MongooseModule } from '@nestjs/mongoose';
-import { PackagesModule } from '../orders/orders.module';
+import { PackagesModule } from '../packages/packages.module';
 
 @Module({
   imports: [

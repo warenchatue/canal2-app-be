@@ -6,12 +6,10 @@ import { Order, OrderSchema } from './entities/order.entity';
 import { PackageController } from './orders.controller';
 import { PackageHandler } from './orders.handler';
 import { OrdersService } from './orders.service';
-import { PlanningsModule } from '../plannings/plannings.module';
 import { SpotsModule } from '../products/products.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Order.name, schema: OrderSchema }]),
-    forwardRef(() => PlanningsModule),
     forwardRef(() => SpotsModule),
     NotificationsModule,
     UsersModule,
@@ -20,4 +18,4 @@ import { SpotsModule } from '../products/products.module';
   providers: [OrdersService, PackageHandler],
   exports: [OrdersService],
 })
-export class PackagesModule {}
+export class OrdersModule {}

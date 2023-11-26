@@ -16,13 +16,13 @@ import * as moment from 'moment';
 import { sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { URequest } from 'src/common/shared/request';
-import { UseJwt } from '../auth/auth.decorator';
-import { OrdersService } from '../orders/orders.service';
+import { UseJwt } from '../../auth/auth.decorator';
 import { CreatePlanningDto } from './dto/create-planning.dto';
 import { UpdatePlanningDto } from './dto/update-planning.dto';
 import { PlanningsService } from './plannings.service';
 import { getNotPlayDto } from './dto/get-not-play';
 import { autoValidatePlanningDto } from './dto/auto-validate.dto';
+import { PackagesService } from '../packages/packages.service';
 
 @Controller('plannings')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -32,7 +32,7 @@ export class PlanningsController extends BaseController {
 
   constructor(
     private readonly planningsService: PlanningsService,
-    private readonly ordersService: OrdersService,
+    private readonly packagesService: PackagesService,
   ) {
     super();
   }
@@ -146,7 +146,7 @@ export class PlanningsController extends BaseController {
         const yearValues = [];
         const resumeValues = [];
         const actualMonth = moment().format('MM/yyyy');
-        const packages = await this.ordersService.find();
+        const packages = await this.packagesService.find();
         for (let index = 1; index <= 12; index++) {
           yearMonths.push(
             index > 9
@@ -269,7 +269,10 @@ export class PlanningsController extends BaseController {
   ) {
     try {
       const planning = await await this.planningsService.create(dto);
-      await this.ordersService.addPlanning(packageId, planning._id.toString());
+      await this.packagesService.addPlanning(
+        packageId,
+        planning._id.toString(),
+      );
       return await this.getPlanning(planning._id.toString());
     } catch (error) {
       sendError(error);
@@ -306,7 +309,7 @@ export class PlanningsController extends BaseController {
         await this.planningsService.findOne(planningId)
       ).toJSON();
       const response = await this.planningsService.deleteOne(planningId);
-      await this.ordersService.pullPlanning(
+      await this.packagesService.pullPlanning(
         planning['product']['order']['_id'].toString(),
         planningId,
       );

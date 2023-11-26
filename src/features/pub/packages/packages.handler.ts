@@ -9,7 +9,7 @@ import { NotificationsService } from '../../notifications/notifications.service'
 import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
 
-export const ORDER_CREATED_EVENT = 'order.create';
+export const ORDER_CREATED_EVENT = 'package.create';
 
 @Injectable()
 export class PackageHandler {
@@ -21,10 +21,10 @@ export class PackageHandler {
   ) {}
 
   @OnEvent(ORDER_CREATED_EVENT)
-  async handleOrderCreated(data) {
+  async handlePackageCreated(data) {
     try {
       const notif = await this.notificationsService.create({
-        type: NotificationType.newOrder,
+        type: NotificationType.neutral,
         level: NotificationLevel.info,
         data: await this._d(data),
       });

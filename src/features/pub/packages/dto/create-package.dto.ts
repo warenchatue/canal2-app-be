@@ -10,14 +10,7 @@ import {
   Min,
 } from 'class-validator';
 import { toBoolean } from 'src/common/helpers';
-export class CreateOrderDto {
-  @ApiProperty({ example: 'My awesome package' })
-  @IsNotEmpty()
-  @IsString()
-  @Min(5)
-  @Max(256)
-  label: string;
-
+export class CreatePackageDto {
   @ApiPropertyOptional({ example: 'XAFG_7587' })
   code: string;
 
@@ -25,6 +18,9 @@ export class CreateOrderDto {
   @IsNotEmpty()
   @IsNumber()
   numberSpots: number;
+
+  @ApiPropertyOptional({ example: 25 })
+  numberPlay?: number;
 
   @ApiProperty({ example: 25 })
   @IsNotEmpty()
@@ -34,9 +30,6 @@ export class CreateOrderDto {
   @ApiProperty({ example: 1 })
   @IsNumber()
   numberProducts: number;
-
-  @ApiPropertyOptional({ example: 25 })
-  numberPlay?: number;
 
   @ApiProperty()
   @IsString()
@@ -60,11 +53,7 @@ export class CreateOrderDto {
 
   @ApiPropertyOptional()
   @IsString()
-  orderValidator: string;
-
-  @ApiPropertyOptional()
-  @IsString()
-  billValidator: string;
+  packageValidator: string;
 
   @ApiPropertyOptional()
   @IsString()
@@ -87,10 +76,6 @@ export class CreateOrderDto {
 
   @ApiProperty()
   @IsString()
-  announcer: string;
-
-  @ApiProperty()
-  @IsString()
   status: string;
 
   @ApiPropertyOptional({ default: false })
@@ -109,13 +94,9 @@ export class CreateOrderDto {
   @Max(512)
   description?: string;
 
-  @ApiPropertyOptional({ example: 'http://' })
-  @IsString()
-  contractUrl?: string;
+  @ApiPropertyOptional({ example: '' })
+  order?: string;
 
-  @ApiPropertyOptional({ example: '{}' })
-  items?: any[];
-
-  @ApiPropertyOptional({ example: '{}' })
-  invoice?: any;
+  @ApiPropertyOptional({ example: '' })
+  invoice?: string;
 }

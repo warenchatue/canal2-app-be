@@ -14,30 +14,34 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindQueryDto } from 'src/common/dto/find-query.dto';
 import { sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
-import { UseJwt } from '../auth/auth.decorator';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
-import { OrderDocument } from './entities/order.entity';
-import { ORDER_CREATED_EVENT } from './orders.handler';
-import { OrdersService } from './orders.service';
+import { UseJwt } from '../../auth/auth.decorator';
+import { CreateInvoiceDto } from './dto/create-invoice.dto';
+import { UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { InvoiceDocument } from './entities/invoice.entity';
+import { InvoicesService } from './invoices.service';
+import { PlanningsService } from '../../pub/plannings/plannings.service';
+import { ProductService } from '../../products/products.service';
+import { ORDER_CREATED_EVENT } from './invoices.handler';
 
 @ApiBearerAuth()
-@ApiTags('Packages')
+@ApiTags('Invoices')
 @UseJwt()
-@Controller('packages')
+@Controller('invoices')
 export class PackageController extends BaseController {
   constructor(
-    private readonly packagesService: OrdersService,
+    private readonly invoicesService: InvoicesService,
+    private readonly planningsService: PlanningsService,
+    private readonly productService: ProductService,
     private readonly event: EventEmitter2,
   ) {
     super();
   }
 
   @Post()
-  async create(@Body() dto: CreateOrderDto, @Req() { user }) {
+  async create(@Body() dto: CreateInvoiceDto, @Req() { user }) {
     try {
       return await this.run(async () => {
-        const result = await this.packagesService.create(
+        const result = await this.invoicesService.create(
           { ...dto, creator: user._id },
           dto.announcer,
         );
@@ -56,12 +60,12 @@ export class PackageController extends BaseController {
   }
 
   @Get()
-  async getAllOrders(
+  async getAllInvoices(
     @Req() { user },
-    @Query() { states }: FindQueryDto<OrderDocument>,
+    @Query() { states }: FindQueryDto<InvoiceDocument>,
   ) {
     try {
-      const data = await this.packagesService.find();
+      const data = await this.invoicesService.find();
       const totalItems = data.length;
       const totalAnnouncers = data.map((e) => {
         return e.announcer['_id'];
@@ -73,7 +77,7 @@ export class PackageController extends BaseController {
       return {
         metaData: {
           totalItems,
-          totalAnnouncers: totalAnnouncersSet.size,
+          totalAnnouncers: 0,
           totalSpots,
           totalFiles,
         },
@@ -84,51 +88,41 @@ export class PackageController extends BaseController {
     }
   }
 
-  @Get(':orderId')
-  async getPackage(@Param('orderId') orderId: string, @Req() { user }) {
+  @Get(':invoiceId')
+  async getPackage(@Param('invoiceId') invoiceId: string, @Req() { user }) {
     try {
-      return await this.packagesService.findOne(orderId);
+      return await this.invoicesService.findOne(invoiceId);
     } catch (error) {
       sendError(error);
     }
   }
 
-  @Put(':orderId')
+  @Put(':invoiceId')
   async updatePackage(
-    @Param('orderId') orderId: string,
-    @Body() dto: UpdateOrderDto,
+    @Param('invoiceId') invoiceId: string,
+    @Body() dto: UpdateInvoiceDto,
     @Req() { user },
   ) {
     try {
-      return await this.packagesService.updateOne(orderId, dto);
+      return await this.invoicesService.updateOne(invoiceId, dto);
     } catch (error) {
       sendError(error);
     }
   }
 
-  @Put(':orderId/close')
-  async closePackage(@Param('orderId') orderId: string, @Req() { user }) {
+  @Put(':invoiceId/close')
+  async closePackage(@Param('invoiceId') invoiceId: string, @Req() { user }) {
     try {
-      return await this.packagesService.closePackage(orderId);
+      return await this.invoicesService.closePackage(invoiceId);
     } catch (error) {
       sendError(error);
     }
   }
 
-  @Put(':orderId/reopen')
-  async reopenPackage(@Param('orderId') orderId: string, @Req() { user }) {
+  @Put(':invoiceId/reopen')
+  async reopenPackage(@Param('invoiceId') invoiceId: string, @Req() { user }) {
     try {
-      return await this.packagesService.reopenPackage(orderId);
-    } catch (error) {
-      sendError(error);
-    }
-  }
-
-  @Delete(':orderId')
-  async deletePackage(@Param('orderId') orderId: string, @Req() { user }) {
-    try {
-      const order = await this.packagesService.findOne(orderId);
-      return await this.packagesService.deleteOne(orderId);
+      return await this.invoicesService.reopenPackage(invoiceId);
     } catch (error) {
       sendError(error);
     }

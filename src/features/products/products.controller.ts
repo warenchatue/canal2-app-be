@@ -16,7 +16,7 @@ import { sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { URequest } from 'src/common/shared/request';
 import { UseJwt } from '../auth/auth.decorator';
-import { OrdersService } from '../orders/orders.service';
+import { PackagesService } from '../pub/packages/packages.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductService } from './products.service';
@@ -30,7 +30,7 @@ export class SpotsController extends BaseController {
 
   constructor(
     private readonly productService: ProductService,
-    private readonly ordersService: OrdersService,
+    private readonly packagesService: PackagesService,
   ) {
     super();
   }
@@ -75,7 +75,7 @@ export class SpotsController extends BaseController {
   async createSpot(@Body() dto: CreateProductDto) {
     try {
       const spot = await await this.productService.create(dto);
-      await this.ordersService.addProduct(dto.order, spot._id.toString());
+      await this.packagesService.addProduct(dto.order, spot._id.toString());
       return spot.toJSON();
     } catch (error) {
       sendError(error);
@@ -107,7 +107,7 @@ export class SpotsController extends BaseController {
       try {
         const spot = (await this.productService.findOne(spotId)).toJSON();
         const response = await this.productService.deleteOne(spotId);
-        await this.ordersService.pullProduct(
+        await this.packagesService.pullProduct(
           spot['order']['_id'].toString(),
           spotId,
         );

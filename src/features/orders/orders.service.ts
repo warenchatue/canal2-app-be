@@ -26,24 +26,6 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
       { path: 'announcer', model: 'Announcer' },
-      {
-        path: 'products',
-        model: 'Product',
-      },
-      {
-        path: 'plannings',
-        model: 'Planning',
-        populate: [
-          {
-            path: 'hour',
-            model: 'Hour',
-          },
-          {
-            path: 'product',
-            model: 'Product',
-          },
-        ],
-      },
     ];
     return this.orders.findById(_id).orFail().populate(population).exec();
   }
@@ -53,14 +35,6 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
       { path: 'announcer', model: 'Announcer' },
-      {
-        path: 'products',
-        model: 'Product',
-      },
-      {
-        path: 'plannings',
-        model: 'Planning',
-      },
     ];
     return this.orders
       .find()
@@ -96,33 +70,5 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
     return this.orders.findByIdAndUpdate(_id, {
       $set: dto,
     });
-  }
-
-  addProduct(_id: string, productId: string) {
-    return this.orders
-      .findByIdAndUpdate(_id, { $push: { products: productId } })
-      .orFail()
-      .exec();
-  }
-
-  addPlanning(_id: string, planningId: string) {
-    return this.orders
-      .findByIdAndUpdate(_id, { $push: { plannings: planningId } })
-      .orFail()
-      .exec();
-  }
-
-  pullProduct(_id: string, productId: string) {
-    return this.orders
-      .findByIdAndUpdate(_id, { $pull: { products: productId } })
-      .orFail()
-      .exec();
-  }
-
-  pullPlanning(_id: string, planningId: string) {
-    return this.orders
-      .findByIdAndUpdate(_id, { $pull: { plannings: planningId } })
-      .orFail()
-      .exec();
   }
 }

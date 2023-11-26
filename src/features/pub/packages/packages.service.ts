@@ -3,22 +3,22 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ServiceDeleteAbstract } from 'src/common/abstracts/service-delete.abstract';
 import { USER_POPULATION } from '../../users/entities/user.entity';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
-import { Order, OrderDocument } from './entities/order.entity';
+import { CreatePackageDto } from './dto/create-package.dto';
+import { UpdatePackageDto } from './dto/update-package.dto';
+import { OrderPackage, PackageDocument } from './entities/package.entity';
 import { State } from 'src/common/shared/base-schema';
 
 @Injectable()
-export class OrdersService extends ServiceDeleteAbstract<Order> {
+export class PackagesService extends ServiceDeleteAbstract<OrderPackage> {
   constructor(
-    @InjectModel(Order.name)
-    private readonly orders: Model<OrderDocument>,
+    @InjectModel(OrderPackage.name)
+    private readonly packages: Model<PackageDocument>,
   ) {
     super();
   }
 
-  create(dto: CreateOrderDto, announcerId: string) {
-    return this.orders.create({ ...dto, announcer: announcerId });
+  create(dto: CreatePackageDto) {
+    return this.packages.create({ ...dto });
   }
 
   findOne(_id) {
@@ -45,7 +45,7 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
         ],
       },
     ];
-    return this.orders.findById(_id).orFail().populate(population).exec();
+    return this.packages.findById(_id).orFail().populate(population).exec();
   }
 
   find(states: State[] = [State.active]) {
@@ -62,7 +62,7 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
         model: 'Planning',
       },
     ];
-    return this.orders
+    return this.packages
       .find()
       .populate(population)
       .where('state')
@@ -72,7 +72,7 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
 
   findByAnnouncer(announcerId: string, states: State[] = [State.active]) {
     const population = [{ path: 'creator', ...USER_POPULATION }];
-    return this.orders
+    return this.packages
       .find({ announcer: announcerId })
       .populate(population)
       .where('state')
@@ -81,46 +81,46 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
   }
 
   closePackage(_id: string) {
-    return this.orders.findByIdAndUpdate(_id, {
+    return this.packages.findByIdAndUpdate(_id, {
       $set: { closed: true },
     });
   }
 
   reopenPackage(_id: string) {
-    return this.orders.findByIdAndUpdate(_id, {
+    return this.packages.findByIdAndUpdate(_id, {
       $set: { closed: false },
     });
   }
 
-  updateOne(_id: string, dto: UpdateOrderDto) {
-    return this.orders.findByIdAndUpdate(_id, {
+  updateOne(_id: string, dto: UpdatePackageDto) {
+    return this.packages.findByIdAndUpdate(_id, {
       $set: dto,
     });
   }
 
   addProduct(_id: string, productId: string) {
-    return this.orders
+    return this.packages
       .findByIdAndUpdate(_id, { $push: { products: productId } })
       .orFail()
       .exec();
   }
 
   addPlanning(_id: string, planningId: string) {
-    return this.orders
+    return this.packages
       .findByIdAndUpdate(_id, { $push: { plannings: planningId } })
       .orFail()
       .exec();
   }
 
   pullProduct(_id: string, productId: string) {
-    return this.orders
+    return this.packages
       .findByIdAndUpdate(_id, { $pull: { products: productId } })
       .orFail()
       .exec();
   }
 
   pullPlanning(_id: string, planningId: string) {
-    return this.orders
+    return this.packages
       .findByIdAndUpdate(_id, { $pull: { plannings: planningId } })
       .orFail()
       .exec();

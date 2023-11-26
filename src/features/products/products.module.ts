@@ -4,7 +4,7 @@ import { SpotsController } from './products.controller';
 import { Product, ProductSchema } from './entities/product.entity';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductsHandler } from './products.handler';
-import { PackagesModule } from '../orders/orders.module';
+import { PackagesModule } from '../pub/packages/packages.module';
 // import { FirebaseService } from '../firebase/firebase.service';
 
 @Module({

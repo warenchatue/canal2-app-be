@@ -1,20 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as sc } from 'mongoose';
 import { BaseSchema } from 'src/common/shared/base-schema';
-import {
-  Announcer,
-  AnnouncerDocument,
-} from 'src/features/announcers/entities/announcer.entity';
-import { Planning } from 'src/features/plannings/entities/planning.entity';
+import { Order } from 'src/features/orders/entities/order.entity';
 import { Product } from 'src/features/products/entities/product.entity';
+import { Planning } from 'src/features/pub/plannings/entities/planning.entity';
 import { User } from 'src/features/users/entities/user.entity';
 @Schema({
   timestamps: true,
 })
-export class Order extends BaseSchema {
-  @Prop()
-  label: string;
-
+export class OrderPackage extends BaseSchema {
   @Prop()
   code: string;
 
@@ -36,14 +30,11 @@ export class Order extends BaseSchema {
   @Prop()
   description: string;
 
-  @Prop()
-  contractUrl: string;
+  @Prop({ type: sc.Types.ObjectId, ref: () => Order })
+  order: sc.Types.ObjectId;
 
-  @Prop({ type: sc.Types.Mixed })
-  items: sc.Types.Mixed | any;
-
-  @Prop({ type: sc.Types.Mixed })
-  invoice: sc.Types.Mixed | any;
+  @Prop({ type: sc.Types.ObjectId, ref: () => Order })
+  invoice: sc.Types.ObjectId;
 
   @Prop()
   status: string;
@@ -58,10 +49,7 @@ export class Order extends BaseSchema {
   manager: sc.Types.ObjectId;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
-  orderValidator: sc.Types.ObjectId;
-
-  @Prop({ type: sc.Types.ObjectId, ref: () => User })
-  billValidator: sc.Types.ObjectId;
+  packageValidator: sc.Types.ObjectId;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
   planningValidator: sc.Types.ObjectId;
@@ -78,9 +66,6 @@ export class Order extends BaseSchema {
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
   expectedAdminValidator: sc.Types.ObjectId;
 
-  @Prop({ type: sc.Types.ObjectId, ref: () => Announcer })
-  announcer: sc.Types.ObjectId | AnnouncerDocument;
-
   @Prop({ type: [{ type: sc.Types.ObjectId, ref: () => Product }] })
   products: sc.Types.ObjectId[] | string[];
 
@@ -88,5 +73,5 @@ export class Order extends BaseSchema {
   plannings: sc.Types.ObjectId[] | string[];
 }
 
-export type OrderDocument = Order & Document;
-export const OrderSchema = SchemaFactory.createForClass(Order);
+export type PackageDocument = OrderPackage & Document;
+export const PackageSchema = SchemaFactory.createForClass(OrderPackage);

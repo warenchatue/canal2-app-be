@@ -5,6 +5,7 @@ import { User, UserDocument } from 'src/features/users/entities/user.entity';
 export enum NotificationType {
   neutral = 'neutral',
   newOrder = 'newOrder',
+  newInvoice = 'newInvoice',
 }
 
 export enum NotificationLevel {
