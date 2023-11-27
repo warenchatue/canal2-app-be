@@ -25,11 +25,21 @@ export class PackagesService extends ServiceDeleteAbstract<OrderPackage> {
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
-      { path: 'announcer', model: 'Announcer' },
       {
         path: 'products',
         model: 'Product',
       },
+      {
+        path: 'order',
+        model: 'Order',
+        populate: [
+          {
+            path: 'announcer',
+            model: 'Announcer',
+          },
+        ],
+      },
+
       {
         path: 'plannings',
         model: 'Planning',
@@ -52,7 +62,16 @@ export class PackagesService extends ServiceDeleteAbstract<OrderPackage> {
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
-      { path: 'announcer', model: 'Announcer' },
+      {
+        path: 'order',
+        model: 'Order',
+        populate: [
+          {
+            path: 'announcer',
+            model: 'Announcer',
+          },
+        ],
+      },
       {
         path: 'products',
         model: 'Product',

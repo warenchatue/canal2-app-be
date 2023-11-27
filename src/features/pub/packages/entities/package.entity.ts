@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as sc } from 'mongoose';
 import { BaseSchema } from 'src/common/shared/base-schema';
+import { Invoice } from 'src/features/accountancy/invoices/entities/invoice.entity';
 import { Order } from 'src/features/orders/entities/order.entity';
 import { Product } from 'src/features/products/entities/product.entity';
 import { Planning } from 'src/features/pub/plannings/entities/planning.entity';
@@ -22,6 +23,9 @@ export class OrderPackage extends BaseSchema {
   numberProducts: number;
 
   @Prop()
+  quantities: number;
+
+  @Prop()
   numberPlay: number;
 
   @Prop()
@@ -33,7 +37,7 @@ export class OrderPackage extends BaseSchema {
   @Prop({ type: sc.Types.ObjectId, ref: () => Order })
   order: sc.Types.ObjectId;
 
-  @Prop({ type: sc.Types.ObjectId, ref: () => Order })
+  @Prop({ type: sc.Types.ObjectId, ref: () => Invoice })
   invoice: sc.Types.ObjectId;
 
   @Prop()
@@ -49,13 +53,10 @@ export class OrderPackage extends BaseSchema {
   manager: sc.Types.ObjectId;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
-  packageValidator: sc.Types.ObjectId;
-
-  @Prop({ type: sc.Types.ObjectId, ref: () => User })
-  planningValidator: sc.Types.ObjectId;
+  validator: sc.Types.ObjectId;
 
   @Prop()
-  planningValidatorSignature: string;
+  validatorSignature: string;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
   adminValidator: sc.Types.ObjectId;

@@ -20,6 +20,9 @@ export class CreateOrderDto {
   @ApiPropertyOptional({ example: 'XAFG_7587' })
   code: string;
 
+  @ApiPropertyOptional({ example: '' })
+  paymentCondition: string;
+
   @ApiProperty()
   @IsString()
   creator: string;
@@ -30,7 +33,7 @@ export class CreateOrderDto {
 
   @ApiPropertyOptional()
   @IsString()
-  orderValidator: string;
+  validator: string;
 
   @ApiPropertyOptional()
   requiredAdminValidator: boolean;
@@ -69,6 +72,10 @@ export class CreateOrderDto {
   @IsArray()
   package?: string;
 
-  @ApiPropertyOptional({ example: '{}' })
+  @ApiPropertyOptional()
+  @IsArray()
+  org?: string;
+
+  @ApiPropertyOptional({ example: '[]' })
   items?: any[];
 }

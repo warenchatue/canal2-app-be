@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as sc } from 'mongoose';
 import { BaseSchema } from 'src/common/shared/base-schema';
 import { Order } from 'src/features/orders/entities/order.entity';
+import { OrderPackage } from 'src/features/pub/packages/entities/package.entity';
 
 export enum ProductType {
   BA = 'BA',
@@ -34,8 +35,8 @@ export class Product extends BaseSchema {
   @Prop({ default: false })
   isPlay: boolean;
 
-  @Prop({ type: sc.Types.ObjectId, ref: () => Order })
-  order: sc.Types.ObjectId | string;
+  @Prop({ type: sc.Types.ObjectId, ref: () => OrderPackage })
+  package: sc.Types.ObjectId | string;
 }
 
 export type ProductDocument = Product & Document;

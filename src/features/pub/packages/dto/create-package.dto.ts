@@ -14,11 +14,6 @@ export class CreatePackageDto {
   @ApiPropertyOptional({ example: 'XAFG_7587' })
   code: string;
 
-  @ApiProperty({ example: 25 })
-  @IsNotEmpty()
-  @IsNumber()
-  numberSpots: number;
-
   @ApiPropertyOptional({ example: 25 })
   numberPlay?: number;
 
@@ -30,6 +25,10 @@ export class CreatePackageDto {
   @ApiProperty({ example: 1 })
   @IsNumber()
   numberProducts: number;
+
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  quantities: number;
 
   @ApiProperty()
   @IsString()
@@ -53,15 +52,11 @@ export class CreatePackageDto {
 
   @ApiPropertyOptional()
   @IsString()
-  packageValidator: string;
+  validator: string;
 
   @ApiPropertyOptional()
   @IsString()
-  planningValidator: string;
-
-  @ApiPropertyOptional()
-  @IsString()
-  planningValidatorSignature: string;
+  validatorSignature: string;
 
   @ApiPropertyOptional()
   @IsString()

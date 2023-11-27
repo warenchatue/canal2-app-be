@@ -32,8 +32,8 @@ export class ProductService extends ServiceDeleteAbstract<Product> {
       .orFail()
       .populate([
         {
-          path: 'order',
-          model: 'Order',
+          path: 'package',
+          model: 'OrderPackage',
         },
       ])
       .exec();
@@ -44,8 +44,8 @@ export class ProductService extends ServiceDeleteAbstract<Product> {
       .find()
       .populate([
         {
-          path: 'order',
-          model: 'Order',
+          path: 'package',
+          model: 'OrderPackage',
         },
       ])
       .where('state')

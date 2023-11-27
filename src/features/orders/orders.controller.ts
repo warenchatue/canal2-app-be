@@ -22,12 +22,12 @@ import { ORDER_CREATED_EVENT } from './orders.handler';
 import { OrdersService } from './orders.service';
 
 @ApiBearerAuth()
-@ApiTags('Packages')
+@ApiTags('Orders')
 @UseJwt()
-@Controller('packages')
-export class PackageController extends BaseController {
+@Controller('orders')
+export class OrdersController extends BaseController {
   constructor(
-    private readonly packagesService: OrdersService,
+    private readonly ordersService: OrdersService,
     private readonly event: EventEmitter2,
   ) {
     super();
@@ -37,7 +37,7 @@ export class PackageController extends BaseController {
   async create(@Body() dto: CreateOrderDto, @Req() { user }) {
     try {
       return await this.run(async () => {
-        const result = await this.packagesService.create(
+        const result = await this.ordersService.create(
           { ...dto, creator: user._id },
           dto.announcer,
         );
@@ -61,7 +61,7 @@ export class PackageController extends BaseController {
     @Query() { states }: FindQueryDto<OrderDocument>,
   ) {
     try {
-      const data = await this.packagesService.find();
+      const data = await this.ordersService.find();
       const totalItems = data.length;
       const totalAnnouncers = data.map((e) => {
         return e.announcer['_id'];
@@ -85,9 +85,9 @@ export class PackageController extends BaseController {
   }
 
   @Get(':orderId')
-  async getPackage(@Param('orderId') orderId: string, @Req() { user }) {
+  async getOrder(@Param('orderId') orderId: string, @Req() { user }) {
     try {
-      return await this.packagesService.findOne(orderId);
+      return await this.ordersService.findOne(orderId);
     } catch (error) {
       sendError(error);
     }
@@ -100,7 +100,7 @@ export class PackageController extends BaseController {
     @Req() { user },
   ) {
     try {
-      return await this.packagesService.updateOne(orderId, dto);
+      return await this.ordersService.updateOne(orderId, dto);
     } catch (error) {
       sendError(error);
     }
@@ -109,7 +109,7 @@ export class PackageController extends BaseController {
   @Put(':orderId/close')
   async closePackage(@Param('orderId') orderId: string, @Req() { user }) {
     try {
-      return await this.packagesService.closePackage(orderId);
+      return await this.ordersService.closePackage(orderId);
     } catch (error) {
       sendError(error);
     }
@@ -118,7 +118,7 @@ export class PackageController extends BaseController {
   @Put(':orderId/reopen')
   async reopenPackage(@Param('orderId') orderId: string, @Req() { user }) {
     try {
-      return await this.packagesService.reopenPackage(orderId);
+      return await this.ordersService.reopenPackage(orderId);
     } catch (error) {
       sendError(error);
     }
@@ -127,8 +127,8 @@ export class PackageController extends BaseController {
   @Delete(':orderId')
   async deletePackage(@Param('orderId') orderId: string, @Req() { user }) {
     try {
-      const order = await this.packagesService.findOne(orderId);
-      return await this.packagesService.deleteOne(orderId);
+      const order = await this.ordersService.findOne(orderId);
+      return await this.ordersService.deleteOne(orderId);
     } catch (error) {
       sendError(error);
     }

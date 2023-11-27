@@ -22,6 +22,14 @@ export class CreateAnnouncerDto {
   @IsPhoneNumber()
   phone: string;
 
+  @ApiPropertyOptional({ default: '' })
+  @IsPhoneNumber()
+  rc: string;
+
+    @ApiPropertyOptional({ default: '' })
+  @IsPhoneNumber()
+  nc: string;
+
   @ApiProperty({ default: AnnouncerType.personal })
   @IsNotEmpty()
   @IsEnum(AnnouncerType)

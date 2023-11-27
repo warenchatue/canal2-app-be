@@ -14,24 +14,22 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindQueryDto } from 'src/common/dto/find-query.dto';
 import { sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
+import { OrdersService } from 'src/features/orders/orders.service';
 import { UseJwt } from '../../auth/auth.decorator';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { InvoiceDocument } from './entities/invoice.entity';
-import { InvoicesService } from './invoices.service';
-import { PlanningsService } from '../../pub/plannings/plannings.service';
-import { ProductService } from '../../products/products.service';
 import { ORDER_CREATED_EVENT } from './invoices.handler';
+import { InvoicesService } from './invoices.service';
 
 @ApiBearerAuth()
 @ApiTags('Invoices')
 @UseJwt()
 @Controller('invoices')
-export class PackageController extends BaseController {
+export class InvoicesController extends BaseController {
   constructor(
     private readonly invoicesService: InvoicesService,
-    private readonly planningsService: PlanningsService,
-    private readonly productService: ProductService,
+    private readonly ordersServices: OrdersService,
     private readonly event: EventEmitter2,
   ) {
     super();
@@ -123,6 +121,16 @@ export class PackageController extends BaseController {
   async reopenPackage(@Param('invoiceId') invoiceId: string, @Req() { user }) {
     try {
       return await this.invoicesService.reopenPackage(invoiceId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @Delete(':invoiceId')
+  async deleteInvoice(@Param('invoiceId') invoiceId: string, @Req() { user }) {
+    try {
+      const invoice = await this.invoicesService.findOne(invoiceId);
+      return await this.invoicesService.deleteOne(invoiceId);
     } catch (error) {
       sendError(error);
     }

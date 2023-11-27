@@ -6,7 +6,7 @@ export class CreateProductDto {
   @ApiProperty({ example: 'df4545s5d4s5d4s5ds54sdds4dssdsdsds' })
   @IsNotEmpty()
   @IsString()
-  order: string;
+  package: string;
 
   @ApiProperty({ example: '2023....' })
   @IsNotEmpty()

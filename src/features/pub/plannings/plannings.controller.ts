@@ -79,10 +79,10 @@ export class PlanningsController extends BaseController {
         json['_id'] = json['_id'].toString();
         json['hour']['_id'] = json['hour']['_id'].toString();
         json['product']['_id'] = json['product']['_id'].toString();
-        json['product']['order']['_id'] =
-          json['product']['order']['_id'].toString();
-        json['product']['order']['products'] = [];
-        json['product']['order']['plannings'] = [];
+        json['product']['package']['_id'] =
+          json['product']['package']['_id'].toString();
+        json['product']['package']['products'] = [];
+        json['product']['package']['plannings'] = [];
         return json;
       });
       const dateArray = [];
@@ -206,10 +206,10 @@ export class PlanningsController extends BaseController {
       json['_id'] = json['_id'].toString();
       json['hour']['_id'] = json['hour']['_id'].toString();
       json['product']['_id'] = json['product']['_id'].toString();
-      json['product']['order']['_id'] =
-        json['product']['order']['_id'].toString();
-      json['product']['order']['products'] = [];
-      json['product']['order']['plannings'] = [];
+      json['product']['package']['_id'] =
+        json['product']['package']['_id'].toString();
+      json['product']['package']['products'] = [];
+      json['product']['package']['plannings'] = [];
       return json;
     });
   }
@@ -310,7 +310,7 @@ export class PlanningsController extends BaseController {
       ).toJSON();
       const response = await this.planningsService.deleteOne(planningId);
       await this.packagesService.pullPlanning(
-        planning['product']['order']['_id'].toString(),
+        planning['product']['package']['_id'].toString(),
         planningId,
       );
       return response;

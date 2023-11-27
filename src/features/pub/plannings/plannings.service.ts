@@ -40,8 +40,8 @@ export class PlanningsService extends DeletableMixin<Planning> {
           path: 'product',
           model: 'Product',
           populate: {
-            path: 'order',
-            model: 'Order',
+            path: 'package',
+            model: 'OrderPackage',
             populate: [
               {
                 path: 'creator',
@@ -52,8 +52,14 @@ export class PlanningsService extends DeletableMixin<Planning> {
                 model: 'User',
               },
               {
-                path: 'announcer',
-                model: 'Announcer',
+                path: 'order',
+                model: 'Order',
+                populate: [
+                  {
+                    path: 'announcer',
+                    model: 'Announcer',
+                  },
+                ],
               },
             ],
           },
@@ -76,8 +82,8 @@ export class PlanningsService extends DeletableMixin<Planning> {
           path: 'product',
           model: 'Product',
           populate: {
-            path: 'order',
-            model: 'Order',
+            path: 'package',
+            model: 'OrderPackage',
             populate: [
               {
                 path: 'creator',
@@ -88,8 +94,14 @@ export class PlanningsService extends DeletableMixin<Planning> {
                 model: 'User',
               },
               {
-                path: 'announcer',
-                model: 'Announcer',
+                path: 'order',
+                model: 'Order',
+                populate: [
+                  {
+                    path: 'announcer',
+                    model: 'Announcer',
+                  },
+                ],
               },
             ],
           },

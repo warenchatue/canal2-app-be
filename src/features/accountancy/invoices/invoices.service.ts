@@ -26,24 +26,7 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
       { path: 'announcer', model: 'Announcer' },
-      {
-        path: 'products',
-        model: 'Product',
-      },
-      {
-        path: 'plannings',
-        model: 'Planning',
-        populate: [
-          {
-            path: 'hour',
-            model: 'Hour',
-          },
-          {
-            path: 'product',
-            model: 'Product',
-          },
-        ],
-      },
+      { path: 'org', model: 'Org' },
     ];
     return this.invoices.findById(_id).orFail().populate(population).exec();
   }
@@ -53,14 +36,7 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
       { path: 'announcer', model: 'Announcer' },
-      {
-        path: 'products',
-        model: 'Product',
-      },
-      {
-        path: 'plannings',
-        model: 'Planning',
-      },
+      { path: 'org', model: 'Org' },
     ];
     return this.invoices
       .find()

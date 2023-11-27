@@ -23,6 +23,12 @@ export class Announcer extends BaseSchema {
   @Prop()
   phone: string;
 
+  @Prop()
+  rc: string;
+
+  @Prop()
+  nc: string;
+
   @Prop({ type: sc.Types.ObjectId, ref: () => Country })
   country: sc.Types.ObjectId | string;
 

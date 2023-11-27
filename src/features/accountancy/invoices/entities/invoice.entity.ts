@@ -5,6 +5,7 @@ import {
   Announcer,
   AnnouncerDocument,
 } from 'src/features/announcers/entities/announcer.entity';
+import { Order } from 'src/features/orders/entities/order.entity';
 import { User } from 'src/features/users/entities/user.entity';
 @Schema({
   timestamps: true,
@@ -22,11 +23,14 @@ export class Invoice extends BaseSchema {
   @Prop()
   contractUrl: string;
 
-  @Prop({ type: sc.Types.Mixed })
-  items: sc.Types.Mixed | any;
+  @Prop({ type: [{ type: sc.Types.Mixed }] })
+  items: sc.Types.Mixed[] | any[];
 
-  @Prop({ type: sc.Types.ObjectId, ref: () => User })
+  @Prop({ type: sc.Types.ObjectId, ref: () => Order })
   order: sc.Types.ObjectId;
+
+  @Prop({ type: sc.Types.ObjectId, ref: 'Org' })
+  org: sc.Types.ObjectId;
 
   @Prop()
   status: string;

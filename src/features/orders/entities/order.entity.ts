@@ -14,6 +14,9 @@ export class Order extends BaseSchema {
   label: string;
 
   @Prop()
+  paymentCondition: string;
+
+  @Prop()
   code: string;
 
   @Prop()
@@ -22,13 +25,16 @@ export class Order extends BaseSchema {
   @Prop()
   contractUrl: string;
 
-  @Prop({ type: sc.Types.Mixed })
-  items: sc.Types.Mixed | any;
+  @Prop({ type: [{ type: sc.Types.Mixed }] })
+  items: sc.Types.Mixed[] | any[];
 
-  @Prop({ type: sc.Types.ObjectId, ref: () => User })
+  @Prop({ type: sc.Types.ObjectId, ref: 'OrderPackage' })
   package: sc.Types.ObjectId;
 
-  @Prop({ type: sc.Types.ObjectId, ref: () => User })
+  @Prop({ type: sc.Types.ObjectId, ref: 'Org' })
+  org: sc.Types.ObjectId;
+
+  @Prop({ type: sc.Types.ObjectId, ref: 'Invoice' })
   invoice: sc.Types.ObjectId;
 
   @Prop()
@@ -47,7 +53,7 @@ export class Order extends BaseSchema {
   announcer: sc.Types.ObjectId | AnnouncerDocument;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
-  orderValidator: sc.Types.ObjectId;
+  validator: sc.Types.ObjectId;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
   adminValidator: sc.Types.ObjectId;

@@ -16,6 +16,8 @@ import { PlanningsModule } from './features/pub/plannings/plannings.module';
 import { SpotsModule } from './features/products/products.module';
 import { RolesModule } from './features/roles/roles.module';
 import { UsersModule } from './features/users/users.module';
+import { PackagesModule } from './features/pub/packages/packages.module';
+import { InvoicesModule } from './features/accountancy/invoices/invoices.module';
 
 const features = [
   AuthModule,
@@ -31,6 +33,8 @@ const features = [
   OrgsModule,
   AccountsModule,
   TaxesModule,
+  PackagesModule,
+  InvoicesModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {

@@ -49,7 +49,7 @@ export class SpotsController extends BaseController {
       const result = (await this.productService.findActive()).map((e) => {
         const result = e.toJSON();
         result['_id'] = result['_id'].toString();
-        result['order']['_id'] = result['order']['_id'].toString();
+        result['package']['_id'] = result['package']['_id'].toString();
         return result;
       });
 
@@ -64,7 +64,7 @@ export class SpotsController extends BaseController {
     return await this.run(async () => {
       const result = (await this.productService.findOne(spotId)).toJSON();
       result['_id'] = result['_id'].toString();
-      result['order']['_id'] = result['order']['_id'].toString();
+      result['package']['_id'] = result['package']['_id'].toString();
       return result;
     });
   }
@@ -75,7 +75,7 @@ export class SpotsController extends BaseController {
   async createSpot(@Body() dto: CreateProductDto) {
     try {
       const spot = await await this.productService.create(dto);
-      await this.packagesService.addProduct(dto.order, spot._id.toString());
+      await this.packagesService.addProduct(dto.package, spot._id.toString());
       return spot.toJSON();
     } catch (error) {
       sendError(error);
@@ -108,7 +108,7 @@ export class SpotsController extends BaseController {
         const spot = (await this.productService.findOne(spotId)).toJSON();
         const response = await this.productService.deleteOne(spotId);
         await this.packagesService.pullProduct(
-          spot['order']['_id'].toString(),
+          spot['package']['_id'].toString(),
           spotId,
         );
         return response;

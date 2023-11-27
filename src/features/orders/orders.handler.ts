@@ -12,8 +12,8 @@ import { UsersService } from '../users/users.service';
 export const ORDER_CREATED_EVENT = 'order.create';
 
 @Injectable()
-export class PackageHandler {
-  private readonly logger: Logger = new Logger(PackageHandler.name);
+export class OrderHandler {
+  private readonly logger: Logger = new Logger(OrderHandler.name);
 
   constructor(
     private readonly notificationsService: NotificationsService,

@@ -59,9 +59,12 @@ export class CreateInvoiceDto {
   @Max(512)
   description?: string;
 
-  @ApiPropertyOptional({ example: '' })
+  @ApiPropertyOptional()
   order?: string;
 
-  @ApiPropertyOptional({ example: '{}' })
+  @ApiPropertyOptional()
+  org?: string;
+
+  @ApiPropertyOptional({ example: '[]' })
   items?: any[];
 }
