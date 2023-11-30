@@ -6,6 +6,7 @@ import {
   AnnouncerDocument,
 } from 'src/features/announcers/entities/announcer.entity';
 import { Order } from 'src/features/orders/entities/order.entity';
+import { Transaction } from 'src/features/transactions/entities/transaction.entity';
 import { User } from 'src/features/users/entities/user.entity';
 @Schema({
   timestamps: true,
@@ -21,10 +22,22 @@ export class Invoice extends BaseSchema {
   description: string;
 
   @Prop()
-  contractUrl: string;
+  paymentCondition: string;
+
+  @Prop()
+  amount: number;
+
+  @Prop()
+  team: string;
+
+  @Prop()
+  paid: number;
 
   @Prop({ type: [{ type: sc.Types.Mixed }] })
   items: sc.Types.Mixed[] | any[];
+
+  @Prop({ type: [{ type: sc.Types.ObjectId, ref: () => Transaction }] })
+  transactions: sc.Types.ObjectId[] | string[];
 
   @Prop({ type: sc.Types.ObjectId, ref: () => Order })
   order: sc.Types.ObjectId;
@@ -48,7 +61,7 @@ export class Invoice extends BaseSchema {
   announcer: sc.Types.ObjectId | AnnouncerDocument;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
-  orderValidator: sc.Types.ObjectId;
+  validator: sc.Types.ObjectId;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
   adminValidator: sc.Types.ObjectId;

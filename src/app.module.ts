@@ -18,6 +18,7 @@ import { RolesModule } from './features/roles/roles.module';
 import { UsersModule } from './features/users/users.module';
 import { PackagesModule } from './features/pub/packages/packages.module';
 import { InvoicesModule } from './features/accountancy/invoices/invoices.module';
+import { TransactionsModule } from './features/transactions/transactions.module';
 
 const features = [
   AuthModule,
@@ -35,6 +36,7 @@ const features = [
   TaxesModule,
   PackagesModule,
   InvoicesModule,
+  TransactionsModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {

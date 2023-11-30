@@ -17,6 +17,9 @@ export class Order extends BaseSchema {
   paymentCondition: string;
 
   @Prop()
+  teal: string;
+
+  @Prop()
   code: string;
 
   @Prop()
@@ -24,6 +27,9 @@ export class Order extends BaseSchema {
 
   @Prop()
   contractUrl: string;
+
+  @Prop()
+  amount: number;
 
   @Prop({ type: [{ type: sc.Types.Mixed }] })
   items: sc.Types.Mixed[] | any[];

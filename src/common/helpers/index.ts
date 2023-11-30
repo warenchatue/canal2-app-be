@@ -40,6 +40,20 @@ export const randSrt = (length = 7): string => {
   return str;
 };
 
+/**
+ *
+ * @param value
+ * @returns the generated code
+ */
+export const genCode = (value: number, length = 4): string => {
+  let newCode = value.toString();
+  for (let i = 0; i < length - value.toString().length; i++) {
+    newCode = '0' + newCode;
+  }
+
+  return newCode;
+};
+
 /** Convert number to currency */
 export const toCurrency = ({
   amount,

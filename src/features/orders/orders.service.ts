@@ -58,13 +58,17 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
       .exec();
   }
 
-  closePackage(_id: string) {
+  findAll() {
+    return this.orders.find().exec();
+  }
+
+  closeOrder(_id: string) {
     return this.orders.findByIdAndUpdate(_id, {
       $set: { closed: true },
     });
   }
 
-  reopenPackage(_id: string) {
+  reopenOrder(_id: string) {
     return this.orders.findByIdAndUpdate(_id, {
       $set: { closed: false },
     });

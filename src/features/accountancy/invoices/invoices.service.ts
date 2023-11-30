@@ -26,6 +26,17 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
       { path: 'announcer', model: 'Announcer' },
+      { path: 'transactions', model: 'Transaction' },
+      {
+        path: 'order',
+        model: 'Order',
+        populate: [
+          {
+            path: 'package',
+            model: 'OrderPackage',
+          },
+        ],
+      },
       { path: 'org', model: 'Org' },
     ];
     return this.invoices.findById(_id).orFail().populate(population).exec();
@@ -36,6 +47,17 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
       { path: 'announcer', model: 'Announcer' },
+      { path: 'transactions', model: 'Transaction' },
+      {
+        path: 'order',
+        model: 'Order',
+        populate: [
+          {
+            path: 'package',
+            model: 'OrderPackage',
+          },
+        ],
+      },
       { path: 'org', model: 'Org' },
     ];
     return this.invoices
@@ -44,6 +66,10 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
       .where('state')
       .in(states)
       .exec();
+  }
+
+  findAll() {
+    return this.invoices.find().exec();
   }
 
   findByAnnouncer(announcerId: string, states: State[] = [State.active]) {
@@ -74,30 +100,24 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
     });
   }
 
-  addProduct(_id: string, productId: string) {
+  addPayment(_id: string, txnId: string) {
     return this.invoices
-      .findByIdAndUpdate(_id, { $push: { products: productId } })
+      .findByIdAndUpdate(_id, { $push: { transactions: txnId } })
       .orFail()
       .exec();
   }
 
-  addPlanning(_id: string, planningId: string) {
+  updatePaidAmount(_id: string, paid: number) {
     return this.invoices
-      .findByIdAndUpdate(_id, { $push: { plannings: planningId } })
-      .orFail()
+      .findByIdAndUpdate(_id, {
+        $set: { paid: paid },
+      })
       .exec();
   }
 
-  pullProduct(_id: string, productId: string) {
+  pullPayment(_id: string, txnId: string) {
     return this.invoices
-      .findByIdAndUpdate(_id, { $pull: { products: productId } })
-      .orFail()
-      .exec();
-  }
-
-  pullPlanning(_id: string, planningId: string) {
-    return this.invoices
-      .findByIdAndUpdate(_id, { $pull: { plannings: planningId } })
+      .findByIdAndUpdate(_id, { $pull: { transactions: txnId } })
       .orFail()
       .exec();
   }

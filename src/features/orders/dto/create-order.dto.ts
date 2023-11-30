@@ -76,6 +76,12 @@ export class CreateOrderDto {
   @IsArray()
   org?: string;
 
+  @ApiPropertyOptional()
+  amount?: number;
+
+  @ApiPropertyOptional()
+  team?: string;
+
   @ApiPropertyOptional({ example: '[]' })
   items?: any[];
 }

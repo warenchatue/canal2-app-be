@@ -12,11 +12,12 @@ import {
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindQueryDto } from 'src/common/dto/find-query.dto';
-import { sendError } from 'src/common/helpers';
+import { genCode, sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { UseJwt } from '../auth/auth.decorator';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import * as moment from 'moment';
 import { OrderDocument } from './entities/order.entity';
 import { ORDER_CREATED_EVENT } from './orders.handler';
 import { OrdersService } from './orders.service';
@@ -36,9 +37,15 @@ export class OrdersController extends BaseController {
   @Post()
   async create(@Body() dto: CreateOrderDto, @Req() { user }) {
     try {
+      const allOrders = await this.ordersService.findAll();
       return await this.run(async () => {
         const result = await this.ordersService.create(
-          { ...dto, creator: user._id },
+          {
+            ...dto,
+            creator: user._id,
+            code:
+              'DEV/' + moment().year() + '/' + genCode(allOrders.length + 1),
+          },
           dto.announcer,
         );
 
@@ -107,25 +114,25 @@ export class OrdersController extends BaseController {
   }
 
   @Put(':orderId/close')
-  async closePackage(@Param('orderId') orderId: string, @Req() { user }) {
+  async closeOrder(@Param('orderId') orderId: string, @Req() { user }) {
     try {
-      return await this.ordersService.closePackage(orderId);
+      return await this.ordersService.closeOrder(orderId);
     } catch (error) {
       sendError(error);
     }
   }
 
   @Put(':orderId/reopen')
-  async reopenPackage(@Param('orderId') orderId: string, @Req() { user }) {
+  async reopenOrder(@Param('orderId') orderId: string, @Req() { user }) {
     try {
-      return await this.ordersService.reopenPackage(orderId);
+      return await this.ordersService.reopenOrder(orderId);
     } catch (error) {
       sendError(error);
     }
   }
 
   @Delete(':orderId')
-  async deletePackage(@Param('orderId') orderId: string, @Req() { user }) {
+  async deleteOrder(@Param('orderId') orderId: string, @Req() { user }) {
     try {
       const order = await this.ordersService.findOne(orderId);
       return await this.ordersService.deleteOne(orderId);

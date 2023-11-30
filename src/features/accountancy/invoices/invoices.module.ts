@@ -7,12 +7,14 @@ import { Invoice, InvoiceSchema } from './entities/invoice.entity';
 import { InvoicesController } from './invoices.controller';
 import { InvoicesHandler } from './invoices.handler';
 import { InvoicesService } from './invoices.service';
+import { TransactionsModule } from 'src/features/transactions/transactions.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Invoice.name, schema: InvoiceSchema }]),
     OrdersModule,
     NotificationsModule,
     UsersModule,
+    TransactionsModule,
   ],
   controllers: [InvoicesController],
   providers: [InvoicesService, InvoicesHandler],

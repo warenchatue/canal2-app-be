@@ -1,14 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import {
-  IsArray,
-  IsBoolean,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  Max,
-  Min,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString, Max, Min } from 'class-validator';
 import { toBoolean } from 'src/common/helpers';
 export class CreateInvoiceDto {
   @ApiProperty({ example: 'My awesome bill' })
@@ -21,6 +13,9 @@ export class CreateInvoiceDto {
   @ApiPropertyOptional({ example: 'XAFG_7587' })
   code: string;
 
+  @ApiPropertyOptional({ example: '' })
+  paymentCondition: string;
+
   @ApiProperty()
   @IsString()
   creator: string;
@@ -31,7 +26,7 @@ export class CreateInvoiceDto {
 
   @ApiPropertyOptional()
   @IsString()
-  invoiceValidator: string;
+  validator: string;
 
   @ApiPropertyOptional()
   requiredAdminValidator: boolean;
@@ -65,6 +60,18 @@ export class CreateInvoiceDto {
   @ApiPropertyOptional()
   org?: string;
 
+  @ApiPropertyOptional()
+  amount?: number;
+
+  @ApiPropertyOptional()
+  team?: string;
+
+  @ApiPropertyOptional()
+  paid?: number;
+
   @ApiPropertyOptional({ example: '[]' })
   items?: any[];
+
+  @ApiPropertyOptional({ example: '[]' })
+  transactions?: string[];
 }

@@ -12,15 +12,20 @@ import {
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindQueryDto } from 'src/common/dto/find-query.dto';
-import { sendError } from 'src/common/helpers';
+import { genCode, sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { OrdersService } from 'src/features/orders/orders.service';
 import { UseJwt } from '../../auth/auth.decorator';
+import * as moment from 'moment';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { InvoiceDocument } from './entities/invoice.entity';
 import { ORDER_CREATED_EVENT } from './invoices.handler';
 import { InvoicesService } from './invoices.service';
+import { CreateTransactionDto } from 'src/features/transactions/dto/create-transaction.dto';
+import { TransactionsService } from 'src/features/transactions/transactions.service';
+import { TransactionType } from 'src/features/transactions/entities/transaction.entity';
+import { throwError } from 'rxjs';
 
 @ApiBearerAuth()
 @ApiTags('Invoices')
@@ -30,6 +35,7 @@ export class InvoicesController extends BaseController {
   constructor(
     private readonly invoicesService: InvoicesService,
     private readonly ordersServices: OrdersService,
+    private readonly transactionsService: TransactionsService,
     private readonly event: EventEmitter2,
   ) {
     super();
@@ -38,9 +44,15 @@ export class InvoicesController extends BaseController {
   @Post()
   async create(@Body() dto: CreateInvoiceDto, @Req() { user }) {
     try {
+      const allInvoices = await this.invoicesService.findAll();
       return await this.run(async () => {
         const result = await this.invoicesService.create(
-          { ...dto, creator: user._id },
+          {
+            ...dto,
+            creator: user._id,
+            code:
+              'FAC/' + moment().year() + '/' + genCode(allInvoices.length + 1),
+          },
           dto.announcer,
         );
 
@@ -90,6 +102,29 @@ export class InvoicesController extends BaseController {
   async getPackage(@Param('invoiceId') invoiceId: string, @Req() { user }) {
     try {
       return await this.invoicesService.findOne(invoiceId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @Put(':invoiceId/addPayment')
+  async addPayment(
+    @Param('invoiceId') invoiceId: string,
+    @Body() dto: CreateTransactionDto,
+    @Req() { user },
+  ) {
+    try {
+      const txn = await this.transactionsService.create({
+        ...dto,
+        type: TransactionType.sales,
+        author: user._id,
+      });
+      if (txn) {
+        const inv = await this.invoicesService.findOne(invoiceId);
+        this.invoicesService.updatePaidAmount(invoiceId, txn.amount + inv.paid);
+        return await this.invoicesService.addPayment(invoiceId, txn._id);
+      }
+      throwError;
     } catch (error) {
       sendError(error);
     }
