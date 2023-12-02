@@ -14,7 +14,7 @@ export class CreateAccountDto {
   @IsString()
   position: number;
 
-  @ApiProperty({ example: 'tax desc' })
+  @ApiProperty({ example: 'acc desc' })
   @IsNotEmpty()
   @IsEmail()
   description: string;

@@ -19,6 +19,8 @@ import { UsersModule } from './features/users/users.module';
 import { PackagesModule } from './features/pub/packages/packages.module';
 import { InvoicesModule } from './features/accountancy/invoices/invoices.module';
 import { TransactionsModule } from './features/transactions/transactions.module';
+import { PaymentMethodsModule } from './features/accountancy/payment-methods/payment-methods.module';
+import { PaymentConditionsModule } from './features/accountancy/payment-conditions/payment-conditions.module';
 
 const features = [
   AuthModule,
@@ -37,6 +39,8 @@ const features = [
   PackagesModule,
   InvoicesModule,
   TransactionsModule,
+  PaymentMethodsModule,
+  PaymentConditionsModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {
