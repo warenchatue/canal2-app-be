@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as sc } from 'mongoose';
 import { BaseSchema } from 'src/common/shared/base-schema';
+import { Account } from 'src/features/accountancy/accounts/entities/account.entity';
 import { Org } from 'src/features/orgs/entities/org.entity';
 import { User } from 'src/features/users/entities/user.entity';
 
@@ -23,6 +24,9 @@ export enum TransactionStatus {
   timestamps: true,
 })
 export class Transaction extends BaseSchema {
+  @Prop()
+  code: string;
+
   @Prop({ required: true })
   amount: number;
 
@@ -50,8 +54,8 @@ export class Transaction extends BaseSchema {
   @Prop({ type: sc.Types.Mixed })
   data: sc.Types.Mixed;
 
-  @Prop({ type: sc.Types.Mixed })
-  paymentMethod: sc.Types.Mixed;
+  @Prop({ type: sc.Types.ObjectId, ref: () => Account })
+  paymentAccount: sc.Types.ObjectId | sc.Types.String;
 }
 
 export const TransactionSchema = SchemaFactory.createForClass(Transaction);

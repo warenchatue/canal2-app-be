@@ -14,6 +14,9 @@ export class CreatePackageDto {
   @ApiPropertyOptional({ example: 'XAFG_7587' })
   code: string;
 
+  @ApiPropertyOptional({ example: 'SPOT' })
+  label: string;
+
   @ApiPropertyOptional({ example: 25 })
   numberPlay?: number;
 
@@ -63,11 +66,7 @@ export class CreatePackageDto {
   adminValidator: string;
 
   @ApiPropertyOptional()
-  requiredAdminValidator: boolean;
-
-  @ApiPropertyOptional()
-  @IsString()
-  expectedAdminValidator: string;
+  adminValidated: boolean;
 
   @ApiProperty()
   @IsString()

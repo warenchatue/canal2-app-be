@@ -22,9 +22,6 @@ export class Invoice extends BaseSchema {
   description: string;
 
   @Prop()
-  paymentCondition: string;
-
-  @Prop()
   amount: number;
 
   @Prop()
@@ -35,6 +32,12 @@ export class Invoice extends BaseSchema {
 
   @Prop({ type: [{ type: sc.Types.Mixed }] })
   items: sc.Types.Mixed[] | any[];
+
+  @Prop({ type: sc.Types.ObjectId, ref: 'PaymentMethod' })
+  paymentMethod: sc.Types.ObjectId;
+
+  @Prop({ type: sc.Types.ObjectId, ref: 'PaymentCondition' })
+  paymentCondition: sc.Types.ObjectId;
 
   @Prop({ type: [{ type: sc.Types.ObjectId, ref: () => Transaction }] })
   transactions: sc.Types.ObjectId[] | string[];

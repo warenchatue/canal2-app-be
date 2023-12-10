@@ -27,7 +27,9 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
       { path: 'manager', model: 'User' },
       { path: 'announcer', model: 'Announcer' },
       { path: 'org', model: 'Org' },
-      { path: 'package', model: 'OrderPackage' },
+      { path: 'package', model: 'Campaign' },
+      { path: 'paymentMethod', model: 'PaymentMethod' },
+      { path: 'paymentCondition', model: 'PaymentCondition' },
     ];
     return this.orders.findById(_id).orFail().populate(population).exec();
   }
@@ -38,7 +40,9 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
       { path: 'manager', model: 'User' },
       { path: 'announcer', model: 'Announcer' },
       { path: 'org', model: 'Org' },
-      { path: 'package', model: 'OrderPackage' },
+      { path: 'package', model: 'Campaign' },
+      { path: 'paymentMethod', model: 'PaymentMethod' },
+      { path: 'paymentCondition', model: 'PaymentCondition' },
     ];
     return this.orders
       .find()

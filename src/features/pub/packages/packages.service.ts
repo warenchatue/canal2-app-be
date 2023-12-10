@@ -5,14 +5,14 @@ import { ServiceDeleteAbstract } from 'src/common/abstracts/service-delete.abstr
 import { USER_POPULATION } from '../../users/entities/user.entity';
 import { CreatePackageDto } from './dto/create-package.dto';
 import { UpdatePackageDto } from './dto/update-package.dto';
-import { OrderPackage, PackageDocument } from './entities/package.entity';
+import { Campaign, CampaignDocument } from './entities/package.entity';
 import { State } from 'src/common/shared/base-schema';
 
 @Injectable()
-export class PackagesService extends ServiceDeleteAbstract<OrderPackage> {
+export class PackagesService extends ServiceDeleteAbstract<Campaign> {
   constructor(
-    @InjectModel(OrderPackage.name)
-    private readonly packages: Model<PackageDocument>,
+    @InjectModel(Campaign.name)
+    private readonly packages: Model<CampaignDocument>,
   ) {
     super();
   }
@@ -25,13 +25,29 @@ export class PackagesService extends ServiceDeleteAbstract<OrderPackage> {
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
+      { path: 'adminValidator', model: 'User' },
       {
         path: 'products',
         model: 'Product',
       },
       {
+        path: 'announcer',
+        model: 'Announcer',
+      },
+      {
         path: 'order',
         model: 'Order',
+        populate: [
+          {
+            path: 'announcer',
+            model: 'Announcer',
+          },
+        ],
+      },
+
+      {
+        path: 'invoice',
+        model: 'Invoice',
         populate: [
           {
             path: 'announcer',
@@ -62,9 +78,25 @@ export class PackagesService extends ServiceDeleteAbstract<OrderPackage> {
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
+      { path: 'adminValidator', model: 'User' },
+      {
+        path: 'announcer',
+        model: 'Announcer',
+      },
       {
         path: 'order',
         model: 'Order',
+        populate: [
+          {
+            path: 'announcer',
+            model: 'Announcer',
+          },
+        ],
+      },
+
+      {
+        path: 'invoice',
+        model: 'Invoice',
         populate: [
           {
             path: 'announcer',

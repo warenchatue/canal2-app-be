@@ -17,7 +17,7 @@ import { BaseController } from 'src/common/shared/base-controller';
 import { UseJwt } from '../../auth/auth.decorator';
 import { CreatePackageDto } from './dto/create-package.dto';
 import { UpdatePackageDto } from './dto/update-package.dto';
-import { PackageDocument } from './entities/package.entity';
+import { CampaignDocument } from './entities/package.entity';
 import { PackagesService } from './packages.service';
 import { PlanningsService } from '../../pub/plannings/plannings.service';
 import { ProductService } from '../../products/products.service';
@@ -62,7 +62,7 @@ export class PackageController extends BaseController {
   @Get()
   async getAllPackages(
     @Req() { user },
-    @Query() { states }: FindQueryDto<PackageDocument>,
+    @Query() { states }: FindQueryDto<CampaignDocument>,
   ) {
     try {
       const data = await this.packagesService.find();

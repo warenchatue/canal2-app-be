@@ -33,11 +33,13 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
         populate: [
           {
             path: 'package',
-            model: 'OrderPackage',
+            model: 'Campaign',
           },
         ],
       },
       { path: 'org', model: 'Org' },
+      { path: 'paymentMethod', model: 'PaymentMethod' },
+      { path: 'paymentCondition', model: 'PaymentCondition' },
     ];
     return this.invoices.findById(_id).orFail().populate(population).exec();
   }
@@ -54,11 +56,13 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
         populate: [
           {
             path: 'package',
-            model: 'OrderPackage',
+            model: 'Campaign',
           },
         ],
       },
       { path: 'org', model: 'Org' },
+      { path: 'paymentMethod', model: 'PaymentMethod' },
+      { path: 'paymentCondition', model: 'PaymentCondition' },
     ];
     return this.invoices
       .find()

@@ -10,7 +10,7 @@ import {
   Post,
   Put,
   Query,
-  Req
+  Req,
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import {
@@ -19,12 +19,13 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { sendError } from 'src/common/helpers';
+import { genCode, sendError } from 'src/common/helpers';
 import { UseJwt } from '../auth/auth.decorator';
 import { OrgsService } from '../orgs/orgs.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { TransactionsService } from './transactions.service';
+import * as moment from 'moment';
 
 @ApiTags('Transactions')
 @Controller('transactions')
@@ -63,14 +64,17 @@ export class TransactionsController {
   @ApiBearerAuth()
   @UseJwt()
   @Post()
-  create(
+  async create(
     @Body() dto: CreateTransactionDto,
     @Req() req,
     @Query('author') author: string = null,
   ) {
-    return this.transactionsService
+    const allTxns = await this.transactionsService.findAllTransactions();
+
+    return await this.transactionsService
       .create({
         ...dto,
+        code: 'REG/' + moment().year() + '/' + genCode(allTxns.length + 1),
         author: author ? author : req.user ? req.user._id : null,
       })
       .then((result) => {
@@ -92,19 +96,6 @@ export class TransactionsController {
   ) {
     return this.transactionsService
       .update(transactionId, dto)
-      .then((result) => result)
-      .catch((error) => {
-        throw new HttpException(error, 500);
-      });
-  }
-
-  @Patch('paymentMethod/:transactionId')
-  updatePaymentMethod(
-    @Param('transactionId') transactionId: string,
-    @Body() dto: UpdateTransactionDto,
-  ) {
-    return this.transactionsService
-      .updatePaymentMethod(transactionId, dto)
       .then((result) => result)
       .catch((error) => {
         throw new HttpException(error, 500);

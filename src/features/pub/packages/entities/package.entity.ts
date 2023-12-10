@@ -2,6 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as sc } from 'mongoose';
 import { BaseSchema } from 'src/common/shared/base-schema';
 import { Invoice } from 'src/features/accountancy/invoices/entities/invoice.entity';
+import {
+  Announcer,
+  AnnouncerDocument,
+} from 'src/features/announcers/entities/announcer.entity';
 import { Order } from 'src/features/orders/entities/order.entity';
 import { Product } from 'src/features/products/entities/product.entity';
 import { Planning } from 'src/features/pub/plannings/entities/planning.entity';
@@ -9,9 +13,12 @@ import { User } from 'src/features/users/entities/user.entity';
 @Schema({
   timestamps: true,
 })
-export class OrderPackage extends BaseSchema {
+export class Campaign extends BaseSchema {
   @Prop()
   code: string;
+
+  @Prop()
+  label: string;
 
   @Prop()
   numberSpots: number;
@@ -40,6 +47,9 @@ export class OrderPackage extends BaseSchema {
   @Prop({ type: sc.Types.ObjectId, ref: () => Invoice })
   invoice: sc.Types.ObjectId;
 
+  @Prop({ type: sc.Types.ObjectId, ref: () => Announcer })
+  announcer: sc.Types.ObjectId | AnnouncerDocument;
+
   @Prop()
   status: string;
 
@@ -62,10 +72,7 @@ export class OrderPackage extends BaseSchema {
   adminValidator: sc.Types.ObjectId;
 
   @Prop({ default: false })
-  requiredAdminValidator: boolean;
-
-  @Prop({ type: sc.Types.ObjectId, ref: () => User })
-  expectedAdminValidator: sc.Types.ObjectId;
+  adminValidated: boolean;
 
   @Prop({ type: [{ type: sc.Types.ObjectId, ref: () => Product }] })
   products: sc.Types.ObjectId[] | string[];
@@ -74,5 +81,5 @@ export class OrderPackage extends BaseSchema {
   plannings: sc.Types.ObjectId[] | string[];
 }
 
-export type PackageDocument = OrderPackage & Document;
-export const PackageSchema = SchemaFactory.createForClass(OrderPackage);
+export type CampaignDocument = Campaign & Document;
+export const CampaignSchema = SchemaFactory.createForClass(Campaign);

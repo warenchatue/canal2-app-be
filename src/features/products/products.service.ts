@@ -33,7 +33,7 @@ export class ProductService extends ServiceDeleteAbstract<Product> {
       .populate([
         {
           path: 'package',
-          model: 'OrderPackage',
+          model: 'Campaign',
         },
       ])
       .exec();
@@ -45,7 +45,7 @@ export class ProductService extends ServiceDeleteAbstract<Product> {
       .populate([
         {
           path: 'package',
-          model: 'OrderPackage',
+          model: 'Campaign',
         },
       ])
       .where('state')

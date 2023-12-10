@@ -6,6 +6,9 @@ import {
 } from '../entities/transaction.entity';
 
 export class CreateTransactionDto {
+  @ApiPropertyOptional()
+  code?: string;
+
   @ApiProperty({ minimum: 100 })
   @IsNotEmpty()
   @Min(100)
@@ -26,7 +29,7 @@ export class CreateTransactionDto {
   data?: any;
 
   @ApiPropertyOptional()
-  paymentMethod?: any;
+  paymentAccount?: string;
 
   @ApiProperty({ example: '63038d57fba1cb40caa1e0c4' })
   @IsNotEmpty()

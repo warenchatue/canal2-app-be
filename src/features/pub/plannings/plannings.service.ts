@@ -41,7 +41,7 @@ export class PlanningsService extends DeletableMixin<Planning> {
           model: 'Product',
           populate: {
             path: 'package',
-            model: 'OrderPackage',
+            model: 'Campaign',
             populate: [
               {
                 path: 'creator',
@@ -83,7 +83,7 @@ export class PlanningsService extends DeletableMixin<Planning> {
           model: 'Product',
           populate: {
             path: 'package',
-            model: 'OrderPackage',
+            model: 'Campaign',
             populate: [
               {
                 path: 'creator',

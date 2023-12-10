@@ -14,9 +14,6 @@ export class Order extends BaseSchema {
   label: string;
 
   @Prop()
-  paymentCondition: string;
-
-  @Prop()
   teal: string;
 
   @Prop()
@@ -34,8 +31,14 @@ export class Order extends BaseSchema {
   @Prop({ type: [{ type: sc.Types.Mixed }] })
   items: sc.Types.Mixed[] | any[];
 
-  @Prop({ type: sc.Types.ObjectId, ref: 'OrderPackage' })
+  @Prop({ type: sc.Types.ObjectId, ref: 'Campaign' })
   package: sc.Types.ObjectId;
+
+  @Prop({ type: sc.Types.ObjectId, ref: 'PaymentMethod' })
+  paymentMethod: sc.Types.ObjectId;
+
+  @Prop({ type: sc.Types.ObjectId, ref: 'PaymentCondition' })
+  paymentCondition: sc.Types.ObjectId;
 
   @Prop({ type: sc.Types.ObjectId, ref: 'Org' })
   org: sc.Types.ObjectId;

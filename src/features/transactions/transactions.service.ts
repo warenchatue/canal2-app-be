@@ -28,6 +28,10 @@ export class TransactionsService extends DeletableMixin<Transaction> {
     return this.transactions.find({ author }).populate('org').exec();
   }
 
+  findAllTransactions() {
+    return this.transactions.find().populate('org').exec();
+  }
+
   findTransactionsByGroup(org: string) {
     return this.transactions.find({ org }).populate(TRANSACTION_POPULATION);
   }
@@ -43,15 +47,6 @@ export class TransactionsService extends DeletableMixin<Transaction> {
       { _id },
       {
         $set: dto,
-      },
-    );
-  }
-
-  updatePaymentMethod(_id: string, dto: UpdateTransactionDto) {
-    return this.transactions.updateOne(
-      { _id },
-      {
-        $set: { paymentMethod: dto.paymentMethod },
       },
     );
   }

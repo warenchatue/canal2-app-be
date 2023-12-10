@@ -114,8 +114,10 @@ export class InvoicesController extends BaseController {
     @Req() { user },
   ) {
     try {
+      const allTxns = await this.transactionsService.findAllTransactions();
       const txn = await this.transactionsService.create({
         ...dto,
+        code: 'REG/' + moment().year() + '/' + genCode(allTxns.length + 1),
         type: TransactionType.sales,
         author: user._id,
       });

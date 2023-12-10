@@ -10,15 +10,15 @@ import {
 } from 'class-validator';
 import { toBoolean } from 'src/common/helpers';
 export class CreateOrderDto {
-  @ApiProperty({ example: 'My awesome order' })
-  @IsNotEmpty()
+  @ApiPropertyOptional({ example: 'My awesome order' })
   @IsString()
-  @Min(5)
-  @Max(256)
   label: string;
 
-  @ApiPropertyOptional({ example: 'XAFG_7587' })
+  @ApiPropertyOptional({ example: 'DEV/2023/0001' })
   code: string;
+
+  @ApiPropertyOptional({ example: '' })
+  paymentMethod: string;
 
   @ApiPropertyOptional({ example: '' })
   paymentCondition: string;
