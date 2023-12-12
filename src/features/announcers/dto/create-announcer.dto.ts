@@ -1,11 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
 import { AnnouncerType } from '../entities/announcer.entity';
 
 export class CreateAnnouncerDto {
@@ -13,20 +7,22 @@ export class CreateAnnouncerDto {
   @IsString()
   name: string;
 
-  @ApiProperty({ example: 'admin@test.com' })
-  @IsNotEmpty()
-  @IsEmail()
+  @ApiPropertyOptional({ example: 'admin@test.com' })
   email: string;
 
   @ApiPropertyOptional({ default: '+237690909090' })
   @IsPhoneNumber()
   phone: string;
 
+  @ApiPropertyOptional({ default: '+237690909010' })
+  @IsPhoneNumber()
+  phone2: string;
+
   @ApiPropertyOptional({ default: '' })
   @IsPhoneNumber()
   rc: string;
 
-    @ApiPropertyOptional({ default: '' })
+  @ApiPropertyOptional({ default: '' })
   @IsPhoneNumber()
   nc: string;
 

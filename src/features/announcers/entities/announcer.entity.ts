@@ -17,11 +17,14 @@ export class Announcer extends BaseSchema {
   @Prop()
   profilePicture: string;
 
-  @Prop({ unique: true })
+  @Prop()
   email: string;
 
   @Prop()
   phone: string;
+
+  @Prop()
+  phone2: string;
 
   @Prop()
   rc: string;
