@@ -26,12 +26,14 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { TransactionsService } from './transactions.service';
 import * as moment from 'moment';
+import { AccountsService } from '../accountancy/accounts/accounts.service';
 
 @ApiTags('Transactions')
 @Controller('transactions')
 export class TransactionsController {
   constructor(
     private readonly transactionsService: TransactionsService,
+    private readonly accountsService: AccountsService,
     private readonly event: EventEmitter2,
   ) {}
 

@@ -10,6 +10,12 @@ export class CreateInvoiceDto {
   @ApiPropertyOptional({ example: 'FAC/2023/001' })
   code: string;
 
+  @ApiPropertyOptional({ example: 'dd/mm/yyyy' })
+  date: string;
+
+  @ApiPropertyOptional({ example: 'dd/mm/yyyy' })
+  dueDate: string;
+
   @ApiPropertyOptional({ example: '' })
   paymentMethod: string;
 

@@ -14,10 +14,16 @@ export class Order extends BaseSchema {
   label: string;
 
   @Prop()
-  teal: string;
+  team: string;
 
   @Prop()
   code: string;
+
+  @Prop()
+  date: string;
+
+  @Prop()
+  dueDate: string;
 
   @Prop()
   description: string;

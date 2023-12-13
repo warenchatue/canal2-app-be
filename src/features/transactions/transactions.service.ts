@@ -25,11 +25,14 @@ export class TransactionsService extends DeletableMixin<Transaction> {
   }
 
   findTransactionsByAuthor(author: string) {
-    return this.transactions.find({ author }).populate('org').exec();
+    return this.transactions
+      .find({ author })
+      .populate(TRANSACTION_POPULATION)
+      .exec();
   }
 
   findAllTransactions() {
-    return this.transactions.find().populate('org').exec();
+    return this.transactions.find().populate(TRANSACTION_POPULATION).exec();
   }
 
   findTransactionsByGroup(org: string) {

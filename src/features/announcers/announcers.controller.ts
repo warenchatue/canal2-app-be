@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import * as _ from 'lodash';
-import { sendError } from 'src/common/helpers';
+import { genCode, sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { URequest } from 'src/common/shared/request';
 import { UseJwt } from '../auth/auth.decorator';
@@ -77,14 +77,14 @@ export class AnnouncersController extends BaseController {
   @Post()
   async createAnnouncer(@Body() dto: CreateAnnouncerDto) {
     try {
-      const announcer = await (
-        await this.announcersService.create(dto)
+      const allAnnouncers = await this.announcersService.findAll();
+      const announcer = (
+        await this.announcersService.create({
+          ...dto,
+          code: 'CLT' + genCode(allAnnouncers.length + 1, 5),
+        })
       ).toJSON();
-      return {
-        name: announcer.name,
-        phone: announcer.phone,
-        type: announcer.type,
-      };
+      return announcer;
     } catch (error) {
       sendError(error);
     }

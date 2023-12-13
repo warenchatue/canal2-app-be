@@ -31,6 +31,9 @@ export class Org extends BaseSchema {
   phone: string;
 
   @Prop()
+  phone2: string;
+
+  @Prop()
   city: string;
 
   @Prop()
@@ -44,6 +47,9 @@ export class Org extends BaseSchema {
 
   @Prop()
   address: string;
+
+  @Prop()
+  footerTitle: string;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
   owner: sc.Types.ObjectId | string | UserDocument;

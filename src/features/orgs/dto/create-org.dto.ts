@@ -32,7 +32,13 @@ export class CreateOrgDto {
   address?: string;
 
   @IsString()
+  footerTitle?: string;
+
+  @IsString()
   phone?: string;
+
+  @IsString()
+  phone2?: string;
 
   @IsString()
   city?: string;

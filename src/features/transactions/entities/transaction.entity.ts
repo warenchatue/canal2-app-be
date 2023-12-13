@@ -63,5 +63,5 @@ export const TransactionSchema = SchemaFactory.createForClass(Transaction);
 export const TRANSACTION_POPULATION = [
   { path: 'org', model: 'Org' },
   { path: 'author', model: 'User' },
-  { path: 'validator', model: 'User' },
+  { path: 'paymentAccount', model: 'Account' },
 ];

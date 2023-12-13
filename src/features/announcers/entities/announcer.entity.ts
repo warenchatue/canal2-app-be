@@ -12,7 +12,13 @@ export enum AnnouncerType {
 @Schema({ timestamps: true })
 export class Announcer extends BaseSchema {
   @Prop()
+  code: string;
+
+  @Prop()
   name: string;
+
+  @Prop()
+  city: string;
 
   @Prop()
   profilePicture: string;

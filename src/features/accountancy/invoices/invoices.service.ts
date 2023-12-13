@@ -26,7 +26,6 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
       { path: 'announcer', model: 'Announcer' },
-      { path: 'transactions', model: 'Transaction' },
       {
         path: 'order',
         model: 'Order',
@@ -34,6 +33,16 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
           {
             path: 'package',
             model: 'Campaign',
+          },
+        ],
+      },
+      {
+        path: 'transactions',
+        model: 'Transaction',
+        populate: [
+          {
+            path: 'paymentAccount',
+            model: 'Account',
           },
         ],
       },
@@ -49,7 +58,6 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
       { path: 'announcer', model: 'Announcer' },
-      { path: 'transactions', model: 'Transaction' },
       {
         path: 'order',
         model: 'Order',
@@ -57,6 +65,16 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
           {
             path: 'package',
             model: 'Campaign',
+          },
+        ],
+      },
+      {
+        path: 'transactions',
+        model: 'Transaction',
+        populate: [
+          {
+            path: 'paymentAccount',
+            model: 'Account',
           },
         ],
       },

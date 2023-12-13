@@ -10,6 +10,7 @@ import {
 } from './transactions.controller';
 import { TransactionsHandler } from './transactions.handler';
 import { TransactionsService } from './transactions.service';
+import { AccountsModule } from '../accountancy/accounts/accounts.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TransactionsService } from './transactions.service';
     OrgsModule,
     NotificationsModule,
     UsersModule,
+    AccountsModule,
   ],
   controllers: [TransactionsController, OrgTransactionsController],
   providers: [TransactionsService, TransactionsHandler],

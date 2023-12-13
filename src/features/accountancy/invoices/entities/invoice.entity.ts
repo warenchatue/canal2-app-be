@@ -19,6 +19,12 @@ export class Invoice extends BaseSchema {
   code: string;
 
   @Prop()
+  date: string;
+
+  @Prop()
+  dueDate: string;
+
+  @Prop()
   description: string;
 
   @Prop()

@@ -17,6 +17,12 @@ export class CreateOrderDto {
   @ApiPropertyOptional({ example: 'DEV/2023/0001' })
   code: string;
 
+  @ApiPropertyOptional({ example: 'dd/mm/yyyy' })
+  date: string;
+
+  @ApiPropertyOptional({ example: 'dd/mm/yyyy' })
+  dueDate: string;
+
   @ApiPropertyOptional({ example: '' })
   paymentMethod: string;
 

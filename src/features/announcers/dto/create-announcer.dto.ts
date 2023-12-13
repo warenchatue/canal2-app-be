@@ -3,6 +3,10 @@ import { IsEnum, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
 import { AnnouncerType } from '../entities/announcer.entity';
 
 export class CreateAnnouncerDto {
+  @ApiPropertyOptional({ default: 'CLT0001' })
+  @IsString()
+  code: string;
+
   @ApiPropertyOptional({ default: 'Canal 2 International' })
   @IsString()
   name: string;
@@ -34,6 +38,10 @@ export class CreateAnnouncerDto {
   @ApiProperty()
   @IsNotEmpty()
   address: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  city: string;
 
   @ApiPropertyOptional()
   country?: string;
