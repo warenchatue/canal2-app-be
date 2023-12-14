@@ -6,7 +6,7 @@ import {
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
-import { AccountProvider, UserType } from '../entities/user.entity';
+import { AccountProvider, UserTeam } from '../entities/user.entity';
 
 export class CreateUserDto {
   @ApiPropertyOptional({ default: 'John' })
@@ -30,10 +30,10 @@ export class CreateUserDto {
   @IsPhoneNumber()
   phone: string;
 
-  @ApiProperty({ default: UserType.personal })
+  @ApiProperty({ default: UserTeam.douala })
   @IsNotEmpty()
-  @IsEnum(UserType)
-  userType?: UserType;
+  @IsEnum(UserTeam)
+  team?: UserTeam;
 
   @ApiProperty()
   @IsNotEmpty()

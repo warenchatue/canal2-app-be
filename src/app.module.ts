@@ -21,6 +21,7 @@ import { InvoicesModule } from './features/accountancy/invoices/invoices.module'
 import { TransactionsModule } from './features/transactions/transactions.module';
 import { PaymentMethodsModule } from './features/accountancy/payment-methods/payment-methods.module';
 import { PaymentConditionsModule } from './features/accountancy/payment-conditions/payment-conditions.module';
+import { ArticleCategoriesModule } from './features/article-categories/article-categories.module';
 
 const features = [
   AuthModule,
@@ -41,6 +42,7 @@ const features = [
   TransactionsModule,
   PaymentMethodsModule,
   PaymentConditionsModule,
+  ArticleCategoriesModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {

@@ -7,6 +7,7 @@ import {
   AnnouncerDocument,
 } from 'src/features/announcers/entities/announcer.entity';
 import { Order } from 'src/features/orders/entities/order.entity';
+import { Org } from 'src/features/orgs/entities/org.entity';
 import { Product } from 'src/features/products/entities/product.entity';
 import { Planning } from 'src/features/pub/plannings/entities/planning.entity';
 import { User } from 'src/features/users/entities/user.entity';
@@ -40,6 +41,9 @@ export class Campaign extends BaseSchema {
 
   @Prop()
   description: string;
+
+  @Prop({ type: sc.Types.ObjectId, ref: () => Org })
+  org: sc.Types.ObjectId;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => Order })
   order: sc.Types.ObjectId;

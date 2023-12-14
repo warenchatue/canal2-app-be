@@ -89,6 +89,9 @@ export class CreatePackageDto {
   description?: string;
 
   @ApiPropertyOptional({ example: '' })
+  org?: string;
+
+  @ApiPropertyOptional({ example: '' })
   order?: string;
 
   @ApiPropertyOptional({ example: '' })

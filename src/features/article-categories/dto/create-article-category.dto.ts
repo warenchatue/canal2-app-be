@@ -1,13 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateArticleDto {
+export class CreateArticleCategoryDto {
   @ApiPropertyOptional({ default: 'SPOT' })
   @IsString()
   code: string;
@@ -16,11 +10,7 @@ export class CreateArticleDto {
   @IsString()
   name: string;
 
-  @ApiProperty({ example: 'art desc' })
+  @ApiProperty({ example: 'art cat desc' })
   @IsNotEmpty()
-  @IsEmail()
   description: string;
-
-  @ApiPropertyOptional()
-  category?: string;
 }

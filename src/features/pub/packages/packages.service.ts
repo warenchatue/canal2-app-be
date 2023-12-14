@@ -25,6 +25,7 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
+      { path: 'org', model: 'Org' },
       { path: 'adminValidator', model: 'User' },
       {
         path: 'products',
@@ -78,6 +79,7 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
+      { path: 'org', model: 'Org' },
       { path: 'adminValidator', model: 'User' },
       {
         path: 'announcer',

@@ -17,27 +17,29 @@ import { sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { URequest } from 'src/common/shared/request';
 import { UseJwt } from '../auth/auth.decorator';
-import { UpdateArticleDto } from './dto/update-article.dto';
-import { ArticlesService } from './articles.service';
-import { CreateArticleDto } from './dto/create-article.dto';
+import { UpdateArticleCategoryDto } from './dto/update-article-catogory.dto';
+import { ArticleCategoriesService } from './article-categories.service';
+import { CreateArticleCategoryDto } from './dto/create-article-category.dto';
 // import { FirebaseService } from '../firebase/firebase.service';
 
-@Controller('articles')
+@Controller('article-categories')
 @UseInterceptors(ClassSerializerInterceptor)
-@ApiTags('Articles')
-export class ArticlesController extends BaseController {
-  private logger = new Logger(ArticlesController.name);
+@ApiTags('ArticleCategories')
+export class ArticleCategoriesController extends BaseController {
+  private logger = new Logger(ArticleCategoriesController.name);
 
-  constructor(private readonly articlesServices: ArticlesService) {
+  constructor(
+    private readonly articleCategoriesServices: ArticleCategoriesService,
+  ) {
     super();
   }
 
-  async updateArticle(
-    @Body() dto: UpdateArticleDto,
+  async updateArticleCategory(
+    @Body() dto: UpdateArticleCategoryDto,
     @Req() { user }: URequest,
   ) {
     return await this.run(
-      async () => await this.articlesServices.update(user._id, dto),
+      async () => await this.articleCategoriesServices.update(user._id, dto),
     );
   }
 
@@ -46,7 +48,7 @@ export class ArticlesController extends BaseController {
   @Get()
   async getAll() {
     return await this.run(async () => {
-      const result = await this.articlesServices.find();
+      const result = await this.articleCategoriesServices.find();
       const final_result = result.map((e) => {
         const json = e.toJSON();
         json['_id'] = json['_id'].toString();
@@ -60,10 +62,12 @@ export class ArticlesController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Get(':articleId')
-  async getAccount(@Param('articleId') articleId: string) {
+  @Get(':articleCategoryId')
+  async getAccount(@Param('articleCategoryId') articleCategoryId: string) {
     return await this.run(async () => {
-      const result = (await this.articlesServices.findOne(articleId)).toJSON();
+      const result = (
+        await this.articleCategoriesServices.findOne(articleCategoryId)
+      ).toJSON();
       console.log(result);
       return result;
     });
@@ -72,25 +76,10 @@ export class ArticlesController extends BaseController {
   @ApiBearerAuth()
   @UseJwt()
   @Post()
-  async createArticle(@Body() dto: CreateArticleDto) {
-    try {
-      const article = await (await this.articlesServices.create(dto)).toJSON();
-      return article;
-    } catch (error) {
-      sendError(error);
-    }
-  }
-
-  @ApiBearerAuth()
-  @UseJwt()
-  @Put(':articleId')
-  async updateAccount(
-    @Param('articleId') accountId: string,
-    @Body() dto: UpdateArticleDto,
-  ) {
+  async createArticleCategory(@Body() dto: CreateArticleCategoryDto) {
     try {
       const article = await (
-        await this.articlesServices.update(accountId, dto)
+        await this.articleCategoriesServices.create(dto)
       ).toJSON();
       return article;
     } catch (error) {
@@ -100,13 +89,30 @@ export class ArticlesController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Delete(':articleId')
-  async deleteArticle(
-    @Param('articleId') articleId: string,
+  @Put(':articleCategoryId')
+  async updateAccount(
+    @Param('articleCategoryId') accountId: string,
+    @Body() dto: UpdateArticleCategoryDto,
+  ) {
+    try {
+      const article = await (
+        await this.articleCategoriesServices.update(accountId, dto)
+      ).toJSON();
+      return article;
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Delete(':articleCategoryId')
+  async deleteArticleCategory(
+    @Param('articleCategoryId') articleCategoryId: string,
     @Req() { user }: URequest,
   ) {
     return await this.run(async () => {
-      return await this.articlesServices.deleteOne(articleId);
+      return await this.articleCategoriesServices.deleteOne(articleCategoryId);
     });
   }
 }

@@ -142,7 +142,7 @@ export class UsersService extends DeletableMixin<User> {
     return this.users
       .findOne({ phone })
       .populate('_id')
-      .select(['email', 'phone', 'firstName', 'lastName', 'userType'])
+      .select(['email', 'phone', 'firstName', 'lastName', 'team'])
       .transform((doc) => {
         return {
           _id: doc._id.toString(),
@@ -150,7 +150,7 @@ export class UsersService extends DeletableMixin<User> {
           firstName: doc.firstName,
           lastName: doc.lastName,
           email: doc.email,
-          userType: doc.userType,
+          team: doc.team,
         };
       })
       .orFail()

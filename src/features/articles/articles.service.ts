@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreateArticleDto } from './dto/create-article.dto';
-import { Article, ArticleDocument } from './entities/article.entity';
-import * as bcrypt from 'bcrypt';
-import { UpdateArticleDto } from './dto/update-article.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { DeletableMixin } from 'src/common/mixins/deletable.mixin';
 import { State } from 'src/common/shared/base-schema';
-import { SALT_ROUND } from 'src/common/vars';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CreateArticleDto } from './dto/create-article.dto';
+import { UpdateArticleDto } from './dto/update-article.dto';
+import { Article, ArticleDocument } from './entities/article.entity';
 
 @Injectable()
 export class ArticlesService extends DeletableMixin<Article> {
@@ -31,23 +29,29 @@ export class ArticlesService extends DeletableMixin<Article> {
   }
 
   find(states = [State.active]) {
-    return (
-      this.articles
-        .find()
-        .where('state')
-        .in(states)
-        // .populate([
-        //   {
-        //     path: 'category',
-        //     model: 'Category',
-        //   },
-        // ])
-        .exec()
-    );
+    return this.articles
+      .find()
+      .where('state')
+      .in(states)
+      .populate([
+        {
+          path: 'category',
+          model: 'ArticleCategory',
+        },
+      ])
+      .exec();
   }
 
   findAll() {
-    return this.articles.find().exec();
+    return this.articles
+      .find()
+      .populate([
+        {
+          path: 'category',
+          model: 'ArticleCategory',
+        },
+      ])
+      .exec();
   }
 
   async update(_id: string, dto: UpdateArticleDto) {

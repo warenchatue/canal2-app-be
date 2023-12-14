@@ -12,9 +12,9 @@ export enum AccountProvider {
   admin = 'admin',
 }
 
-export enum UserType {
-  corporate = 'corporate',
-  personal = 'personal',
+export enum UserTeam {
+  douala = 'douala',
+  yaounde = 'yaounde',
 }
 
 @Schema({ timestamps: true })
@@ -43,8 +43,8 @@ export class User extends BaseSchema {
   @Prop({ type: sc.Types.ObjectId, ref: () => Country })
   country: sc.Types.ObjectId | string;
 
-  @Prop({ default: UserType.personal })
-  userType: UserType;
+  @Prop({ default: UserTeam.douala })
+  team: UserTeam;
 
   @Prop({ default: 0 })
   ownedOrgs: number;

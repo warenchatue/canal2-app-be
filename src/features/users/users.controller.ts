@@ -150,7 +150,7 @@ export class UsersController extends BaseController {
       return {
         firstName: user.firstName,
         lastName: user.lastName,
-        userType: user.userType,
+        team: user.team,
       };
     } catch (error) {
       sendError(error);
