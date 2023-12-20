@@ -1,13 +1,13 @@
 version: '3'
 services:
-  c2pub-db:
+  dinoes-db:
     image: mongo:4.4.17
     volumes:
-      - c2pub_data:/data/db
+      - dinoes_data:/data/db
     ports:
-      - 2721:27017
-  c2pub-be:
-    container_name: c2pub-be
+      - 2720:27017
+  dinoes-be:
+    container_name: dinoes-be
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -17,4 +17,4 @@ services:
       - .:/src:cached
 
 volumes:
-  c2pub_data:
+  dinoes_data:
