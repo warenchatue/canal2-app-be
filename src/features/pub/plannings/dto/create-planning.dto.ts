@@ -17,9 +17,13 @@ export class CreatePlanningDto {
   @IsBoolean()
   isAutoPlay: boolean;
 
-  @ApiProperty({ example: 'dfd4fsdsdsdd4788' })
+  @ApiProperty({ example: '7:25' })
   @IsNotEmpty()
   hour: string;
+
+  @ApiProperty({ example: '7:28' })
+  @IsNotEmpty()
+  playedHour: string;
 
   @ApiProperty({ example: 'dfdfd4f44dfdfd44dffdfdf7' })
   @IsNotEmpty()

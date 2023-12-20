@@ -28,10 +28,19 @@ export class Invoice extends BaseSchema {
   description: string;
 
   @Prop()
+  team: string;
+
+  @Prop()
+  amountHT: number;
+
+  @Prop()
   amount: number;
 
   @Prop()
-  team: string;
+  tva: number;
+
+  @Prop()
+  tsp: number;
 
   @Prop()
   paid: number;

@@ -67,13 +67,22 @@ export class CreateInvoiceDto {
   org?: string;
 
   @ApiPropertyOptional()
-  amount?: number;
-
-  @ApiPropertyOptional()
   team?: string;
 
   @ApiPropertyOptional()
+  amountHT?: number;
+
+  @ApiPropertyOptional()
+  amount?: number;
+
+  @ApiPropertyOptional()
   paid?: number;
+
+  @ApiPropertyOptional()
+  tva?: number;
+
+  @ApiPropertyOptional()
+  tsp?: number;
 
   @ApiPropertyOptional({ example: '[]' })
   items?: any[];

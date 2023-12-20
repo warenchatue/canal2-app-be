@@ -4,6 +4,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Logger,
   Param,
   Post,
@@ -50,7 +52,9 @@ export class AnnouncersController extends BaseController {
       const final_result = result.map((e) => {
         const json = e.toJSON();
         json['_id'] = json['_id'].toString();
-        json['country']['_id'] = json['country']['_id'].toString();
+        if (json['country']) {
+          json['country']['_id'] = json['country']['_id'].toString();
+        }
         json['notifications'] = [];
         return json;
       });
@@ -77,6 +81,13 @@ export class AnnouncersController extends BaseController {
   @Post()
   async createAnnouncer(@Body() dto: CreateAnnouncerDto) {
     try {
+      const oneAnnouncer = await this.announcersService.findByName(dto.name);
+      if (oneAnnouncer) {
+        throw new HttpException(
+          'Announcer name already exists',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       const allAnnouncers = await this.announcersService.findAll();
       const announcer = (
         await this.announcersService.create({

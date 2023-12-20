@@ -38,8 +38,8 @@ export class AnnouncersService extends DeletableMixin<Announcer> {
       .exec();
   }
 
-  findByPhone(phone: string) {
-    return this.announcers.findOne({ phone }).exec();
+  findByName(name: string) {
+    return this.announcers.findOne({ name }).exec();
   }
 
   findOne(_id: string) {
