@@ -12,7 +12,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - '8701:8700'
+      - '8700:8700'
     volumes:
       - .:/src:cached
 
