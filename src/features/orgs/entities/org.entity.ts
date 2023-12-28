@@ -40,6 +40,9 @@ export class Org extends BaseSchema {
   description: string;
 
   @Prop()
+  logo: string;
+
+  @Prop()
   nc: string;
 
   @Prop()

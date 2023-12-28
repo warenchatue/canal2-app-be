@@ -50,15 +50,28 @@ export class PlanningsController extends BaseController {
   @UseJwt()
   @Get('stats')
   async getPlanningStats() {
-    return this.getPlannings(true);
+    return this.getPlannings(true, false);
+  }
+  @ApiBearerAuth()
+  @UseJwt()
+  @Get('today')
+  async getPlanningToday() {
+    return this.getPlannings(false, true);
   }
 
   @ApiBearerAuth()
   @UseJwt()
   @Get()
-  async getPlannings(isStat = false) {
+  async getPlannings(isStat = false, isToday = false) {
     return await this.run(async () => {
-      const result = await this.planningsService.find();
+      let result = await this.planningsService.find();
+      if (isToday) {
+        result = result.filter((e) => {
+          return (
+            moment(e.date).format('DD/MM/yyyy') == moment().format('DD/MM/yyyy')
+          );
+        });
+      }
       if (result.length == 0) {
         return {
           metaData: {

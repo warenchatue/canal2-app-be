@@ -55,4 +55,7 @@ export class CreateOrgDto {
   })
   @IsString()
   description?: string;
+
+  @IsString()
+  logo?: string;
 }

@@ -9,6 +9,9 @@ export class CreatePlanningDto {
   @ApiPropertyOptional({ example: 'XAFG_7587_2Z7K' })
   code: string;
 
+  @ApiPropertyOptional({ example: '2023' })
+  position: Date;
+
   @ApiPropertyOptional({ default: false })
   @IsBoolean()
   isManualPlay: boolean;

@@ -8,6 +8,9 @@ export class Planning extends BaseSchema {
   date: string;
 
   @Prop()
+  position: string;
+
+  @Prop()
   code: string;
 
   @Prop()
