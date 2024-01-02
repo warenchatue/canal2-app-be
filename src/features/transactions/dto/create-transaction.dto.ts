@@ -42,6 +42,10 @@ export class CreateTransactionDto {
   @IsString()
   author?: string;
 
+  @ApiPropertyOptional()
+  @IsString()
+  announcer?: string;
+
   approved?: boolean;
 
   status?: TransactionStatus;

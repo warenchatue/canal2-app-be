@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsString, Max, Min } from 'class-validator';
+import { IsArray, IsBoolean, IsString, Max, Min } from 'class-validator';
 import { toBoolean } from 'src/common/helpers';
 import { CreateAccountingDocItemDto } from './create-accounting-doc-item.dto';
 export class CreateAccountingDocDto {
@@ -67,6 +67,7 @@ export class CreateAccountingDocDto {
   @ApiPropertyOptional()
   amount?: number;
 
-  @ApiPropertyOptional({ type: CreateAccountingDocItemDto })
+  @ApiPropertyOptional({ isArray: true, type: CreateAccountingDocItemDto })
+  @IsArray()
   items?: CreateAccountingDocItemDto[];
 }

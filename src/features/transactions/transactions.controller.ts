@@ -40,9 +40,9 @@ export class TransactionsController {
   @ApiBearerAuth()
   @UseJwt()
   @Get()
-  findTransactionsByAuthor(@Req() req) {
+  findAllTransactions(@Req() req) {
     return this.transactionsService
-      .findTransactionsByAuthor(req.user._id)
+      .findAllTransactions()
       .then((result) => result)
       .catch((error) => {
         throw new HttpException(error, 400, { cause: new Error() });

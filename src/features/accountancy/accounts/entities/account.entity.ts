@@ -2,6 +2,13 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, PopulateOptions } from 'mongoose';
 import { BaseSchema } from 'src/common/shared/base-schema';
 
+export enum AccountJournal {
+  purchaseJournal = 'purchaseJournal',
+  saleJournal = 'saleJournal',
+  treasuryJournal = 'treasuryJournal',
+  otherOperationJournal = 'otherOperationJournal',
+}
+
 @Schema({ timestamps: true })
 export class Account extends BaseSchema {
   @Prop()
@@ -11,7 +18,10 @@ export class Account extends BaseSchema {
   label: string;
 
   @Prop()
-  position: string;
+  position: AccountJournal;
+
+  @Prop()
+  journal: string;
 
   @Prop()
   description: string;

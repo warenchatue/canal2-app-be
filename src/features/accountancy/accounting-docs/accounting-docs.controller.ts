@@ -26,7 +26,7 @@ import { AccountingDocDocument } from './entities/accounting-doc.entity';
 @ApiBearerAuth()
 @ApiTags('AccountingDocs')
 @UseJwt()
-@Controller('accountingDocs')
+@Controller('accounting-docs')
 export class AccountingDocsController extends BaseController {
   constructor(
     private readonly accountingDocsService: AccountingDocsService,

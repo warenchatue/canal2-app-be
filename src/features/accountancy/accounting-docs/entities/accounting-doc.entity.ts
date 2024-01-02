@@ -25,8 +25,8 @@ export class AccountingDoc extends BaseSchema {
   @Prop()
   amount: number;
 
-  @Prop({ type: [{ type: sc.Types.ObjectId, ref: 'AccountingDocItem' }] })
-  items: sc.Types.ObjectId[];
+  @Prop({ type: [{ type: sc.Types.Mixed }] })
+  items: sc.Types.Mixed[];
 
   @Prop({ type: sc.Types.ObjectId, ref: 'Account' })
   paymentAccount: sc.Types.ObjectId;

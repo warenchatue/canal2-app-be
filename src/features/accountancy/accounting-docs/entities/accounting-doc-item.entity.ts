@@ -16,5 +16,5 @@ export class AccountingDocItem extends BaseSchema {
 }
 
 export type AccountingDocItemDocument = AccountingDocItem & Document;
-export const AccountingDocSchema =
+export const AccountingDocItemSchema =
   SchemaFactory.createForClass(AccountingDocItem);

@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as sc } from 'mongoose';
 import { BaseSchema } from 'src/common/shared/base-schema';
 import { Account } from 'src/features/accountancy/accounts/entities/account.entity';
+import { Announcer } from 'src/features/announcers/entities/announcer.entity';
 import { Org } from 'src/features/orgs/entities/org.entity';
 import { User } from 'src/features/users/entities/user.entity';
 
@@ -48,6 +49,9 @@ export class Transaction extends BaseSchema {
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
   author: sc.Types.ObjectId | sc.Types.String;
 
+  @Prop({ type: sc.Types.ObjectId, ref: () => Announcer })
+  announcer: sc.Types.ObjectId | sc.Types.String;
+
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
   validator: sc.Types.ObjectId | sc.Types.String;
 
@@ -64,4 +68,5 @@ export const TRANSACTION_POPULATION = [
   { path: 'org', model: 'Org' },
   { path: 'author', model: 'User' },
   { path: 'paymentAccount', model: 'Account' },
+  { path: 'announcer', model: 'Announcer' },
 ];
