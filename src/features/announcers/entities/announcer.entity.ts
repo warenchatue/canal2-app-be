@@ -21,6 +21,9 @@ export class Announcer extends BaseSchema {
   city: string;
 
   @Prop()
+  address: string;
+
+  @Prop()
   profilePicture: string;
 
   @Prop()

@@ -17,23 +17,23 @@ import { BaseController } from 'src/common/shared/base-controller';
 import { OrdersService } from 'src/features/orders/orders.service';
 import { UseJwt } from '../../auth/auth.decorator';
 import * as moment from 'moment';
-import { CreateInvoiceDto } from './dto/create-invoice.dto';
-import { UpdateInvoiceDto } from './dto/update-invoice.dto';
-import { InvoiceDocument } from './entities/invoice.entity';
-import { ORDER_CREATED_EVENT } from './invoices.handler';
-import { InvoicesService } from './invoices.service';
+import { CreateRecoveryProcedureDto } from './dto/create-recovery-procedure.dto';
+import { UpdateRecoveryProcedureDto } from './dto/update-recovery-procedure.dto';
+import { RecoveryProcedureDocument } from './entities/recovery-procedure.entity';
+import { ORDER_CREATED_EVENT } from './recovery-procedures.handler';
+import { RecoveryProceduresService } from './recovery-procedures.service';
 import { CreateTransactionDto } from 'src/features/transactions/dto/create-transaction.dto';
 import { TransactionsService } from 'src/features/transactions/transactions.service';
 import { TransactionType } from 'src/features/transactions/entities/transaction.entity';
 import { throwError } from 'rxjs';
 
 @ApiBearerAuth()
-@ApiTags('Invoices')
+@ApiTags('RecoveryProcedures')
 @UseJwt()
 @Controller('invoices')
-export class InvoicesController extends BaseController {
+export class RecoveryProceduresController extends BaseController {
   constructor(
-    private readonly invoicesService: InvoicesService,
+    private readonly invoicesService: RecoveryProceduresService,
     private readonly ordersServices: OrdersService,
     private readonly transactionsService: TransactionsService,
     private readonly event: EventEmitter2,
@@ -42,12 +42,15 @@ export class InvoicesController extends BaseController {
   }
 
   @Post()
-  async create(@Body() dto: CreateInvoiceDto, @Req() { user }) {
+  async create(@Body() dto: CreateRecoveryProcedureDto, @Req() { user }) {
     try {
-      const allInvoices = await this.invoicesService.findAll();
+      const allRecoveryProcedures = await this.invoicesService.findAll();
       return await this.run(async () => {
         const invCode =
-          'FAC/' + moment().year() + '/' + genCode(allInvoices.length + 1);
+          'FAC/' +
+          moment().year() +
+          '/' +
+          genCode(allRecoveryProcedures.length + 1);
         const result = await this.invoicesService.create(
           {
             ...dto,
@@ -71,9 +74,9 @@ export class InvoicesController extends BaseController {
   }
 
   @Get()
-  async getAllInvoices(
+  async getAllRecoveryProcedures(
     @Req() { user },
-    @Query() { states }: FindQueryDto<InvoiceDocument>,
+    @Query() { states }: FindQueryDto<RecoveryProcedureDocument>,
   ) {
     try {
       const data = await this.invoicesService.find();
@@ -99,18 +102,21 @@ export class InvoicesController extends BaseController {
     }
   }
 
-  @Get(':invoiceId')
-  async getPackage(@Param('invoiceId') invoiceId: string, @Req() { user }) {
+  @Get(':recoveryProcedureId')
+  async getPackage(
+    @Param('recoveryProcedureId') recoveryProcedureId: string,
+    @Req() { user },
+  ) {
     try {
-      return await this.invoicesService.findOne(invoiceId);
+      return await this.invoicesService.findOne(recoveryProcedureId);
     } catch (error) {
       sendError(error);
     }
   }
 
-  @Put(':invoiceId/addPayment')
+  @Put(':recoveryProcedureId/addPayment')
   async addPayment(
-    @Param('invoiceId') invoiceId: string,
+    @Param('recoveryProcedureId') recoveryProcedureId: string,
     @Body() dto: CreateTransactionDto,
     @Req() { user },
   ) {
@@ -123,9 +129,15 @@ export class InvoicesController extends BaseController {
         author: user._id,
       });
       if (txn) {
-        const inv = await this.invoicesService.findOne(invoiceId);
-        this.invoicesService.updatePaidAmount(invoiceId, txn.amount + inv.paid);
-        return await this.invoicesService.addPayment(invoiceId, txn._id);
+        const inv = await this.invoicesService.findOne(recoveryProcedureId);
+        this.invoicesService.updatePaidAmount(
+          recoveryProcedureId,
+          txn.amount + inv.paid,
+        );
+        return await this.invoicesService.addPayment(
+          recoveryProcedureId,
+          txn._id,
+        );
       }
       throwError;
     } catch (error) {
@@ -133,42 +145,51 @@ export class InvoicesController extends BaseController {
     }
   }
 
-  @Put(':invoiceId')
+  @Put(':recoveryProcedureId')
   async updatePackage(
-    @Param('invoiceId') invoiceId: string,
-    @Body() dto: UpdateInvoiceDto,
+    @Param('recoveryProcedureId') recoveryProcedureId: string,
+    @Body() dto: UpdateRecoveryProcedureDto,
     @Req() { user },
   ) {
     try {
-      return await this.invoicesService.updateOne(invoiceId, dto);
+      return await this.invoicesService.updateOne(recoveryProcedureId, dto);
     } catch (error) {
       sendError(error);
     }
   }
 
-  @Put(':invoiceId/close')
-  async closePackage(@Param('invoiceId') invoiceId: string, @Req() { user }) {
+  @Put(':recoveryProcedureId/close')
+  async closePackage(
+    @Param('recoveryProcedureId') recoveryProcedureId: string,
+    @Req() { user },
+  ) {
     try {
-      return await this.invoicesService.closePackage(invoiceId);
+      return await this.invoicesService.closePackage(recoveryProcedureId);
     } catch (error) {
       sendError(error);
     }
   }
 
-  @Put(':invoiceId/reopen')
-  async reopenPackage(@Param('invoiceId') invoiceId: string, @Req() { user }) {
+  @Put(':recoveryProcedureId/reopen')
+  async reopenPackage(
+    @Param('recoveryProcedureId') recoveryProcedureId: string,
+    @Req() { user },
+  ) {
     try {
-      return await this.invoicesService.reopenPackage(invoiceId);
+      return await this.invoicesService.reopenPackage(recoveryProcedureId);
     } catch (error) {
       sendError(error);
     }
   }
 
-  @Delete(':invoiceId')
-  async deleteInvoice(@Param('invoiceId') invoiceId: string, @Req() { user }) {
+  @Delete(':recoveryProcedureId')
+  async deleteRecoveryProcedure(
+    @Param('recoveryProcedureId') recoveryProcedureId: string,
+    @Req() { user },
+  ) {
     try {
-      const invoice = await this.invoicesService.findOne(invoiceId);
-      return await this.invoicesService.deleteOne(invoiceId);
+      const invoice = await this.invoicesService.findOne(recoveryProcedureId);
+      return await this.invoicesService.deleteOne(recoveryProcedureId);
     } catch (error) {
       sendError(error);
     }

@@ -3,21 +3,24 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ServiceDeleteAbstract } from 'src/common/abstracts/service-delete.abstract';
 import { USER_POPULATION } from '../../users/entities/user.entity';
-import { CreateInvoiceDto } from './dto/create-invoice.dto';
-import { UpdateInvoiceDto } from './dto/update-invoice.dto';
-import { Invoice, InvoiceDocument } from './entities/invoice.entity';
+import { CreateRecoveryProcedureDto } from './dto/create-recovery-procedure.dto';
+import { UpdateRecoveryProcedureDto } from './dto/update-recovery-procedure.dto';
+import {
+  RecoveryProcedure,
+  RecoveryProcedureDocument,
+} from './entities/recovery-procedure.entity';
 import { State } from 'src/common/shared/base-schema';
 
 @Injectable()
-export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
+export class RecoveryProceduresService extends ServiceDeleteAbstract<RecoveryProcedure> {
   constructor(
-    @InjectModel(Invoice.name)
-    private readonly invoices: Model<InvoiceDocument>,
+    @InjectModel(RecoveryProcedure.name)
+    private readonly invoices: Model<RecoveryProcedureDocument>,
   ) {
     super();
   }
 
-  create(dto: CreateInvoiceDto, announcerId: string) {
+  create(dto: CreateRecoveryProcedureDto, announcerId: string) {
     return this.invoices.create({ ...dto, announcer: announcerId });
   }
 
@@ -116,7 +119,7 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
     });
   }
 
-  updateOne(_id: string, dto: UpdateInvoiceDto) {
+  updateOne(_id: string, dto: UpdateRecoveryProcedureDto) {
     return this.invoices.findByIdAndUpdate(_id, {
       $set: dto,
     });

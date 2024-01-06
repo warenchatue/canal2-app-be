@@ -12,8 +12,8 @@ import { UsersService } from '../../users/users.service';
 export const ORDER_CREATED_EVENT = 'invoice.create';
 
 @Injectable()
-export class InvoicesHandler {
-  private readonly logger: Logger = new Logger(InvoicesHandler.name);
+export class RecoveryProceduresHandler {
+  private readonly logger: Logger = new Logger(RecoveryProceduresHandler.name);
 
   constructor(
     private readonly notificationsService: NotificationsService,
@@ -21,10 +21,10 @@ export class InvoicesHandler {
   ) {}
 
   @OnEvent(ORDER_CREATED_EVENT)
-  async handleInvoiceCreated(data) {
+  async handleRecoveryProcedureCreated(data) {
     try {
       const notif = await this.notificationsService.create({
-        type: NotificationType.newInvoice,
+        type: NotificationType.neutral,
         level: NotificationLevel.info,
         data: await this._d(data),
       });

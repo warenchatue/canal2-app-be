@@ -2,48 +2,44 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsString, Max, Min } from 'class-validator';
 import { toBoolean } from 'src/common/helpers';
-export class CreateInvoiceDto {
+export class CreateRecoveryProcedureDto {
   @ApiPropertyOptional({ example: 'My awesome bill' })
   @IsString()
   label: string;
 
-  @ApiPropertyOptional({ example: 'FAC/2023/001' })
+  @ApiPropertyOptional({ example: 'REC/2023/001' })
   code: string;
 
   @ApiPropertyOptional({ example: 'dd/mm/yyyy' })
   date: string;
 
-  @ApiPropertyOptional({ example: 'dd/mm/yyyy' })
-  dueDate: string;
-
-  @ApiPropertyOptional({ example: '' })
-  paymentMethod: string;
-
-  @ApiPropertyOptional({ example: '' })
-  paymentCondition: string;
-
   @ApiProperty()
   @IsString()
   creator: string;
 
+  @ApiProperty()
+  @IsString()
+  agent1: string;
+
+  @ApiProperty()
+  @IsString()
+  agent2: string;
+
+  @ApiProperty()
+  @IsString()
+  agent3: string;
+
+  @ApiProperty()
+  @IsString()
+  agent4: string;
+
   @ApiPropertyOptional()
   @IsString()
-  manager: string;
+  announcer: string;
 
   @ApiPropertyOptional()
   @IsString()
   validator: string;
-
-  @ApiPropertyOptional()
-  requiredAdminValidator: boolean;
-
-  @ApiPropertyOptional()
-  @IsString()
-  expectedAdminValidator: string;
-
-  @ApiProperty()
-  @IsString()
-  announcer: string;
 
   @ApiProperty()
   @IsString()
@@ -61,32 +57,11 @@ export class CreateInvoiceDto {
   description?: string;
 
   @ApiPropertyOptional()
-  order?: string;
-
-  @ApiPropertyOptional()
-  org?: string;
-
-  @ApiPropertyOptional()
-  team?: string;
-
-  @ApiPropertyOptional()
-  amountHT?: number;
-
-  @ApiPropertyOptional()
   amount?: number;
 
   @ApiPropertyOptional()
   paid?: number;
 
-  @ApiPropertyOptional()
-  tva?: number;
-
-  @ApiPropertyOptional()
-  tsp?: number;
-
   @ApiPropertyOptional({ example: '[]' })
   items?: any[];
-
-  @ApiPropertyOptional({ example: '[]' })
-  transactions?: string[];
 }

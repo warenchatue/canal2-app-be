@@ -39,18 +39,19 @@ export class OrdersController extends BaseController {
     try {
       const allOrders = await this.ordersService.findAll();
       return await this.run(async () => {
+        const devCode =
+          'DEV/' + moment().year() + '/' + genCode(allOrders.length + 1);
         const result = await this.ordersService.create(
           {
             ...dto,
             creator: user._id,
-            code:
-              'DEV/' + moment().year() + '/' + genCode(allOrders.length + 1),
+            code: devCode,
           },
           dto.announcer,
         );
 
         this.event.emit(ORDER_CREATED_EVENT, {
-          code: dto.code,
+          code: devCode,
           accountId: user._id,
           completed: true,
         });
