@@ -30,10 +30,10 @@ import { throwError } from 'rxjs';
 @ApiBearerAuth()
 @ApiTags('RecoveryProcedures')
 @UseJwt()
-@Controller('invoices')
+@Controller('recovery-procedures')
 export class RecoveryProceduresController extends BaseController {
   constructor(
-    private readonly invoicesService: RecoveryProceduresService,
+    private readonly recoveryProceduresService: RecoveryProceduresService,
     private readonly ordersServices: OrdersService,
     private readonly transactionsService: TransactionsService,
     private readonly event: EventEmitter2,
@@ -44,24 +44,25 @@ export class RecoveryProceduresController extends BaseController {
   @Post()
   async create(@Body() dto: CreateRecoveryProcedureDto, @Req() { user }) {
     try {
-      const allRecoveryProcedures = await this.invoicesService.findAll();
+      const allRecoveryProcedures =
+        await this.recoveryProceduresService.findAll();
       return await this.run(async () => {
-        const invCode =
-          'FAC/' +
+        const recCode =
+          'REC/' +
           moment().year() +
           '/' +
           genCode(allRecoveryProcedures.length + 1);
-        const result = await this.invoicesService.create(
+        const result = await this.recoveryProceduresService.create(
           {
             ...dto,
             creator: user._id,
-            code: invCode,
+            code: recCode,
           },
           dto.announcer,
         );
 
         this.event.emit(ORDER_CREATED_EVENT, {
-          code: invCode,
+          code: recCode,
           accountId: user._id,
           completed: true,
         });
@@ -79,20 +80,24 @@ export class RecoveryProceduresController extends BaseController {
     @Query() { states }: FindQueryDto<RecoveryProcedureDocument>,
   ) {
     try {
-      const data = await this.invoicesService.find();
+      const data = await this.recoveryProceduresService.find();
       const totalItems = data.length;
       const totalAnnouncers = data.map((e) => {
         return e.announcer['_id'];
       });
+      const totalAmount = data
+        .map((e) => {
+          return e.amount;
+        })
+        .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
       const totalAnnouncersSet = new Set(totalAnnouncers);
-      const totalSpots = 0;
       const totalFiles = 0;
 
       return {
         metaData: {
           totalItems,
-          totalAnnouncers: 0,
-          totalSpots,
+          totalAnnouncers: totalAnnouncersSet.size,
+          totalAmount,
           totalFiles,
         },
         data,
@@ -108,7 +113,7 @@ export class RecoveryProceduresController extends BaseController {
     @Req() { user },
   ) {
     try {
-      return await this.invoicesService.findOne(recoveryProcedureId);
+      return await this.recoveryProceduresService.findOne(recoveryProcedureId);
     } catch (error) {
       sendError(error);
     }
@@ -129,12 +134,14 @@ export class RecoveryProceduresController extends BaseController {
         author: user._id,
       });
       if (txn) {
-        const inv = await this.invoicesService.findOne(recoveryProcedureId);
-        this.invoicesService.updatePaidAmount(
+        const inv = await this.recoveryProceduresService.findOne(
+          recoveryProcedureId,
+        );
+        this.recoveryProceduresService.updatePaidAmount(
           recoveryProcedureId,
           txn.amount + inv.paid,
         );
-        return await this.invoicesService.addPayment(
+        return await this.recoveryProceduresService.addPayment(
           recoveryProcedureId,
           txn._id,
         );
@@ -152,7 +159,10 @@ export class RecoveryProceduresController extends BaseController {
     @Req() { user },
   ) {
     try {
-      return await this.invoicesService.updateOne(recoveryProcedureId, dto);
+      return await this.recoveryProceduresService.updateOne(
+        recoveryProcedureId,
+        dto,
+      );
     } catch (error) {
       sendError(error);
     }
@@ -164,7 +174,9 @@ export class RecoveryProceduresController extends BaseController {
     @Req() { user },
   ) {
     try {
-      return await this.invoicesService.closePackage(recoveryProcedureId);
+      return await this.recoveryProceduresService.closePackage(
+        recoveryProcedureId,
+      );
     } catch (error) {
       sendError(error);
     }
@@ -176,7 +188,9 @@ export class RecoveryProceduresController extends BaseController {
     @Req() { user },
   ) {
     try {
-      return await this.invoicesService.reopenPackage(recoveryProcedureId);
+      return await this.recoveryProceduresService.reopenPackage(
+        recoveryProcedureId,
+      );
     } catch (error) {
       sendError(error);
     }
@@ -188,8 +202,12 @@ export class RecoveryProceduresController extends BaseController {
     @Req() { user },
   ) {
     try {
-      const invoice = await this.invoicesService.findOne(recoveryProcedureId);
-      return await this.invoicesService.deleteOne(recoveryProcedureId);
+      const invoice = await this.recoveryProceduresService.findOne(
+        recoveryProcedureId,
+      );
+      return await this.recoveryProceduresService.deleteOne(
+        recoveryProcedureId,
+      );
     } catch (error) {
       sendError(error);
     }
