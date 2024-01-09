@@ -28,7 +28,7 @@ export class User extends BaseSchema {
   @Prop()
   profilePicture: string;
 
-  @Prop({ unique: true })
+  @Prop()
   email: string;
 
   @Prop()

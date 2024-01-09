@@ -90,6 +90,13 @@ export class RecoveryProceduresController extends BaseController {
           return e.amount;
         })
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+      const totalPaid = data
+        .map((e) => {
+          return e.paid;
+        })
+        .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
       const totalAnnouncersSet = new Set(totalAnnouncers);
       const totalFiles = 0;
 
@@ -98,6 +105,7 @@ export class RecoveryProceduresController extends BaseController {
           totalItems,
           totalAnnouncers: totalAnnouncersSet.size,
           totalAmount,
+          totalPaid,
           totalFiles,
         },
         data,

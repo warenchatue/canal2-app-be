@@ -1,6 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
-import { AnnouncerType } from '../entities/announcer.entity';
+import {
+  AnnouncerCategory,
+  AnnouncerStatus,
+  AnnouncerType,
+} from '../entities/announcer.entity';
 
 export class CreateAnnouncerDto {
   @ApiPropertyOptional({ default: 'CLT0001' })
@@ -30,10 +34,20 @@ export class CreateAnnouncerDto {
   @IsPhoneNumber()
   nc: string;
 
-  @ApiProperty({ default: AnnouncerType.personal })
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsEnum(AnnouncerStatus)
+  status?: AnnouncerStatus;
+
+  @ApiProperty()
   @IsNotEmpty()
   @IsEnum(AnnouncerType)
   type?: AnnouncerType;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsEnum(AnnouncerCategory)
+  category?: AnnouncerCategory;
 
   @ApiProperty()
   @IsNotEmpty()

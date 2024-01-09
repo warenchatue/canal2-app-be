@@ -9,6 +9,19 @@ export enum AnnouncerType {
   personal = 'personal',
 }
 
+export enum AnnouncerStatus {
+  active = 'active',
+  inactive = 'inactive',
+}
+
+export enum AnnouncerCategory {
+  largeAccount = 'largeAccount',
+  bank = 'bank',
+  school = 'school',
+  PME = 'PME',
+  TPE = 'TPE',
+}
+
 @Schema({ timestamps: true })
 export class Announcer extends BaseSchema {
   @Prop()
@@ -44,8 +57,14 @@ export class Announcer extends BaseSchema {
   @Prop({ type: sc.Types.ObjectId, ref: () => Country })
   country: sc.Types.ObjectId | string;
 
-  @Prop({ default: AnnouncerType.personal })
+  @Prop()
+  status: AnnouncerStatus;
+
+  @Prop()
   type: AnnouncerType;
+
+  @Prop()
+  category: AnnouncerCategory;
 
   @Prop({ default: 0 })
   notificationsCount: number;
