@@ -14,9 +14,6 @@ export class CreateAccountingDocDto {
   @ApiPropertyOptional({ example: 'dd/mm/yyyy' })
   date: string;
 
-  @ApiPropertyOptional({ example: '' })
-  paymentAccount: string;
-
   @ApiProperty()
   @IsString()
   creator: string;
@@ -27,7 +24,15 @@ export class CreateAccountingDocDto {
 
   @ApiPropertyOptional()
   @IsString()
+  extBeneficiary: string;
+
+  @ApiPropertyOptional()
+  @IsString()
   validator: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  docType: string;
 
   @ApiPropertyOptional()
   @IsString()

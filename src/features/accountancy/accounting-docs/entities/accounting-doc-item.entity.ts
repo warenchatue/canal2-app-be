@@ -13,6 +13,12 @@ export class AccountingDocItem extends BaseSchema {
 
   @Prop()
   amount: number;
+
+  @Prop()
+  debit: number;
+
+  @Prop()
+  credit: number;
 }
 
 export type AccountingDocItemDocument = AccountingDocItem & Document;

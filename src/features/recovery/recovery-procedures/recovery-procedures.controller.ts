@@ -87,13 +87,13 @@ export class RecoveryProceduresController extends BaseController {
       });
       const totalAmount = data
         .map((e) => {
-          return e.amount;
+          return e.amount ?? 0;
         })
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
       const totalPaid = data
         .map((e) => {
-          return e.paid;
+          return e.paid ?? 0;
         })
         .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 

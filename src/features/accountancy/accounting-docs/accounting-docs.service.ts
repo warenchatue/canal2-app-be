@@ -31,7 +31,8 @@ export class AccountingDocsService extends ServiceDeleteAbstract<AccountingDoc> 
       { path: 'authorizer', model: 'User' },
       { path: 'validator', model: 'User' },
       { path: 'org', model: 'Org' },
-      { path: 'paymentAccount', model: 'Account' },
+      { path: 'docType', model: 'DocType' },
+      { path: 'journal', model: 'Journal' },
     ];
     return this.accountingDocs
       .findById(_id)
@@ -47,7 +48,8 @@ export class AccountingDocsService extends ServiceDeleteAbstract<AccountingDoc> 
       { path: 'authorizer', model: 'User' },
       { path: 'validator', model: 'User' },
       { path: 'org', model: 'Org' },
-      { path: 'paymentAccount', model: 'Account' },
+      { path: 'docType', model: 'DocType' },
+      { path: 'journal', model: 'Journal' },
     ];
     return this.accountingDocs
       .find()

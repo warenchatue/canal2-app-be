@@ -24,6 +24,8 @@ import { PaymentConditionsModule } from './features/accountancy/payment-conditio
 import { ArticleCategoriesModule } from './features/article-categories/article-categories.module';
 import { AccountingDocsModule } from './features/accountancy/accounting-docs/accounting-docs.module';
 import { RecoveryProceduresModule } from './features/recovery/recovery-procedures/recovery-procedures.module';
+import { JournalsModule } from './features/accountancy/journals/journals.module';
+import { DocTypesModule } from './features/accountancy/doc-types/doc-types.module';
 
 const features = [
   AuthModule,
@@ -47,6 +49,8 @@ const features = [
   ArticleCategoriesModule,
   AccountingDocsModule,
   RecoveryProceduresModule,
+  JournalsModule,
+  DocTypesModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {

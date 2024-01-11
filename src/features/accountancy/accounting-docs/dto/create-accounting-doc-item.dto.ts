@@ -10,4 +10,10 @@ export class CreateAccountingDocItemDto {
 
   @ApiPropertyOptional()
   amount?: number;
+
+  @ApiPropertyOptional()
+  debit?: number;
+
+  @ApiPropertyOptional()
+  credit?: number;
 }
