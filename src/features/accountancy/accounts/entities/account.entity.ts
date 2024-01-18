@@ -18,10 +18,7 @@ export class Account extends BaseSchema {
   label: string;
 
   @Prop()
-  position: AccountJournal;
-
-  @Prop()
-  journal: string;
+  position: string;
 
   @Prop()
   description: string;

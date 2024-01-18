@@ -63,6 +63,18 @@ export class CreateAccountingDocDto {
   @Max(512)
   description?: string;
 
+  @ApiPropertyOptional({ example: 'My awesome accounting doc ref' })
+  @IsString()
+  @Min(15)
+  @Max(512)
+  ref?: string;
+
+  @ApiPropertyOptional({ example: 'My awesome accounting doc invoiceNumber' })
+  @IsString()
+  @Min(15)
+  @Max(512)
+  invoiceNumber?: string;
+
   @ApiPropertyOptional()
   org?: string;
 

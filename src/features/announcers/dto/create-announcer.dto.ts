@@ -34,6 +34,10 @@ export class CreateAnnouncerDto {
   @IsPhoneNumber()
   nc: string;
 
+  @ApiPropertyOptional({ default: '' })
+  @IsPhoneNumber()
+  niu: string;
+
   @ApiProperty()
   @IsNotEmpty()
   @IsEnum(AnnouncerStatus)

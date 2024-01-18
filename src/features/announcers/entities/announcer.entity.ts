@@ -54,6 +54,9 @@ export class Announcer extends BaseSchema {
   @Prop()
   nc: string;
 
+  @Prop()
+  niu: string;
+
   @Prop({ type: sc.Types.ObjectId, ref: () => Country })
   country: sc.Types.ObjectId | string;
 

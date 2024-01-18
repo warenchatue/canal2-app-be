@@ -72,13 +72,18 @@ export class AccountingDocsController extends BaseController {
     try {
       const data = await this.accountingDocsService.find();
       const totalItems = data.length;
-      const totalSpots = 0;
+      const totalAmount = data
+        .map((e) => {
+          return e.amount ?? 0;
+        })
+        .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
       const totalFiles = 0;
 
       return {
         metaData: {
           totalItems,
-          totalSpots,
+          totalAmount,
           totalFiles,
         },
         data,

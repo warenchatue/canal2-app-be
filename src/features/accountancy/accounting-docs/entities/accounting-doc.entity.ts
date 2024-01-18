@@ -19,6 +19,12 @@ export class AccountingDoc extends BaseSchema {
   description: string;
 
   @Prop()
+  ref: string;
+
+  @Prop()
+  invoiceNumber: string;
+
+  @Prop()
   extBeneficiary: string;
 
   @Prop()
