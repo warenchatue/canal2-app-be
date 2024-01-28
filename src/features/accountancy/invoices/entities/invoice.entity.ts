@@ -63,11 +63,17 @@ export class Invoice extends BaseSchema {
   @Prop({ type: sc.Types.ObjectId, ref: 'Org' })
   org: sc.Types.ObjectId;
 
+  @Prop({ type: sc.Types.ObjectId, ref: 'Invoice' })
+  from: sc.Types.ObjectId;
+
   @Prop()
   status: string;
 
   @Prop({ default: false })
   closed: boolean;
+
+  @Prop({ default: true })
+  isDoit: boolean;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
   creator: sc.Types.ObjectId;

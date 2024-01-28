@@ -21,6 +21,10 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
     return this.invoices.create({ ...dto, announcer: announcerId });
   }
 
+  findOneNoPopulate(_id) {
+    return this.invoices.findById(_id).orFail().exec();
+  }
+
   findOne(_id) {
     const population = [
       { path: 'creator', model: 'User' },
@@ -107,6 +111,26 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
   closePackage(_id: string) {
     return this.invoices.findByIdAndUpdate(_id, {
       $set: { closed: true },
+    });
+  }
+
+  updateIsDoit(
+    _id: string,
+    amount: number,
+    amountHT: number,
+    tva: number,
+    tsp: number,
+  ) {
+    return this.invoices.findByIdAndUpdate(_id, {
+      $set: {
+        isDoit: false,
+        amount: amount,
+         amountHT: amountHT,
+        tva: tva,
+        tsp: tsp,
+        paid: 0,
+        transactions: [],
+      },
     });
   }
 

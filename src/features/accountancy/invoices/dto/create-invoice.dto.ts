@@ -54,6 +54,11 @@ export class CreateInvoiceDto {
   @IsBoolean()
   closed: boolean;
 
+  @ApiPropertyOptional({ default: true })
+  @Transform(({ value }) => toBoolean(value))
+  @IsBoolean()
+  isDoit: boolean;
+
   @ApiPropertyOptional({ example: 'My awesome package description' })
   @IsString()
   @Min(15)
@@ -65,6 +70,9 @@ export class CreateInvoiceDto {
 
   @ApiPropertyOptional()
   org?: string;
+
+  @ApiPropertyOptional()
+  from?: string;
 
   @ApiPropertyOptional()
   team?: string;

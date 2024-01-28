@@ -164,6 +164,82 @@ export class InvoicesController extends BaseController {
     }
   }
 
+  @Put(':invoiceId/doit')
+  async updateIsDoit(@Param('invoiceId') invoiceId: string, @Req() { user }) {
+    try {
+      const oneInvoice = await this.invoicesService.findOneNoPopulate(
+        invoiceId,
+      );
+      return await this.invoicesService.updateIsDoit(
+        invoiceId,
+        -(oneInvoice.amount ?? 0),
+        -(oneInvoice.amountHT ?? 0),
+        -(oneInvoice.tva ?? 0),
+        -(oneInvoice.tsp ?? 0),
+      );
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @Put(':invoiceId/copy')
+  async copyInvoice(@Param('invoiceId') invoiceId: string, @Req() { user }) {
+    try {
+      const allInvoices = await this.invoicesService.findAll();
+      const oneInvoice = await this.invoicesService.findOneNoPopulate(
+        invoiceId,
+      );
+
+      return await this.run(async () => {
+        const invCode =
+          'FAC/' + moment().year() + '/' + genCode(allInvoices.length + 1);
+        const result = await this.invoicesService.create(
+          {
+            code: invCode,
+            from: invoiceId,
+            date: oneInvoice.date,
+            dueDate: oneInvoice.dueDate,
+            org: oneInvoice.org?.toString(),
+            order: oneInvoice.order?.toString(),
+            items: oneInvoice.items,
+            description: oneInvoice.description,
+            manager: oneInvoice.manager?.toString(),
+            paymentCondition: oneInvoice.paymentCondition?.toString(),
+            paymentMethod: oneInvoice.paymentMethod?.toString(),
+            validator: oneInvoice.validator?.toString(),
+            paid: oneInvoice.paid,
+            tsp: oneInvoice.tsp,
+            tva: oneInvoice.tva,
+            team: oneInvoice.team,
+            transactions: oneInvoice.transactions.map((e) => e.toString()),
+            amount: oneInvoice.amount,
+            amountHT: oneInvoice.amountHT,
+            creator: user._id,
+            isDoit: true,
+            label: oneInvoice.label,
+            requiredAdminValidator: false,
+            expectedAdminValidator:
+              oneInvoice.expectedAdminValidator?.toString(),
+            announcer: oneInvoice.announcer?.toString(),
+            status: oneInvoice.status,
+            closed: oneInvoice.closed,
+          },
+          oneInvoice.announcer?.toString(),
+        );
+
+        this.event.emit(ORDER_CREATED_EVENT, {
+          code: invCode,
+          accountId: user._id,
+          completed: true,
+        });
+
+        return result;
+      });
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
   @Delete(':invoiceId')
   async deleteInvoice(@Param('invoiceId') invoiceId: string, @Req() { user }) {
     try {
