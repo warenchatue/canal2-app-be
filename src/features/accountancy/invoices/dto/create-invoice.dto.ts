@@ -1,7 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsString, Max, Min } from 'class-validator';
+import { IsArray, IsBoolean, IsString, Max, Min } from 'class-validator';
 import { toBoolean } from 'src/common/helpers';
+import { CreateTaxItemDto } from './create-tax-item.dto';
 export class CreateInvoiceDto {
   @ApiPropertyOptional({ example: 'My awesome bill' })
   @IsString()
@@ -94,6 +95,10 @@ export class CreateInvoiceDto {
 
   @ApiPropertyOptional({ example: '[]' })
   items?: any[];
+
+  @ApiPropertyOptional({ isArray: true, type: CreateTaxItemDto })
+  @IsArray()
+  taxes?: CreateTaxItemDto[];
 
   @ApiPropertyOptional({ example: '[]' })
   transactions?: string[];

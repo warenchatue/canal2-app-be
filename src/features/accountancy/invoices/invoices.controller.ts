@@ -26,6 +26,7 @@ import { CreateTransactionDto } from 'src/features/transactions/dto/create-trans
 import { TransactionsService } from 'src/features/transactions/transactions.service';
 import { TransactionType } from 'src/features/transactions/entities/transaction.entity';
 import { throwError } from 'rxjs';
+import { CreateTaxItemDto } from './dto/create-tax-item.dto';
 
 @ApiBearerAuth()
 @ApiTags('Invoices')
@@ -127,6 +128,20 @@ export class InvoicesController extends BaseController {
         this.invoicesService.updatePaidAmount(invoiceId, txn.amount + inv.paid);
         return await this.invoicesService.addPayment(invoiceId, txn._id);
       }
+      throwError;
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @Put(':invoiceId/addTax')
+  async addTax(
+    @Param('invoiceId') invoiceId: string,
+    @Body() dto: CreateTaxItemDto,
+    @Req() { user },
+  ) {
+    try {
+      return await this.invoicesService.addTax(invoiceId, dto);
       throwError;
     } catch (error) {
       sendError(error);

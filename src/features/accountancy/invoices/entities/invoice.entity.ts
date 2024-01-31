@@ -48,6 +48,9 @@ export class Invoice extends BaseSchema {
   @Prop({ type: [{ type: sc.Types.Mixed }] })
   items: sc.Types.Mixed[] | any[];
 
+  @Prop({ type: [{ type: sc.Types.Mixed }] })
+  taxes: sc.Types.Mixed[];
+
   @Prop({ type: sc.Types.ObjectId, ref: 'PaymentMethod' })
   paymentMethod: sc.Types.ObjectId;
 

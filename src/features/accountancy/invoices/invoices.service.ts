@@ -7,6 +7,7 @@ import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { Invoice, InvoiceDocument } from './entities/invoice.entity';
 import { State } from 'src/common/shared/base-schema';
+import { CreateTaxItemDto } from './dto/create-tax-item.dto';
 
 @Injectable()
 export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
@@ -149,6 +150,13 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
   addPayment(_id: string, txnId: string) {
     return this.invoices
       .findByIdAndUpdate(_id, { $push: { transactions: txnId } })
+      .orFail()
+      .exec();
+  }
+
+  addTax(_id: string, tax: CreateTaxItemDto) {
+    return this.invoices
+      .findByIdAndUpdate(_id, { $push: { taxes: tax } })
       .orFail()
       .exec();
   }
