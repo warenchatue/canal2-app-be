@@ -28,6 +28,9 @@ export class Invoice extends BaseSchema {
   description: string;
 
   @Prop()
+  note: string;
+
+  @Prop()
   team: string;
 
   @Prop()

@@ -81,7 +81,7 @@ export class OrdersController extends BaseController {
       return {
         metaData: {
           totalItems,
-          totalAnnouncers: totalAnnouncersSet.size,
+          totalAnnouncers: 0,
           totalSpots,
           totalFiles,
         },

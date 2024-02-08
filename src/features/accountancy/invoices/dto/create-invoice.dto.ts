@@ -4,7 +4,7 @@ import { IsArray, IsBoolean, IsString, Max, Min } from 'class-validator';
 import { toBoolean } from 'src/common/helpers';
 import { CreateTaxItemDto } from './create-tax-item.dto';
 export class CreateInvoiceDto {
-  @ApiPropertyOptional({ example: 'My awesome bill' })
+  @ApiPropertyOptional({ example: 'My awesome invoice' })
   @IsString()
   label: string;
 
@@ -60,11 +60,17 @@ export class CreateInvoiceDto {
   @IsBoolean()
   isDoit: boolean;
 
-  @ApiPropertyOptional({ example: 'My awesome package description' })
+  @ApiPropertyOptional({ example: 'My awesome invoice description' })
   @IsString()
-  @Min(15)
+  @Min(5)
   @Max(512)
   description?: string;
+
+  @ApiPropertyOptional({ example: 'My awesome invoice note' })
+  @IsString()
+  @Min(5)
+  @Max(512)
+  note?: string;
 
   @ApiPropertyOptional()
   order?: string;

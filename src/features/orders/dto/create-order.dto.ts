@@ -1,13 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import {
-  IsArray,
-  IsBoolean,
-  IsNotEmpty,
-  IsString,
-  Max,
-  Min,
-} from 'class-validator';
+import { IsArray, IsBoolean, IsString, Max, Min } from 'class-validator';
 import { toBoolean } from 'src/common/helpers';
 export class CreateOrderDto {
   @ApiPropertyOptional({ example: 'My awesome order' })
@@ -61,11 +54,17 @@ export class CreateOrderDto {
   @IsBoolean()
   closed: boolean;
 
-  @ApiPropertyOptional({ example: 'My awesome package description' })
+  @ApiPropertyOptional({ example: 'My awesome order description' })
   @IsString()
-  @Min(15)
+  @Min(5)
   @Max(512)
   description?: string;
+
+  @ApiPropertyOptional({ example: 'My awesome order note' })
+  @IsString()
+  @Min(5)
+  @Max(512)
+  note?: string;
 
   @ApiPropertyOptional({ example: 'http://' })
   @IsString()

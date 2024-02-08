@@ -29,6 +29,9 @@ export class Order extends BaseSchema {
   description: string;
 
   @Prop()
+  note: string;
+
+  @Prop()
   contractUrl: string;
 
   @Prop()
