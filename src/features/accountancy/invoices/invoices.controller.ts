@@ -35,7 +35,6 @@ import { CreateTaxItemDto } from './dto/create-tax-item.dto';
 export class InvoicesController extends BaseController {
   constructor(
     private readonly invoicesService: InvoicesService,
-    private readonly ordersServices: OrdersService,
     private readonly transactionsService: TransactionsService,
     private readonly event: EventEmitter2,
   ) {

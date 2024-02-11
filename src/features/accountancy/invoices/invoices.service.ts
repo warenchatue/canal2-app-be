@@ -126,7 +126,7 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
       $set: {
         isDoit: false,
         amount: amount,
-         amountHT: amountHT,
+        amountHT: amountHT,
         tva: tva,
         tsp: tsp,
         paid: 0,

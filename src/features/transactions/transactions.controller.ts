@@ -26,14 +26,14 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { TransactionsService } from './transactions.service';
 import * as moment from 'moment';
-import { AccountsService } from '../accountancy/accounts/accounts.service';
+import { InvoicesService } from '../accountancy/invoices/invoices.service';
 
 @ApiTags('Transactions')
 @Controller('transactions')
 export class TransactionsController {
   constructor(
     private readonly transactionsService: TransactionsService,
-    private readonly accountsService: AccountsService,
+    private readonly invoicesService: InvoicesService,
     private readonly event: EventEmitter2,
   ) {}
 
@@ -168,13 +168,38 @@ export class OrgTransactionsController {
   }
 
   @Delete(':transactionId')
+  async deleteWithInvoice(
+    @Param('orgId') orgId: string,
+    @Param('transactionId') transactionId: string,
+    @Req() { user },
+  ) {
+    try {
+      const oneTxn = await this.transactionsService.findOne(transactionId);
+      const invoice = await this.invoicesService.pullPayment(
+        oneTxn.data?.invoiceId ?? '',
+        transactionId,
+      );
+
+      if (invoice) {
+        const transaction = await this.transactionsService.deleteOne(
+          transactionId,
+        );
+        return transaction;
+      }
+
+      return oneTxn;
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @Delete(':transactionId')
   async delete(
     @Param('orgId') orgId: string,
     @Param('transactionId') transactionId: string,
     @Req() { user },
   ) {
     try {
-      const accountId = user._id;
       const transaction = await this.transactionsService.deleteOne(
         transactionId,
       );
