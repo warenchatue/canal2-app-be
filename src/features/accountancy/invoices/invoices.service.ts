@@ -105,7 +105,7 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
       .find({ announcer: announcerId })
       .populate(population)
       .where('state')
-      .in([states])
+      .in(states)
       .exec();
   }
 
@@ -132,6 +132,12 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
         paid: 0,
         transactions: [],
       },
+    });
+  }
+
+  updatePaid(_id: string, paid: number) {
+    return this.invoices.findByIdAndUpdate(_id, {
+      $set: { paid: paid },
     });
   }
 

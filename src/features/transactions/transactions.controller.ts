@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -11,6 +12,7 @@ import {
   Put,
   Query,
   Req,
+  UseInterceptors,
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import {
@@ -21,28 +23,31 @@ import {
 } from '@nestjs/swagger';
 import { genCode, sendError } from 'src/common/helpers';
 import { UseJwt } from '../auth/auth.decorator';
-import { OrgsService } from '../orgs/orgs.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { TransactionsService } from './transactions.service';
 import * as moment from 'moment';
 import { InvoicesService } from '../accountancy/invoices/invoices.service';
+import { BaseController } from 'src/common/shared/base-controller';
+import { State } from 'src/common/shared/base-schema';
 
 @ApiTags('Transactions')
 @Controller('transactions')
-export class TransactionsController {
+export class TransactionsController extends BaseController {
   constructor(
     private readonly transactionsService: TransactionsService,
     private readonly invoicesService: InvoicesService,
     private readonly event: EventEmitter2,
-  ) {}
+  ) {
+    super();
+  }
 
   @ApiBearerAuth()
   @UseJwt()
   @Get()
   findAllTransactions(@Req() req) {
     return this.transactionsService
-      .findAllTransactions()
+      .findAllTransactions([State.active])
       .then((result) => result)
       .catch((error) => {
         throw new HttpException(error, 400, { cause: new Error() });
@@ -103,6 +108,39 @@ export class TransactionsController {
         throw new HttpException(error, 500);
       });
   }
+
+  @Delete(':transactionId/with-invoice')
+  async deleteWithInvoice(
+    @Param('transactionId') transactionId: string,
+    @Req() { user },
+  ) {
+    try {
+      const oneTxn = await this.transactionsService.findOne(transactionId);
+      const invData = { ...oneTxn.data } as any;
+      const oneInvoice = await this.invoicesService.findOne(invData.invoiceId);
+      await this.invoicesService.pullPayment(
+        invData.invoiceId ?? '',
+        transactionId,
+      );
+
+      const invoice2 = await this.invoicesService.updatePaid(
+        invData.invoiceId ?? '',
+        oneInvoice.isDoit
+          ? oneInvoice.paid - oneTxn.amount
+          : oneInvoice.paid + -oneTxn.amount,
+      );
+
+      if (invoice2) {
+        const transaction = await this.transactionsService.deleteOne(
+          transactionId,
+        );
+        return transaction;
+      }
+      return oneTxn;
+    } catch (error) {
+      sendError(error);
+    }
+  }
 }
 
 @ApiTags('Transactions')
@@ -110,10 +148,7 @@ export class TransactionsController {
 @UseJwt()
 @Controller('org/:orgId/transactions')
 export class OrgTransactionsController {
-  constructor(
-    private readonly transactionsService: TransactionsService,
-    private readonly orgsService: OrgsService,
-  ) {}
+  constructor(private readonly transactionsService: TransactionsService) {}
 
   @ApiOperation({
     description: 'Returns the list of transactions made in the provided org',
@@ -166,33 +201,6 @@ export class OrgTransactionsController {
       sendError(error);
     }
   }
-
-  @Delete(':transactionId')
-  async deleteWithInvoice(
-    @Param('orgId') orgId: string,
-    @Param('transactionId') transactionId: string,
-    @Req() { user },
-  ) {
-    try {
-      const oneTxn = await this.transactionsService.findOne(transactionId);
-      const invoice = await this.invoicesService.pullPayment(
-        oneTxn.data?.invoiceId ?? '',
-        transactionId,
-      );
-
-      if (invoice) {
-        const transaction = await this.transactionsService.deleteOne(
-          transactionId,
-        );
-        return transaction;
-      }
-
-      return oneTxn;
-    } catch (error) {
-      sendError(error);
-    }
-  }
-
   @Delete(':transactionId')
   async delete(
     @Param('orgId') orgId: string,

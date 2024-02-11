@@ -10,6 +10,7 @@ import {
   TransactionDocument,
   TransactionStatus,
 } from './entities/transaction.entity';
+import { State } from 'src/common/shared/base-schema';
 
 @Injectable()
 export class TransactionsService extends DeletableMixin<Transaction> {
@@ -31,8 +32,13 @@ export class TransactionsService extends DeletableMixin<Transaction> {
       .exec();
   }
 
-  findAllTransactions() {
-    return this.transactions.find().populate(TRANSACTION_POPULATION).exec();
+  findAllTransactions(states: State[] = [State.active]) {
+    return this.transactions
+      .find()
+      .populate(TRANSACTION_POPULATION)
+      .where('state')
+      .in(states)
+      .exec();
   }
 
   findTransactionsByGroup(org: string) {
