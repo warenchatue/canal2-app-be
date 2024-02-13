@@ -21,6 +21,10 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
     return this.packages.create({ ...dto });
   }
 
+  findOneNP(_id) {
+    return this.packages.findById(_id).orFail().exec();
+  }
+
   findOne(_id) {
     const population = [
       { path: 'creator', model: 'User' },

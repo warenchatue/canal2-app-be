@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import * as moment from 'moment';
-import { sendError } from 'src/common/helpers';
+import { makeId, sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { URequest } from 'src/common/shared/request';
 import { UseJwt } from '../../auth/auth.decorator';
@@ -287,6 +287,36 @@ export class PlanningsController extends BaseController {
         planning._id.toString(),
       );
       return await this.getPlanning(planning._id.toString());
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Post(':packageId/bulk')
+  async createPlannings(
+    @Param('packageId') packageId: string,
+    @Body() dtos: CreatePlanningDto[],
+    // @Req() { user },
+  ) {
+    try {
+      const myPlannings = [];
+      for (let index = 0; index < dtos.length; index++) {
+        const myCampaign = await this.packagesService.findOneNP(packageId);
+        const planning = await this.planningsService.create({
+          ...dtos[index],
+          code: myCampaign.code + '_' + makeId(4),
+        });
+        await this.packagesService.addPlanning(
+          packageId,
+          planning._id.toString(),
+        );
+        const endPlanning = await this.getPlanning(planning._id.toString());
+        myPlannings.push(endPlanning);
+      }
+
+      return myPlannings;
     } catch (error) {
       sendError(error);
     }
