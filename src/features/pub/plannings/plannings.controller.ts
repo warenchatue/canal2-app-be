@@ -90,12 +90,17 @@ export class PlanningsController extends BaseController {
       let data = result.map((e) => {
         const json = e.toJSON();
         json['_id'] = json['_id'].toString();
-        json['hour']['_id'] = json['hour']['_id'].toString();
-        json['product']['_id'] = json['product']['_id'].toString();
-        json['product']['package']['_id'] =
-          json['product']['package']['_id'].toString();
-        json['product']['package']['products'] = [];
-        json['product']['package']['plannings'] = [];
+        if (json['hour']) {
+          json['hour']['_id'] = json['hour']['_id'].toString();
+        }
+        if (json['product']) {
+          json['product']['_id'] = json['product']['_id'].toString();
+          json['product']['package']['_id'] =
+            json['product']['package']['_id'].toString();
+          json['product']['package']['products'] = [];
+          json['product']['package']['plannings'] = [];
+        }
+
         return json;
       });
       const dateArray = [];
@@ -149,7 +154,9 @@ export class PlanningsController extends BaseController {
       }).length;
       const totalToday = finalData.filter((e) => {
         return (
-          moment(e.date).format('DD/MM/yyyy') == moment().format('DD/MM/yyyy')
+          moment(e.date).format('DD/MM/yyyy') ==
+            moment().format('DD/MM/yyyy') &&
+          e.product?.package?.validator != null
         );
       }).length;
 
