@@ -1,11 +1,11 @@
 version: '3'
 services:
-  dinoes-db:
-    image: mongo:4.4.17
-    volumes:
-      - dinoes_data:/data/db
-    ports:
-      - 2720:27017
+  # dinoes-db:
+  #   image: mongo:4.4.17
+  #   volumes:
+  #     - dinoes_data:/data/db
+  #   ports:
+  #     - 2720:27017
   dinoes-be:
     container_name: dinoes-be
     build:
@@ -15,6 +15,5 @@ services:
       - '8700:8700'
     volumes:
       - .:/src:cached
-
-volumes:
-  dinoes_data:
+# volumes:
+#   dinoes_data:
