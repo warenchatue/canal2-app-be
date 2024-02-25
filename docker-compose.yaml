@@ -6,13 +6,22 @@ services:
   #     - dinoes_data:/data/db
   #   ports:
   #     - 2720:27017
-  dinoes-be:
+  dinoes-be-dev:
     container_name: dinoes-be
     build:
       context: .
       dockerfile: ./Dockerfile
     ports:
       - '8700:8700'
+    volumes:
+      - .:/src:cached
+  dinoes-be-prod:
+    container_name: dinoes-be
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '8710:8710'
     volumes:
       - .:/src:cached
 # volumes:
