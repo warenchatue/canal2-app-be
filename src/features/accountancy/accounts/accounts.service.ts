@@ -46,6 +46,22 @@ export class AccountsService extends DeletableMixin<Account> {
     );
   }
 
+  findLight(states = [State.active]) {
+    return this.accounts
+      .find({}, { label: 1, code: 1, position: 1 })
+      .where('state')
+      .in(states)
+      .transform((docs) => {
+        return docs.map((doc) => ({
+          _id: doc._id.toString(),
+          label: doc.label,
+          code: doc.code,
+          position: doc.position,
+        }));
+      })
+      .exec();
+  }
+
   findAll() {
     return this.accounts.find().exec();
   }

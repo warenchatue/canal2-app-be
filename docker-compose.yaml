@@ -15,14 +15,5 @@ services:
       - '8700:8700'
     volumes:
       - .:/src:cached
-  dinoes-be-prod:
-    container_name: dinoes-be
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    ports:
-      - '8710:8710'
-    volumes:
-      - .:/src:cached
 # volumes:
 #   dinoes_data:

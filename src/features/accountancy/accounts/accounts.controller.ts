@@ -57,6 +57,16 @@ export class AccountsController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
+  @Get('all/light')
+  async getAllLight() {
+    return await this.run(async () => {
+      const result = await this.taxesServices.findLight();
+      return result;
+    });
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
   @Get(':accountId')
   async getAccount(@Param('accountId') accountId: string) {
     return await this.run(async () => {

@@ -65,6 +65,16 @@ export class AnnouncersController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
+  @Get('all/light')
+  async getAllLight() {
+    return await this.run(async () => {
+      const result = await this.announcersService.findLight();
+      return result;
+    });
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
   @Get(':announcerId')
   async getAccount(@Param('announcerId') announcerId: string) {
     return await this.run(async () => {

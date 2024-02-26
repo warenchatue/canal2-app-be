@@ -68,6 +68,19 @@ export class AnnouncersService extends DeletableMixin<Announcer> {
       ])
       .exec();
   }
+  findLight(states = [State.active]) {
+    return this.announcers
+      .find({}, { name: 1 })
+      .where('state')
+      .in(states)
+      .transform((docs) => {
+        return docs.map((doc) => ({
+          _id: doc._id.toString(),
+          name: doc.name,
+        }));
+      })
+      .exec();
+  }
 
   findAll() {
     return this.announcers
