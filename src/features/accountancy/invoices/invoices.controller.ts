@@ -124,8 +124,12 @@ export class InvoicesController extends BaseController {
       });
       if (txn) {
         const inv = await this.invoicesService.findOne(invoiceId);
-        this.invoicesService.updatePaidAmount(invoiceId, txn.amount + inv.paid);
-        return await this.invoicesService.addPayment(invoiceId, txn._id);
+        await this.invoicesService.updatePaidAmount(
+          invoiceId,
+          txn.amount + inv.paid,
+        );
+        await this.invoicesService.addPayment(invoiceId, txn._id);
+        return await this.invoicesService.findOne(invoiceId);
       }
       throwError;
     } catch (error) {

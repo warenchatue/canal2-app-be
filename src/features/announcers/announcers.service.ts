@@ -76,6 +76,7 @@ export class AnnouncersService extends DeletableMixin<Announcer> {
       .transform((docs) => {
         return docs.map((doc) => ({
           _id: doc._id.toString(),
+          id: doc._id.toString(),
           name: doc.name,
         }));
       })
