@@ -28,6 +28,9 @@ export class Transaction extends BaseSchema {
   @Prop()
   code: string;
 
+  @Prop()
+  date: string;
+
   @Prop({ required: true })
   amount: number;
 

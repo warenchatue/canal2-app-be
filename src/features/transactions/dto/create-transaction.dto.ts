@@ -9,6 +9,9 @@ export class CreateTransactionDto {
   @ApiPropertyOptional()
   code?: string;
 
+  @ApiPropertyOptional({ example: 'dd/mm/yyyy' })
+  date?: string;
+
   @ApiProperty({ minimum: 100 })
   @IsNotEmpty()
   @Min(100)
