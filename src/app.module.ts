@@ -26,6 +26,8 @@ import { AccountingDocsModule } from './features/accountancy/accounting-docs/acc
 import { RecoveryProceduresModule } from './features/recovery/recovery-procedures/recovery-procedures.module';
 import { JournalsModule } from './features/accountancy/journals/journals.module';
 import { DocTypesModule } from './features/accountancy/doc-types/doc-types.module';
+import { SuppliersModule } from './features/suppliers/suppliers.module';
+import { PurchaseOrdersModule } from './features/purchase-orders/purchase-orders.module';
 
 const features = [
   AuthModule,
@@ -51,6 +53,8 @@ const features = [
   RecoveryProceduresModule,
   JournalsModule,
   DocTypesModule,
+  SuppliersModule,
+  PurchaseOrdersModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {
