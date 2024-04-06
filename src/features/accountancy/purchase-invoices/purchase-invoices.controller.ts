@@ -30,7 +30,7 @@ import { CreateTaxItemDto } from '../invoices/dto/create-tax-item.dto';
 @ApiBearerAuth()
 @ApiTags('PurchaseInvoices')
 @UseJwt()
-@Controller('invoices')
+@Controller('purchase-invoices')
 export class PurchaseInvoicesController extends BaseController {
   constructor(
     private readonly invoicesService: PurchaseInvoicesService,
