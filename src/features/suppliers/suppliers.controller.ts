@@ -99,7 +99,7 @@ export class SuppliersController extends BaseController {
       const supplier = (
         await this.suppliersService.create({
           ...dto,
-          code: 'CLT' + genCode(allSuppliers.length + 1, 5),
+          code: 'F' + genCode(allSuppliers.length + 1, 5),
         })
       ).toJSON();
       return supplier;

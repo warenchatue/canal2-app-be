@@ -28,7 +28,7 @@ export class PurchaseOrdersService extends ServiceDeleteAbstract<PurchaseOrder> 
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
-      { path: 'announcer', model: 'Announcer' },
+      { path: 'supplier', model: 'Supplier' },
       { path: 'org', model: 'Org' },
       { path: 'paymentMethod', model: 'PaymentMethod' },
       { path: 'paymentCondition', model: 'PaymentCondition' },
@@ -40,7 +40,7 @@ export class PurchaseOrdersService extends ServiceDeleteAbstract<PurchaseOrder> 
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
-      { path: 'announcer', model: 'Announcer' },
+      { path: 'supplier', model: 'Supplier' },
       { path: 'org', model: 'Org' },
       { path: 'paymentMethod', model: 'PaymentMethod' },
       { path: 'paymentCondition', model: 'PaymentCondition' },
