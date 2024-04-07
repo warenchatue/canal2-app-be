@@ -28,6 +28,7 @@ import { JournalsModule } from './features/accountancy/journals/journals.module'
 import { DocTypesModule } from './features/accountancy/doc-types/doc-types.module';
 import { SuppliersModule } from './features/suppliers/suppliers.module';
 import { PurchaseOrdersModule } from './features/purchase-orders/purchase-orders.module';
+import { PurchaseInvoicesModule } from './features/accountancy/purchase-invoices/purchase-invoices.module';
 
 const features = [
   AuthModule,
@@ -55,6 +56,7 @@ const features = [
   DocTypesModule,
   SuppliersModule,
   PurchaseOrdersModule,
+  PurchaseInvoicesModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {

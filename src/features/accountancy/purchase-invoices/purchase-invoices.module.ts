@@ -4,7 +4,7 @@ import { OrdersModule } from 'src/features/orders/orders.module';
 import { NotificationsModule } from '../../notifications/notifications.module';
 import { UsersModule } from '../../users/users.module';
 import {
-  PurchasePurchaseInvoice,
+  PurchaseInvoice,
   PurchaseInvoiceSchema,
 } from './entities/purchase-invoice.entity';
 import { PurchaseInvoicesController } from './purchase-invoices.controller';
@@ -14,7 +14,7 @@ import { TransactionsModule } from 'src/features/transactions/transactions.modul
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: PurchasePurchaseInvoice.name, schema: PurchaseInvoiceSchema },
+      { name: PurchaseInvoice.name, schema: PurchaseInvoiceSchema },
     ]),
     forwardRef(() => TransactionsModule),
     OrdersModule,

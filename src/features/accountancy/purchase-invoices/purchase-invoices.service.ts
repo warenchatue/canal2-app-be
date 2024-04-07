@@ -6,16 +6,16 @@ import { USER_POPULATION } from '../../users/entities/user.entity';
 import { CreatePurchaseInvoiceDto } from './dto/create-purchase-invoice.dto';
 import { UpdatePurchaseInvoiceDto } from './dto/update-purchase-invoice.dto';
 import {
-  PurchasePurchaseInvoice,
+  PurchaseInvoice,
   PurchaseInvoiceDocument,
 } from './entities/purchase-invoice.entity';
 import { State } from 'src/common/shared/base-schema';
 import { CreateTaxItemDto } from '../invoices/dto/create-tax-item.dto';
 
 @Injectable()
-export class PurchaseInvoicesService extends ServiceDeleteAbstract<PurchasePurchaseInvoice> {
+export class PurchaseInvoicesService extends ServiceDeleteAbstract<PurchaseInvoice> {
   constructor(
-    @InjectModel(PurchasePurchaseInvoice.name)
+    @InjectModel(PurchaseInvoice.name)
     private readonly invoices: Model<PurchaseInvoiceDocument>,
   ) {
     super();
@@ -33,16 +33,10 @@ export class PurchaseInvoicesService extends ServiceDeleteAbstract<PurchasePurch
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
-      { path: 'announcer', model: 'Announcer' },
+      { path: 'supplier', model: 'Supplier' },
       {
         path: 'order',
         model: 'Order',
-        populate: [
-          {
-            path: 'package',
-            model: 'Campaign',
-          },
-        ],
       },
       {
         path: 'transactions',
@@ -65,16 +59,10 @@ export class PurchaseInvoicesService extends ServiceDeleteAbstract<PurchasePurch
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'manager', model: 'User' },
-      { path: 'announcer', model: 'Announcer' },
+      { path: 'supplier', model: 'Supplier' },
       {
         path: 'order',
         model: 'Order',
-        populate: [
-          {
-            path: 'package',
-            model: 'Campaign',
-          },
-        ],
       },
       {
         path: 'transactions',

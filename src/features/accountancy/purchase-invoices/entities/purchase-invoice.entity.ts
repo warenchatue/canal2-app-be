@@ -11,7 +11,7 @@ import { User } from 'src/features/users/entities/user.entity';
 @Schema({
   timestamps: true,
 })
-export class PurchasePurchaseInvoice extends BaseSchema {
+export class PurchaseInvoice extends BaseSchema {
   @Prop()
   label: string;
 
@@ -69,7 +69,7 @@ export class PurchasePurchaseInvoice extends BaseSchema {
   @Prop({ type: sc.Types.ObjectId, ref: 'Org' })
   org: sc.Types.ObjectId;
 
-  @Prop({ type: sc.Types.ObjectId, ref: 'PurchasePurchaseInvoice' })
+  @Prop({ type: sc.Types.ObjectId, ref: 'PurchaseInvoice' })
   from: sc.Types.ObjectId;
 
   @Prop()
@@ -103,7 +103,6 @@ export class PurchasePurchaseInvoice extends BaseSchema {
   expectedAdminValidator: sc.Types.ObjectId;
 }
 
-export type PurchaseInvoiceDocument = PurchasePurchaseInvoice & Document;
-export const PurchaseInvoiceSchema = SchemaFactory.createForClass(
-  PurchasePurchaseInvoice,
-);
+export type PurchaseInvoiceDocument = PurchaseInvoice & Document;
+export const PurchaseInvoiceSchema =
+  SchemaFactory.createForClass(PurchaseInvoice);
