@@ -28,53 +28,8 @@ export class TvProgramsService extends ServiceDeleteAbstract<TvProgram> {
   findOne(_id) {
     const population = [
       { path: 'creator', model: 'User' },
-      { path: 'manager', model: 'User' },
+      { path: 'category', model: 'ProgramCategory' },
       { path: 'org', model: 'Org' },
-      { path: 'adminValidator', model: 'User' },
-      {
-        path: 'products',
-        model: 'Product',
-      },
-      {
-        path: 'announcer',
-        model: 'Announcer',
-      },
-      {
-        path: 'order',
-        model: 'Order',
-        populate: [
-          {
-            path: 'announcer',
-            model: 'Announcer',
-          },
-        ],
-      },
-
-      {
-        path: 'invoice',
-        model: 'Invoice',
-        populate: [
-          {
-            path: 'announcer',
-            model: 'Announcer',
-          },
-        ],
-      },
-
-      {
-        path: 'plannings',
-        model: 'Planning',
-        populate: [
-          {
-            path: 'hour',
-            model: 'Hour',
-          },
-          {
-            path: 'product',
-            model: 'Product',
-          },
-        ],
-      },
     ];
     return this.tvPrograms.findById(_id).orFail().populate(population).exec();
   }
@@ -82,42 +37,8 @@ export class TvProgramsService extends ServiceDeleteAbstract<TvProgram> {
   find(states: State[] = [State.active]) {
     const population = [
       { path: 'creator', model: 'User' },
-      { path: 'manager', model: 'User' },
+      { path: 'category', model: 'ProgramCategory' },
       { path: 'org', model: 'Org' },
-      { path: 'adminValidator', model: 'User' },
-      {
-        path: 'announcer',
-        model: 'Announcer',
-      },
-      {
-        path: 'order',
-        model: 'Order',
-        populate: [
-          {
-            path: 'announcer',
-            model: 'Announcer',
-          },
-        ],
-      },
-
-      {
-        path: 'invoice',
-        model: 'Invoice',
-        populate: [
-          {
-            path: 'announcer',
-            model: 'Announcer',
-          },
-        ],
-      },
-      {
-        path: 'products',
-        model: 'Product',
-      },
-      {
-        path: 'plannings',
-        model: 'Planning',
-      },
     ];
     return this.tvPrograms
       .find()

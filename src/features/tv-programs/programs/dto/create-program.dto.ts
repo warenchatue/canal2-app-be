@@ -1,20 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import {
-  IsArray,
-  IsBoolean,
-  IsNumber,
-  IsString,
-  Max,
-  Min,
-} from 'class-validator';
+import { IsArray, IsBoolean, IsString, Max, Min } from 'class-validator';
 import { toBoolean } from 'src/common/helpers';
 export class CreateTvProgramDto {
   @ApiProperty({ example: 'PROG_001' })
   code: string;
 
   @ApiProperty({ example: 'Canal Matin' })
-  label: string;
+  name: string;
 
   @ApiProperty()
   category: string;
@@ -54,11 +47,6 @@ export class CreateTvProgramDto {
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
   closed: boolean;
-
-  @ApiPropertyOptional({ default: false })
-  @Transform(({ value }) => toBoolean(value))
-  @IsBoolean()
-  planningValidated: boolean;
 
   @ApiPropertyOptional({ example: 'My awesome tvProgram description' })
   @IsString()

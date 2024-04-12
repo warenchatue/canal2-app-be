@@ -29,6 +29,8 @@ import { DocTypesModule } from './features/accountancy/doc-types/doc-types.modul
 import { SuppliersModule } from './features/suppliers/suppliers.module';
 import { PurchaseOrdersModule } from './features/purchase-orders/purchase-orders.module';
 import { PurchaseInvoicesModule } from './features/accountancy/purchase-invoices/purchase-invoices.module';
+import { ProgramCategoriesModule } from './features/tv-programs/programs-categories/program-categories.module';
+import { TvProgramsModule } from './features/tv-programs/programs/programs.module';
 
 const features = [
   AuthModule,
@@ -57,6 +59,8 @@ const features = [
   SuppliersModule,
   PurchaseOrdersModule,
   PurchaseInvoicesModule,
+  ProgramCategoriesModule,
+  TvProgramsModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {
