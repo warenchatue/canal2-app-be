@@ -93,6 +93,9 @@ export class PlanningsController extends BaseController {
         if (json['hour']) {
           json['hour']['_id'] = json['hour']['_id'].toString();
         }
+        if (json['tvProgram']) {
+          json['tvProgram']['_id'] = json['tvProgram']['_id'].toString();
+        }
         if (json['product']) {
           json['product']['_id'] = json['product']['_id'].toString();
           json['product']['package']['_id'] =
@@ -223,8 +226,12 @@ export class PlanningsController extends BaseController {
       const result = await this.planningsService.findOne(planningId);
       const json = result.toJSON();
       json['_id'] = json['_id'].toString();
-      json['_id'] = json['_id'].toString();
-      json['hour']['_id'] = json['hour']['_id'].toString();
+      if (json['hour']) {
+        json['hour']['_id'] = json['hour']['_id'].toString();
+      }
+      if (json['tvProgram']) {
+        json['tvProgram']['_id'] = json['tvProgram']['_id'].toString();
+      }
       json['product']['_id'] = json['product']['_id'].toString();
       json['product']['package']['_id'] =
         json['product']['package']['_id'].toString();

@@ -43,6 +43,10 @@ export class CreatePackageDto {
 
   @ApiPropertyOptional()
   @IsArray()
+  tvPrograms?: string[];
+
+  @ApiPropertyOptional()
+  @IsArray()
   plannings?: string[];
 
   @ApiProperty()

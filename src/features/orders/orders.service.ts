@@ -34,6 +34,10 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
     return this.orders.findById(_id).orFail().populate(population).exec();
   }
 
+  findOneNoPopulate(_id) {
+    return this.orders.findById(_id).orFail().exec();
+  }
+
   find(states: State[] = [State.active]) {
     const population = [
       { path: 'creator', model: 'User' },

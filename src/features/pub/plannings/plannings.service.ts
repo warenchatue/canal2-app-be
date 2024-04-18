@@ -37,6 +37,10 @@ export class PlanningsService extends DeletableMixin<Planning> {
           model: 'Hour',
         },
         {
+          path: 'tvProgram',
+          model: 'TvProgram',
+        },
+        {
           path: 'product',
           model: 'Product',
           populate: {
@@ -81,6 +85,10 @@ export class PlanningsService extends DeletableMixin<Planning> {
         {
           path: 'hour',
           model: 'Hour',
+        },
+        {
+          path: 'tvProgram',
+          model: 'TvProgram',
         },
         {
           path: 'product',

@@ -20,11 +20,19 @@ export class CreatePlanningDto {
   @IsBoolean()
   isAutoPlay: boolean;
 
-  @ApiProperty({ example: '7:25' })
-  @IsNotEmpty()
-  hour: string;
+  @ApiPropertyOptional({ default: false })
+  @IsBoolean()
+  isTvProgram: boolean;
 
-  @ApiProperty({ example: '7:28' })
+  @ApiPropertyOptional({ example: '7:25' })
+  @IsNotEmpty()
+  hour?: string;
+
+  @ApiPropertyOptional({ example: 'id' })
+  @IsNotEmpty()
+  tvProgram?: string;
+
+  @ApiPropertyOptional({ example: '7:28' })
   @IsNotEmpty()
   playedHour: string;
 

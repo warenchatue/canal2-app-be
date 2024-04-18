@@ -10,6 +10,9 @@ export class CreateOrderDto {
   @ApiPropertyOptional({ example: 'DEV/2023/0001' })
   code: string;
 
+  @ApiPropertyOptional({ example: '' })
+  from: string;
+
   @ApiPropertyOptional({ example: 'dd/mm/yyyy' })
   date: string;
 

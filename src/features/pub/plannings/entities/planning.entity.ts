@@ -19,8 +19,14 @@ export class Planning extends BaseSchema {
   @Prop()
   isAutoPlay: boolean;
 
+  @Prop()
+  isTvProgram: boolean;
+
   @Prop({ type: sc.Types.ObjectId, ref: 'Hour' })
   hour: sc.Types.ObjectId;
+
+  @Prop({ type: sc.Types.ObjectId, ref: 'TvProgram' })
+  tvProgram: sc.Types.ObjectId;
 
   @Prop()
   playedHour: string;
