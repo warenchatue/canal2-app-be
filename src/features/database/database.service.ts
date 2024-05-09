@@ -4,9 +4,11 @@ import * as moment from 'moment';
 import * as JSZip from 'jszip';
 import * as path from 'path';
 import { execSync } from 'child_process';
+import { TelegramBotService } from '../telegram/telegram-bot.service';
 
 @Injectable()
 export class DatabaseService {
+  constructor(private readonly telegramBotService: TelegramBotService) {}
   async exportCollections(
     database: string,
     collections: string[],
@@ -24,9 +26,12 @@ export class DatabaseService {
     );
 
     await this.compressFilesToZip(dbPath, zipPath);
-
     // Clean up the dump directory
     fs.rmdirSync(dumpPath, { recursive: true });
+
+    //Send to the telegram bot
+    // const fileContent = fs.readFileSync(zipPath);
+    this.telegramBotService.sendDocument('746455861', zipPath);
   }
 
   async compressFilesToZip(
