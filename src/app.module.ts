@@ -31,6 +31,7 @@ import { PurchaseOrdersModule } from './features/purchase-orders/purchase-orders
 import { PurchaseInvoicesModule } from './features/accountancy/purchase-invoices/purchase-invoices.module';
 import { ProgramCategoriesModule } from './features/tv-programs/programs-categories/program-categories.module';
 import { TvProgramsModule } from './features/tv-programs/programs/programs.module';
+import { DatabaseModule } from './features/database/database.module';
 
 const features = [
   AuthModule,
@@ -61,6 +62,7 @@ const features = [
   PurchaseInvoicesModule,
   ProgramCategoriesModule,
   TvProgramsModule,
+  DatabaseModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {
