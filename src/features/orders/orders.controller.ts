@@ -21,6 +21,7 @@ import * as moment from 'moment';
 import { OrderDocument } from './entities/order.entity';
 import { ORDER_CREATED_EVENT } from './orders.handler';
 import { OrdersService } from './orders.service';
+import { State } from 'src/common/shared/base-schema';
 
 @ApiBearerAuth()
 @ApiTags('Orders')
@@ -178,6 +179,19 @@ export class OrdersController extends BaseController {
     } catch (error) {
       sendError(error);
     }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Get('/all/by/code')
+  async getOrderByCode(@Query('orderCode') orderCode: string) {
+    return await this.run(async () => {
+      const result = await this.ordersService.findLightByCode(
+        [State.active],
+        orderCode,
+      );
+      return result;
+    });
   }
 
   @Delete(':orderId')

@@ -66,6 +66,22 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
       .exec();
   }
 
+  findLightByCode(states = [State.active], code: string) {
+    const regex = new RegExp(code, 'i');
+    return this.orders
+      .find({ code: regex }, { code: 1 })
+      .where('state')
+      .in(states)
+      .transform((docs) => {
+        return docs.map((doc) => ({
+          _id: doc._id.toString(),
+          id: doc._id.toString(),
+          name: doc.code,
+        }));
+      })
+      .exec();
+  }
+
   findAll() {
     return this.orders.find().exec();
   }
