@@ -17,6 +17,9 @@ export class Planning extends BaseSchema {
   isManualPlay: boolean;
 
   @Prop()
+  isManualPlayUpdatedBy: string;
+
+  @Prop()
   isAutoPlay: boolean;
 
   @Prop()

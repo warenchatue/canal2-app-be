@@ -23,6 +23,7 @@ import { PlanningsService } from './plannings.service';
 import { getNotPlayDto } from './dto/get-not-play';
 import { autoValidatePlanningDto } from './dto/auto-validate.dto';
 import { PackagesService } from '../packages/packages.service';
+import { manualValidatePlanningDto } from './dto/manual-validate.dto';
 
 @Controller('plannings')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -283,6 +284,22 @@ export class PlanningsController extends BaseController {
         await this.planningsService.updateDiffusedByCode(code);
       }
       return true;
+    });
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Post('manual-validate/ids')
+  async manualValidateIds(
+    @Body() dto: manualValidatePlanningDto,
+    @Req() { user },
+  ) {
+    return await this.run(async () => {
+      for (const _id of dto._ids) {
+        await this.planningsService.updateDiffusedById(_id, user._id);
+      }
+      const myCampaign = await this.packagesService.findOne(dto.packageId);
+      return myCampaign.toJSON();
     });
   }
 

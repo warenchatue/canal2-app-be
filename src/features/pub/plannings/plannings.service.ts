@@ -144,6 +144,17 @@ export class PlanningsService extends DeletableMixin<Planning> {
       .exec();
   }
 
+  async updateDiffusedById(_id: string, userId: string) {
+    return await this.plannings
+      .findOneAndUpdate(
+        { _id },
+        { $set: { isManualPlay: true, isManualPlayUpdatedBy: userId } },
+        { new: true },
+      )
+      .orFail()
+      .exec();
+  }
+
   async pushNotification(_id: string, notificationId: string) {
     const result = await this.plannings
       .findByIdAndUpdate(_id, {
