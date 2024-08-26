@@ -34,6 +34,10 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
     return this.orders.findById(_id).orFail().populate(population).exec();
   }
 
+  findOneNoPopulate(_id) {
+    return this.orders.findById(_id).orFail().exec();
+  }
+
   find(states: State[] = [State.active]) {
     const population = [
       { path: 'creator', model: 'User' },
@@ -59,6 +63,22 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
       .populate(population)
       .where('state')
       .in([states])
+      .exec();
+  }
+
+  findLightByCode(states = [State.active], code: string) {
+    const regex = new RegExp(code, 'i');
+    return this.orders
+      .find({ code: regex }, { code: 1 })
+      .where('state')
+      .in(states)
+      .transform((docs) => {
+        return docs.map((doc) => ({
+          _id: doc._id.toString(),
+          id: doc._id.toString(),
+          name: doc.code,
+        }));
+      })
       .exec();
   }
 

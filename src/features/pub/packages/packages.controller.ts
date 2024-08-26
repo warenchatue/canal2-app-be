@@ -125,6 +125,21 @@ export class PackageController extends BaseController {
     }
   }
 
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':packageId/add-tv-program/:tvProgramId')
+  async addTvProgram(
+    @Param('packageId') packageId: string,
+    @Param('tvProgramId') tvProgramId: string,
+  ) {
+    try {
+      await this.packagesService.addTvProgram(packageId, tvProgramId);
+      return await this.packagesService.findOne(packageId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
   @Put(':packageId/close')
   async closePackage(@Param('packageId') packageId: string, @Req() { user }) {
     try {

@@ -83,6 +83,22 @@ export class AnnouncersService extends DeletableMixin<Announcer> {
       .exec();
   }
 
+  findLightByName(states = [State.active], name: string) {
+    const regex = new RegExp(name, 'i');
+    return this.announcers
+      .find({ name: regex }, { name: 1 })
+      .where('state')
+      .in(states)
+      .transform((docs) => {
+        return docs.map((doc) => ({
+          _id: doc._id.toString(),
+          id: doc._id.toString(),
+          name: doc.name,
+        }));
+      })
+      .exec();
+  }
+
   findAll() {
     return this.announcers
       .find()

@@ -37,6 +37,10 @@ export class PlanningsService extends DeletableMixin<Planning> {
           model: 'Hour',
         },
         {
+          path: 'tvProgram',
+          model: 'TvProgram',
+        },
+        {
           path: 'product',
           model: 'Product',
           populate: {
@@ -81,6 +85,10 @@ export class PlanningsService extends DeletableMixin<Planning> {
         {
           path: 'hour',
           model: 'Hour',
+        },
+        {
+          path: 'tvProgram',
+          model: 'TvProgram',
         },
         {
           path: 'product',
@@ -132,6 +140,17 @@ export class PlanningsService extends DeletableMixin<Planning> {
   async updateDiffusedByCode(code: string) {
     return await this.plannings
       .findOneAndUpdate({ code }, { $set: { isAutoPlay: true } }, { new: true })
+      .orFail()
+      .exec();
+  }
+
+  async updateDiffusedById(_id: string, userId: string) {
+    return await this.plannings
+      .findOneAndUpdate(
+        { _id },
+        { $set: { isManualPlay: true, isManualPlayUpdatedBy: userId } },
+        { new: true },
+      )
       .orFail()
       .exec();
   }

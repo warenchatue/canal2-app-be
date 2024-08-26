@@ -10,6 +10,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseInterceptors,
 } from '@nestjs/common';
@@ -22,6 +23,7 @@ import { UseJwt } from '../auth/auth.decorator';
 import { UpdateAnnouncerDto } from './dto/update-announcer.dto';
 import { AnnouncersService } from './announcers.service';
 import { CreateAnnouncerDto } from './dto/create-announcer.dto';
+import { State } from 'src/common/shared/base-schema';
 // import { FirebaseService } from '../firebase/firebase.service';
 
 @Controller('announcers')
@@ -69,6 +71,19 @@ export class AnnouncersController extends BaseController {
   async getAllLight() {
     return await this.run(async () => {
       const result = await this.announcersService.findLight();
+      return result;
+    });
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Get('/all/by/name')
+  async getAccountByName(@Query('announcerName') announcerName: string) {
+    return await this.run(async () => {
+      const result = await this.announcersService.findLightByName(
+        [State.active],
+        announcerName,
+      );
       return result;
     });
   }

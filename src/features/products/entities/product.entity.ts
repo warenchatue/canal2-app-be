@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as sc } from 'mongoose';
 import { BaseSchema } from 'src/common/shared/base-schema';
-import { Order } from 'src/features/orders/entities/order.entity';
 import { Campaign } from 'src/features/pub/packages/entities/package.entity';
 
 export enum ProductType {
   BA = 'BA',
   SPOT = 'SPOT',
+  TvProgram = 'TvProgram',
 }
 
 @Schema({ timestamps: true })

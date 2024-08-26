@@ -36,6 +36,10 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
         model: 'Product',
       },
       {
+        path: 'tvPrograms',
+        model: 'TvProgram',
+      },
+      {
         path: 'announcer',
         model: 'Announcer',
       },
@@ -68,6 +72,10 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
           {
             path: 'hour',
             model: 'Hour',
+          },
+          {
+            path: 'tvProgram',
+            model: 'TvProgram',
           },
           {
             path: 'product',
@@ -115,6 +123,10 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
         model: 'Product',
       },
       {
+        path: 'tvPrograms',
+        model: 'TvProgram',
+      },
+      {
         path: 'plannings',
         model: 'Planning',
       },
@@ -153,6 +165,13 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
     return this.packages.findByIdAndUpdate(_id, {
       $set: dto,
     });
+  }
+
+  addTvProgram(_id: string, tvProgramId: string) {
+    return this.packages
+      .findByIdAndUpdate(_id, { $push: { tvPrograms: tvProgramId } })
+      .orFail()
+      .exec();
   }
 
   addProduct(_id: string, productId: string) {
