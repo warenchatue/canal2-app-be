@@ -23,6 +23,7 @@ import { PlanningsService } from './plannings.service';
 import { getNotPlayDto } from './dto/get-not-play';
 import { autoValidatePlanningDto } from './dto/auto-validate.dto';
 import { PackagesService } from '../packages/packages.service';
+import { manualValidatePlanningDto } from './dto/manual-validate.dto';
 
 @Controller('plannings')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -92,6 +93,9 @@ export class PlanningsController extends BaseController {
         json['_id'] = json['_id'].toString();
         if (json['hour']) {
           json['hour']['_id'] = json['hour']['_id'].toString();
+        }
+        if (json['tvProgram']) {
+          json['tvProgram']['_id'] = json['tvProgram']['_id'].toString();
         }
         if (json['product']) {
           json['product']['_id'] = json['product']['_id'].toString();
@@ -223,8 +227,12 @@ export class PlanningsController extends BaseController {
       const result = await this.planningsService.findOne(planningId);
       const json = result.toJSON();
       json['_id'] = json['_id'].toString();
-      json['_id'] = json['_id'].toString();
-      json['hour']['_id'] = json['hour']['_id'].toString();
+      if (json['hour']) {
+        json['hour']['_id'] = json['hour']['_id'].toString();
+      }
+      if (json['tvProgram']) {
+        json['tvProgram']['_id'] = json['tvProgram']['_id'].toString();
+      }
       json['product']['_id'] = json['product']['_id'].toString();
       json['product']['package']['_id'] =
         json['product']['package']['_id'].toString();
@@ -276,6 +284,22 @@ export class PlanningsController extends BaseController {
         await this.planningsService.updateDiffusedByCode(code);
       }
       return true;
+    });
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Post('manual-validate/ids')
+  async manualValidateIds(
+    @Body() dto: manualValidatePlanningDto,
+    @Req() { user },
+  ) {
+    return await this.run(async () => {
+      for (const _id of dto._ids) {
+        await this.planningsService.updateDiffusedById(_id, user._id);
+      }
+      const myCampaign = await this.packagesService.findOne(dto.packageId);
+      return myCampaign.toJSON();
     });
   }
 

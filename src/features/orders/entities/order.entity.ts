@@ -14,6 +14,9 @@ export class Order extends BaseSchema {
   label: string;
 
   @Prop()
+  from: string;
+
+  @Prop()
   team: string;
 
   @Prop()

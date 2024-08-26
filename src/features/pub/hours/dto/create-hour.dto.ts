@@ -15,7 +15,7 @@ export class CreateHourDto {
   @IsEnum(ProductType)
   type: ProductType;
 
-  @ApiPropertyOptional({ default: 'Journal' })
+  @ApiPropertyOptional({ default: 'SPOT' })
   @IsString()
   description: string;
 }

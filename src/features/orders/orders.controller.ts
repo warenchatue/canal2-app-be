@@ -21,6 +21,7 @@ import * as moment from 'moment';
 import { OrderDocument } from './entities/order.entity';
 import { ORDER_CREATED_EVENT } from './orders.handler';
 import { OrdersService } from './orders.service';
+import { State } from 'src/common/shared/base-schema';
 
 @ApiBearerAuth()
 @ApiTags('Orders')
@@ -101,6 +102,54 @@ export class OrdersController extends BaseController {
     }
   }
 
+  @Put(':orderId/copy')
+  async copyOrder(@Param('orderId') orderId: string, @Req() { user }) {
+    try {
+      const allOrders = await this.ordersService.findAll();
+      const oneOrder = await this.ordersService.findOneNoPopulate(orderId);
+
+      return await this.run(async () => {
+        const orderCode =
+          'DEV/' + moment().year() + '/' + genCode(allOrders.length + 1);
+        const result = await this.ordersService.create(
+          {
+            code: orderCode,
+            from: orderId,
+            date: oneOrder.date,
+            dueDate: oneOrder.dueDate,
+            org: oneOrder.org?.toString(),
+            items: oneOrder.items,
+            description: oneOrder.description,
+            manager: oneOrder.manager?.toString(),
+            paymentCondition: oneOrder.paymentCondition?.toString(),
+            paymentMethod: oneOrder.paymentMethod?.toString(),
+            validator: oneOrder.validator?.toString(),
+            team: oneOrder.team,
+            amount: oneOrder.amount,
+            creator: user._id,
+            label: oneOrder.label,
+            requiredAdminValidator: false,
+            expectedAdminValidator: oneOrder.expectedAdminValidator?.toString(),
+            announcer: oneOrder.announcer?.toString(),
+            status: oneOrder.status,
+            closed: oneOrder.closed,
+          },
+          oneOrder.announcer?.toString(),
+        );
+
+        this.event.emit(ORDER_CREATED_EVENT, {
+          code: orderCode,
+          accountId: user._id,
+          completed: true,
+        });
+
+        return result;
+      });
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
   @Put(':orderId')
   async updatePackage(
     @Param('orderId') orderId: string,
@@ -130,6 +179,19 @@ export class OrdersController extends BaseController {
     } catch (error) {
       sendError(error);
     }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Get('/all/by/code')
+  async getOrderByCode(@Query('orderCode') orderCode: string) {
+    return await this.run(async () => {
+      const result = await this.ordersService.findLightByCode(
+        [State.active],
+        orderCode,
+      );
+      return result;
+    });
   }
 
   @Delete(':orderId')

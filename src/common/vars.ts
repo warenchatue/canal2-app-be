@@ -23,6 +23,11 @@ export const DB_CERT = process.env.DB_CERT ?? `${ROOT_PATH}/.secrets/cert.pem`;
 export const NODE_ENV = process.env.NODE_ENV ?? 'local';
 export const API_PORT = process.env.API_PORT ?? 8000;
 
+export const DB_NAME = process.env.DB_NAME ?? 'test';
+
+export const DB_BACKUP_PATH =
+  process.env.DB_BACKUP_PATH ?? '/home/jordan/db-backups/dinoes';
+
 // Default values
 export const PER_PAGE = 15;
 
