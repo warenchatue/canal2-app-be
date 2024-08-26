@@ -32,6 +32,10 @@ import { PurchaseInvoicesModule } from './features/accountancy/purchase-invoices
 import { ProgramCategoriesModule } from './features/tv-programs/programs-categories/program-categories.module';
 import { TvProgramsModule } from './features/tv-programs/programs/programs.module';
 import { DatabaseModule } from './features/database/database.module';
+import { AssetModule } from './features/assets/asset/asset.module';
+import { AssetBrandModule } from './features/assets/asset-brand/asset-brand.module';
+import { AssetModelModule } from './features/assets/asset-model/asset-model.module';
+import { AssetCategoryModule } from './features/assets/asset-category/asset-category.module';
 
 const features = [
   AuthModule,
@@ -63,6 +67,10 @@ const features = [
   ProgramCategoriesModule,
   TvProgramsModule,
   DatabaseModule,
+  AssetCategoryModule,
+  AssetModelModule,
+  AssetBrandModule,
+  AssetModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {
