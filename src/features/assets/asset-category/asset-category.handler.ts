@@ -7,7 +7,8 @@ import { AssetCategory } from './entities/asset-category.entity';
 export class AssetCategoryHandler extends BaseHandler {
   constructor() {
     super(AssetCategoryHandler.name);
-  }explo
+  }
+  explo;
 
   @OnEvent('assetCategory.created')
   handleArticleCreated(payload: AssetCategory) {

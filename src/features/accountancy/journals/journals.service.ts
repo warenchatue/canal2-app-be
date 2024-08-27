@@ -58,7 +58,8 @@ export class JournalsService extends DeletableMixin<Journal> {
           path: 'accounts',
           model: 'Account',
         },
-      ]).exec();
+      ])
+      .exec();
   }
 
   async update(_id: string, dto: UpdateJournalDto) {

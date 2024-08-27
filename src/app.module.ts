@@ -36,6 +36,8 @@ import { AssetModule } from './features/assets/asset/asset.module';
 import { AssetBrandModule } from './features/assets/asset-brand/asset-brand.module';
 import { AssetModelModule } from './features/assets/asset-model/asset-model.module';
 import { AssetCategoryModule } from './features/assets/asset-category/asset-category.module';
+import { AssetFloorModule } from './features/assets/asset-floor/asset-floor.module';
+import { AssetRoomModule } from './features/assets/asset-room/asset-room.module';
 
 const features = [
   AuthModule,
@@ -70,6 +72,8 @@ const features = [
   AssetCategoryModule,
   AssetModelModule,
   AssetBrandModule,
+  AssetFloorModule,
+  AssetRoomModule,
   AssetModule,
 ];
 

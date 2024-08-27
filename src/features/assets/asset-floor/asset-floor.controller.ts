@@ -15,29 +15,29 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { URequest } from 'src/common/shared/request';
-import { AssetModelService } from './asset-model.service';
+import { AssetFloorService } from './asset-floor.service';
 import { UseJwt } from '../../auth/auth.decorator';
-import { UpdateAssetModelDto } from './dto/update-asset-model.dto';
-import { CreateAssetModelDto } from './dto/create-asset-model.dto';
+import { UpdateAssetFloorDto } from './dto/update-asset-floor.dto';
+import { CreateAssetFloorDto } from './dto/create-asset-floor.dto';
 
 // import { FirebaseService } from '../firebase/firebase.service';
 
-@Controller('asset-models')
+@Controller('asset-floors')
 @UseInterceptors(ClassSerializerInterceptor)
-@ApiTags('AssetModels')
-export class AssetModelController extends BaseController {
-  private logger = new Logger(AssetModelController.name);
+@ApiTags('AssetFloors')
+export class AssetFloorController extends BaseController {
+  private logger = new Logger(AssetFloorController.name);
 
-  constructor(private readonly assetModelServices: AssetModelService) {
+  constructor(private readonly assetFloorServices: AssetFloorService) {
     super();
   }
 
-  async UpdateAssetModel(
-    @Body() dto: UpdateAssetModelDto,
+  async UpdateAssetFloor(
+    @Body() dto: UpdateAssetFloorDto,
     @Req() { user }: URequest,
   ) {
     return await this.run(
-      async () => await this.assetModelServices.update(user._id, dto),
+      async () => await this.assetFloorServices.update(user._id, dto),
     );
   }
 
@@ -46,11 +46,10 @@ export class AssetModelController extends BaseController {
   @Get()
   async getAll() {
     return await this.run(async () => {
-      const result = await this.assetModelServices.find();
+      const result = await this.assetFloorServices.find();
       return result.map((e) => {
         const json = e.toJSON();
         json['_id'] = json['_id'].toString();
-        // json['model']['_id'] = json['model']['_id'].toString();
         return json;
       });
     });
@@ -58,11 +57,11 @@ export class AssetModelController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Get(':assetModelId')
-  async getAssetModel(@Param('assetModelId') assetModelId: string) {
+  @Get(':assetFloorId')
+  async getAssetFloor(@Param('assetFloorId') assetFloorId: string) {
     return await this.run(async () => {
       const result = (
-        await this.assetModelServices.findOne(assetModelId)
+        await this.assetFloorServices.findOne(assetFloorId)
       ).toJSON();
       console.log(result);
       return result;
@@ -72,9 +71,9 @@ export class AssetModelController extends BaseController {
   @ApiBearerAuth()
   @UseJwt()
   @Post()
-  async createAssetModel(@Body() dto: CreateAssetModelDto) {
+  async createAssetFloor(@Body() dto: CreateAssetFloorDto) {
     try {
-      return (await this.assetModelServices.create(dto)).toJSON();
+      return (await this.assetFloorServices.create(dto)).toJSON();
     } catch (error) {
       sendError(error);
     }
@@ -82,13 +81,13 @@ export class AssetModelController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Put(':assetModelId')
-  async updateAssetModel(
-    @Param('assetModelId') accountId: string,
-    @Body() dto: UpdateAssetModelDto,
+  @Put(':assetFloorId')
+  async updateAssetFloor(
+    @Param('assetFloorId') accountId: string,
+    @Body() dto: UpdateAssetFloorDto,
   ) {
     try {
-      return (await this.assetModelServices.update(accountId, dto)).toJSON();
+      return (await this.assetFloorServices.update(accountId, dto)).toJSON();
     } catch (error) {
       sendError(error);
     }
@@ -96,10 +95,10 @@ export class AssetModelController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Delete(':assetModelId')
-  async deleteAssetModel(@Param('assetModelId') assetModelId: string) {
+  @Delete(':assetFloorId')
+  async deleteAssetFloor(@Param('assetFloorId') assetFloorId: string) {
     return await this.run(async () => {
-      return await this.assetModelServices.deleteOne(assetModelId);
+      return await this.assetFloorServices.deleteOne(assetFloorId);
     });
   }
 }
