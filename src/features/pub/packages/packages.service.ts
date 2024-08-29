@@ -7,6 +7,8 @@ import { CreatePackageDto } from './dto/create-package.dto';
 import { UpdatePackageDto } from './dto/update-package.dto';
 import { Campaign, CampaignDocument } from './entities/package.entity';
 import { State } from 'src/common/shared/base-schema';
+import { FindQueryDto } from 'src/common/dto/find-query.dto';
+import { paginate } from 'nestjs-paginate-mongo';
 
 @Injectable()
 export class PackagesService extends ServiceDeleteAbstract<Campaign> {
@@ -131,12 +133,80 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
         model: 'Planning',
       },
     ];
+
     return this.packages
       .find()
-      .populate(population)
       .where('state')
       .in(states)
+      .populate(population)
       .exec();
+  }
+
+  findPaginate(
+    query: FindQueryDto<Campaign>,
+    states: State[] = [State.active],
+  ) {
+    const population = [
+      { path: 'creator', model: 'User' },
+      { path: 'manager', model: 'User' },
+      { path: 'org', model: 'Org', select: '_id code name email phone' },
+      { path: 'adminValidator', model: 'User' },
+      {
+        path: 'announcer',
+        model: 'Announcer',
+        select: '_id code name email phone',
+      },
+      {
+        path: 'order',
+        model: 'Order',
+        populate: [
+          {
+            path: 'announcer',
+            model: 'Announcer',
+            select: '_id code name email phone',
+          },
+        ],
+      },
+
+      {
+        path: 'invoice',
+        model: 'Invoice',
+        populate: [
+          {
+            path: 'announcer',
+            model: 'Announcer',
+            select: '_id code name email phone',
+          },
+        ],
+      },
+      {
+        path: 'products',
+        model: 'Product',
+      },
+      {
+        path: 'tvPrograms',
+        model: 'TvProgram',
+      },
+      {
+        path: 'plannings',
+        model: 'Planning',
+      },
+    ];
+    const { search, perPage, page } = query;
+
+    const searchQuery = search
+      ? { 'announcer.name': { $regex: search, $options: 'i' } }
+      : {};
+
+    const packageFilter = {
+      ...searchQuery,
+      ...(states.length > 0 ? { state: { $in: states } } : {}),
+    };
+
+    return paginate(this.packages.find(packageFilter).populate(population), {
+      page,
+      perPage,
+    });
   }
 
   findByAnnouncer(announcerId: string, states: State[] = [State.active]) {
