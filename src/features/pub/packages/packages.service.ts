@@ -260,7 +260,7 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
 
   deleteTvProgram(_id: string, tvProgramId: string) {
     return this.packages
-      .findByIdAndUpdate(_id, { $pop: { tvPrograms: tvProgramId } })
+      .findByIdAndUpdate(_id, { $pull: { tvPrograms: tvProgramId } })
       .orFail()
       .exec();
   }
@@ -274,7 +274,7 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
 
   deleteHour(_id: string, hourId: string) {
     return this.packages
-      .findByIdAndUpdate(_id, { $pop: { hours: hourId } })
+      .findByIdAndUpdate(_id, { $pull: { hours: hourId } })
       .orFail()
       .exec();
   }
