@@ -42,6 +42,10 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
         model: 'TvProgram',
       },
       {
+        path: 'hours',
+        model: 'Hour',
+      },
+      {
         path: 'announcer',
         model: 'Announcer',
       },
@@ -254,9 +258,23 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
       .exec();
   }
 
+  deleteTvProgram(_id: string, tvProgramId: string) {
+    return this.packages
+      .findByIdAndUpdate(_id, { $pop: { tvPrograms: tvProgramId } })
+      .orFail()
+      .exec();
+  }
+
   addHour(_id: string, hourId: string) {
     return this.packages
       .findByIdAndUpdate(_id, { $push: { hours: hourId } })
+      .orFail()
+      .exec();
+  }
+
+  deleteHour(_id: string, hourId: string) {
+    return this.packages
+      .findByIdAndUpdate(_id, { $pop: { hours: hourId } })
       .orFail()
       .exec();
   }

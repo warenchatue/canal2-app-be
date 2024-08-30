@@ -179,6 +179,21 @@ export class PackageController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
+  @Put(':packageId/delete-tv-program/:tvProgramId')
+  async deleteTvProgram(
+    @Param('packageId') packageId: string,
+    @Param('tvProgramId') tvProgramId: string,
+  ) {
+    try {
+      await this.packagesService.deleteTvProgram(packageId, tvProgramId);
+      return await this.packagesService.findOne(packageId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
   @Put(':packageId/add-hour/:hourId')
   async addHour(
     @Param('packageId') packageId: string,
@@ -186,6 +201,21 @@ export class PackageController extends BaseController {
   ) {
     try {
       await this.packagesService.addHour(packageId, hourId);
+      return await this.packagesService.findOne(packageId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':packageId/delete-hour/:hourId')
+  async deleteHour(
+    @Param('packageId') packageId: string,
+    @Param('hourId') hourId: string,
+  ) {
+    try {
+      await this.packagesService.deleteHour(packageId, hourId);
       return await this.packagesService.findOne(packageId);
     } catch (error) {
       sendError(error);
