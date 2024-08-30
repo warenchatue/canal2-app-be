@@ -188,6 +188,10 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
         model: 'TvProgram',
       },
       {
+        path: 'hours',
+        model: 'Hour',
+      },
+      {
         path: 'plannings',
         model: 'Planning',
       },
@@ -246,6 +250,13 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
   addTvProgram(_id: string, tvProgramId: string) {
     return this.packages
       .findByIdAndUpdate(_id, { $push: { tvPrograms: tvProgramId } })
+      .orFail()
+      .exec();
+  }
+
+  addHour(_id: string, hourId: string) {
+    return this.packages
+      .findByIdAndUpdate(_id, { $push: { hours: hourId } })
       .orFail()
       .exec();
   }

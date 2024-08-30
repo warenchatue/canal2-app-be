@@ -177,6 +177,21 @@ export class PackageController extends BaseController {
     }
   }
 
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':packageId/add-hour/:hourId')
+  async addHour(
+    @Param('packageId') packageId: string,
+    @Param('hourId') hourId: string,
+  ) {
+    try {
+      await this.packagesService.addHour(packageId, hourId);
+      return await this.packagesService.findOne(packageId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
   @Put(':packageId/close')
   async closePackage(@Param('packageId') packageId: string) {
     try {
