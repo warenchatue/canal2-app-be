@@ -203,10 +203,16 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
       ...(states.length > 0 ? { state: { $in: states } } : {}),
     };
 
-    return paginate(this.packages.find(packageFilter).populate(population), {
-      page,
-      perPage,
-    });
+    return paginate(
+      this.packages
+        .find(packageFilter)
+        .sort({ ['createdAt']: -1 })
+        .populate(population),
+      {
+        page,
+        perPage,
+      },
+    );
   }
 
   findByAnnouncer(announcerId: string, states: State[] = [State.active]) {
