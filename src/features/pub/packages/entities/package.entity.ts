@@ -12,6 +12,7 @@ import { Product } from 'src/features/products/entities/product.entity';
 import { Planning } from 'src/features/pub/plannings/entities/planning.entity';
 import { TvProgram } from 'src/features/tv-programs/programs/entities/program.entity';
 import { User } from 'src/features/users/entities/user.entity';
+import { Hour } from '../../hours/entities/hour.entity';
 @Schema({
   timestamps: true,
 })
@@ -87,6 +88,9 @@ export class Campaign extends BaseSchema {
 
   @Prop({ type: [{ type: sc.Types.ObjectId, ref: () => TvProgram }] })
   tvPrograms: sc.Types.ObjectId[] | string[];
+
+  @Prop({ type: [{ type: sc.Types.ObjectId, ref: () => Hour }] })
+  hours: sc.Types.ObjectId[] | string[];
 }
 
 export type CampaignDocument = Campaign & Document;

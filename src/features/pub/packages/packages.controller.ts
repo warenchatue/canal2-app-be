@@ -60,21 +60,17 @@ export class PackageController extends BaseController {
   }
 
   @Get()
-  async getAllPackages(
-    @Req() { user },
-    @Query() { states }: FindQueryDto<CampaignDocument>,
-  ) {
+  async getAllPackages() {
     try {
       const data = await this.packagesService.find();
       const totalItems = data.length;
       const totalAnnouncers = 0;
-      // const totalAnnouncersSet = new Set(totalAnnouncers);
       let totalSpots = 0;
-      const allSpots = data.map((e) => {
+      const allSpots = data.map((e: any) => {
         return e.plannings.length;
       });
       if (allSpots.length > 0) {
-        totalSpots = allSpots.reduce(function (a, b) {
+        totalSpots = allSpots.reduce(function (a: any, b: any) {
           return a + b;
         });
       }
@@ -84,7 +80,7 @@ export class PackageController extends BaseController {
       });
 
       if (allFiles.length > 0) {
-        totalFiles = allFiles.reduce(function (a, b) {
+        totalFiles = allFiles.reduce(function (a: any, b: any) {
           return a + b;
         });
       }
@@ -103,8 +99,50 @@ export class PackageController extends BaseController {
     }
   }
 
+  @Get('/paginate')
+  async getAllCampaignsPaginate(
+    @Query() query: FindQueryDto<CampaignDocument>,
+  ) {
+    try {
+      const data = await this.packagesService.findPaginate(query);
+      const totalItems = data.metadata.total;
+      const totalAnnouncers = 0;
+      let totalSpots = 0;
+      const allSpots = data.data.map((e: any) => {
+        return e.plannings.length;
+      });
+      if (allSpots.length > 0) {
+        totalSpots = allSpots.reduce(function (a: any, b: any) {
+          return a + b;
+        });
+      }
+      let totalFiles = 0;
+      const allFiles = data.data.map((e) => {
+        return e.products.length;
+      });
+
+      if (allFiles.length > 0) {
+        totalFiles = allFiles.reduce(function (a: any, b: any) {
+          return a + b;
+        });
+      }
+
+      return {
+        stats: {
+          totalItems,
+          totalAnnouncers: totalAnnouncers,
+          totalSpots,
+          totalFiles,
+        },
+        results: data,
+      };
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
   @Get(':packageId')
-  async getPackage(@Param('packageId') packageId: string, @Req() { user }) {
+  async getPackage(@Param('packageId') packageId: string) {
     try {
       return await this.packagesService.findOne(packageId);
     } catch (error) {
@@ -116,7 +154,6 @@ export class PackageController extends BaseController {
   async updatePackage(
     @Param('packageId') packageId: string,
     @Body() dto: UpdatePackageDto,
-    @Req() { user },
   ) {
     try {
       return await this.packagesService.updateOne(packageId, dto);
@@ -140,8 +177,53 @@ export class PackageController extends BaseController {
     }
   }
 
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':packageId/delete-tv-program/:tvProgramId')
+  async deleteTvProgram(
+    @Param('packageId') packageId: string,
+    @Param('tvProgramId') tvProgramId: string,
+  ) {
+    try {
+      await this.packagesService.deleteTvProgram(packageId, tvProgramId);
+      return await this.packagesService.findOne(packageId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':packageId/add-hour/:hourId')
+  async addHour(
+    @Param('packageId') packageId: string,
+    @Param('hourId') hourId: string,
+  ) {
+    try {
+      await this.packagesService.addHour(packageId, hourId);
+      return await this.packagesService.findOne(packageId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':packageId/delete-hour/:hourId')
+  async deleteHour(
+    @Param('packageId') packageId: string,
+    @Param('hourId') hourId: string,
+  ) {
+    try {
+      await this.packagesService.deleteHour(packageId, hourId);
+      return await this.packagesService.findOne(packageId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
   @Put(':packageId/close')
-  async closePackage(@Param('packageId') packageId: string, @Req() { user }) {
+  async closePackage(@Param('packageId') packageId: string) {
     try {
       return await this.packagesService.closePackage(packageId);
     } catch (error) {
@@ -150,7 +232,7 @@ export class PackageController extends BaseController {
   }
 
   @Put(':packageId/reopen')
-  async reopenPackage(@Param('packageId') packageId: string, @Req() { user }) {
+  async reopenPackage(@Param('packageId') packageId: string) {
     try {
       return await this.packagesService.reopenPackage(packageId);
     } catch (error) {
@@ -159,7 +241,7 @@ export class PackageController extends BaseController {
   }
 
   @Delete(':packageId')
-  async deletePackage(@Param('packageId') packageId: string, @Req() { user }) {
+  async deletePackage(@Param('packageId') packageId: string) {
     try {
       const orderPackage = await this.packagesService.findOne(packageId);
       for (let index = 0; index < orderPackage.plannings.length; index++) {

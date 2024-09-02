@@ -7,12 +7,20 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order, OrderDocument } from './entities/order.entity';
 import { State } from 'src/common/shared/base-schema';
+import { FindQueryDto } from 'src/common/dto/find-query.dto';
+import {
+  Announcer,
+  AnnouncerDocument,
+} from '../announcers/entities/announcer.entity';
+import { paginate } from 'nestjs-paginate-mongo';
 
 @Injectable()
 export class OrdersService extends ServiceDeleteAbstract<Order> {
   constructor(
     @InjectModel(Order.name)
     private readonly orders: Model<OrderDocument>,
+    @InjectModel(Announcer.name)
+    private readonly announcer: Model<AnnouncerDocument>,
   ) {
     super();
   }
@@ -54,6 +62,57 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
       .where('state')
       .in(states)
       .exec();
+  }
+
+  async findPaginate(
+    query: FindQueryDto<OrderDocument>,
+    states: State[] = [State.active],
+  ) {
+    const population = [
+      { path: 'creator', model: 'User' },
+      { path: 'manager', model: 'User' },
+      { path: 'announcer', model: 'Announcer' },
+      { path: 'org', model: 'Org' },
+      { path: 'package', model: 'Campaign' },
+      { path: 'paymentMethod', model: 'PaymentMethod' },
+      { path: 'paymentCondition', model: 'PaymentCondition' },
+    ];
+    let announcerIds: string[] = [];
+    const { search, page, perPage } = query;
+    if (search) {
+      const announcers = await this.announcer
+        .find({
+          $or: [
+            { name: { $regex: search, $options: 'i' } },
+            { code: { $regex: search, $options: 'i' } },
+          ],
+        })
+        .select('_id')
+        .exec();
+
+      announcerIds = announcers.map((announcer) => announcer._id);
+    }
+
+    const invoiceFilter = {
+      ...{ state: { $in: states } },
+      ...(search
+        ? {
+            $or: [
+              { code: { $regex: search, $options: 'i' } },
+              { announcer: { $in: announcerIds } },
+            ],
+          }
+        : {}),
+    };
+
+    return paginate(
+      this.orders
+        .find()
+        .sort({ ['date']: -1 })
+        .populate(population)
+        .where(invoiceFilter),
+      { page, perPage },
+    );
   }
 
   findByAnnouncer(announcerId: string, states: State[] = [State.active]) {
@@ -102,5 +161,13 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
     return this.orders.findByIdAndUpdate(_id, {
       $set: dto,
     });
+  }
+
+  countTotal() {
+    return this.orders
+      .countDocuments({
+        state: { $in: [State.active] },
+      })
+      .exec();
   }
 }

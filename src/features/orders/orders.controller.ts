@@ -93,6 +93,27 @@ export class OrdersController extends BaseController {
     }
   }
 
+  @Get('/paginate')
+  async getAllOrdersPaginate(
+    @Req() {},
+    @Query() query: FindQueryDto<OrderDocument>,
+  ) {
+    try {
+      const data = await this.ordersService.findPaginate(query);
+      const totalItems = await this.ordersService.countTotal();
+
+      return {
+        stats: {
+          totalItems,
+          totalAnnouncers: 0,
+        },
+        results: data,
+      };
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
   @Get(':orderId')
   async getOrder(@Param('orderId') orderId: string, @Req() { user }) {
     try {
