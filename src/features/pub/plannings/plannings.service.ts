@@ -155,6 +155,13 @@ export class PlanningsService extends DeletableMixin<Planning> {
       .exec();
   }
 
+  async updateDate(_id: string, date: string) {
+    return await this.plannings
+      .findOneAndUpdate({ _id }, { $set: { date: date } }, { new: true })
+      .orFail()
+      .exec();
+  }
+
   async pushNotification(_id: string, notificationId: string) {
     const result = await this.plannings
       .findByIdAndUpdate(_id, {

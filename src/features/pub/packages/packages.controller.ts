@@ -12,7 +12,7 @@ import {
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindQueryDto } from 'src/common/dto/find-query.dto';
-import { sendError } from 'src/common/helpers';
+import { sendError, syncDateWithHourCode } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { UseJwt } from '../../auth/auth.decorator';
 import { CreatePackageDto } from './dto/create-package.dto';
@@ -238,6 +238,32 @@ export class PackageController extends BaseController {
     } catch (error) {
       sendError(error);
     }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':packageId/sync')
+  async syncPlanning(@Param('packageId') packageId: string) {
+    return await this.run(async () => {
+      const myCampaign = await this.packagesService.findOne(packageId);
+      let total = 0;
+      for (const planning of myCampaign.plannings) {
+        const updatedDate = syncDateWithHourCode(
+          planning['date'],
+          planning['hour']['code'],
+        );
+
+        if (updatedDate[1]) {
+          total++;
+          console.log('sync: ' + planning['date']);
+          console.log(updatedDate);
+          this.planningsService.updateDate(planning['_id'], updatedDate[0]);
+        }
+        console.log(planning);
+      }
+      console.log(total);
+      return total;
+    });
   }
 
   @Delete(':packageId')

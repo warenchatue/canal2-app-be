@@ -311,8 +311,7 @@ export class PlanningsController extends BaseController {
           await this.packagesService.pullPlanning(dto.packageId, _id);
         }
       }
-      const myCampaign = await this.packagesService.findOne(dto.packageId);
-      return myCampaign.toJSON();
+      return true;
     });
   }
 
