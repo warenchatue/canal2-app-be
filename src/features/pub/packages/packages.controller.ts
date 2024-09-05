@@ -250,7 +250,7 @@ export class PackageController extends BaseController {
       for (const planning of myCampaign.plannings) {
         const updatedDate = syncDateWithHourCode(
           planning['date'],
-          planning['hour']['code'],
+          planning['hour']['code'] ?? planning['hour']['name'],
         );
 
         if (updatedDate[1]) {
@@ -259,7 +259,6 @@ export class PackageController extends BaseController {
           console.log(updatedDate);
           this.planningsService.updateDate(planning['_id'], updatedDate[0]);
         }
-        console.log(planning);
       }
       console.log(total);
       return total;
