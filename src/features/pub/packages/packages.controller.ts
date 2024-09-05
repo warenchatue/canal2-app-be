@@ -252,11 +252,10 @@ export class PackageController extends BaseController {
           planning['date'],
           planning['hour']['code'] ?? planning['hour']['name'],
         );
-
-        if (updatedDate[1]) {
+        // console.log('sync: ' + planning['date']);
+        // console.log('updated: ' + updatedDate[0]);
+        if (planning['date'] != updatedDate[0]) {
           total++;
-          console.log('sync: ' + planning['date']);
-          console.log(updatedDate);
           this.planningsService.updateDate(planning['_id'], updatedDate[0]);
         }
       }
@@ -266,7 +265,7 @@ export class PackageController extends BaseController {
   }
 
   @Delete(':packageId')
-  async deletePackage(@Param('packageId') packageId: string) {
+  async deletePackage(@Param('packageId') packageId: string, @Req() { user }) {
     try {
       const orderPackage = await this.packagesService.findOne(packageId);
       for (let index = 0; index < orderPackage.plannings.length; index++) {
@@ -280,7 +279,7 @@ export class PackageController extends BaseController {
           orderPackage.products[index]['_id'].toString(),
         );
       }
-      return await this.packagesService.deleteOne(packageId);
+      return await this.packagesService.deleteOne(packageId, user._id);
     } catch (error) {
       sendError(error);
     }

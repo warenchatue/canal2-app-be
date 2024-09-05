@@ -1,5 +1,6 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import { IDeletable } from '../mixins/deletable.mixin';
+import { Schema as sc } from 'mongoose';
 
 export enum State {
   active = 'active',
@@ -20,4 +21,7 @@ export class BaseSchema implements IDeletable {
 
   @Prop()
   trashedAt: Date;
+
+  @Prop({ type: sc.Types.ObjectId, ref: () => 'User' })
+  deletedBy: sc.Types.ObjectId | string;
 }

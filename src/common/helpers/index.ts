@@ -141,7 +141,7 @@ export const syncDateWithHourCode = (
     .set('second', 0)
     .set('millisecond', 0);
   const isDiff =
-    updatedDate.toDate().getHours() != hourAdjusted.hours() ? true : false;
+    updatedDate.toDate().getHours() != hourAdjusted.hours() + 1 ? true : false;
   // Convert back to a JavaScript Date object in UTC
   return [updatedDate.toISOString(), isDiff];
 };
