@@ -16,17 +16,17 @@ import { sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { URequest } from 'src/common/shared/request';
 import { UseJwt } from '../../auth/auth.decorator';
-import { UpdateHrPositionDto } from './dto/update-hr-position.dto';
-import { HrPositionService } from './hr-position.service';
-import { CreateHrPositionDto } from './dto/create-hr-position.dto';
+import { UpdateHrAddressDto } from './dto/update-hr-address.dto';
+import { HrAddressService } from './hr-address.service';
+import { CreateHrAddressDto } from './dto/create-hr-address.dto';
 
-@Controller('hr-positions')
+@Controller('hr-addresses')
 @UseInterceptors(ClassSerializerInterceptor)
-@ApiTags('HrPositions')
-export class HrPositionController extends BaseController {
-  private logger = new Logger(HrPositionController.name);
+@ApiTags('HrAddresses')
+export class HrAddressController extends BaseController {
+  private logger = new Logger(HrAddressController.name);
 
-  constructor(private readonly hrPositionService: HrPositionService) {
+  constructor(private readonly hrAddressService: HrAddressService) {
     super();
   }
 
@@ -35,7 +35,7 @@ export class HrPositionController extends BaseController {
   @Get()
   async getAll() {
     return await this.run(async () => {
-      const result = await this.hrPositionService.find();
+      const result = await this.hrAddressService.find();
       return result.map((e) => {
         // const json = e.toJSON();
         // Deep clone the object to ensure mutability
@@ -57,11 +57,11 @@ export class HrPositionController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Get(':hrPositionId')
-  async getHrPosition(@Param('hrPositionId') hrPositionId: string) {
+  @Get(':hrAddressId')
+  async getHrAddress(@Param('hrAddressId') hrAddressId: string) {
     return await this.run(async () => {
       const result = (
-        await this.hrPositionService.findOne(hrPositionId)
+        await this.hrAddressService.findOne(hrAddressId)
       ).toJSON();
       console.log(result);
       return result;
@@ -71,46 +71,35 @@ export class HrPositionController extends BaseController {
   @ApiBearerAuth()
   @UseJwt()
   @Post()
-  async createHrPosition(@Body() dto: CreateHrPositionDto) {
+  async createHrAddress(@Body() dto: CreateHrAddressDto) {
     try {
-      return (await this.hrPositionService.create(dto)).toJSON();
+      return (await this.hrAddressService.create(dto)).toJSON();
     } catch (error) {
       sendError(error);
     }
   }
 
-  async updateHrPosition(
-    @Body() dto: UpdateHrPositionDto,
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':hrAddressId')
+  async updateHrAddress(
+    @Body() dto: UpdateHrAddressDto,
     @Req() { user }: URequest,
   ) {
     return await this.run(
-      async () => await this.hrPositionService.update(user._id, dto),
+      async () => await this.hrAddressService.update(user._id, dto),
     );
   }
 
-  // @ApiBearerAuth()
-  // @UseJwt()
-  // @Put(':hrPositionId')
-  // async updateAccount(
-  //   @Param('hrPositionId') hrPositionId: string,
-  //   @Body() dto: UpdateHrAddressDto,
-  // ) {
-  //   try {
-  //     return (await this.hrPositionService.update(hrPositionId, dto)).toJSON();
-  //   } catch (error) {
-  //     sendError(error);
-  //   }
-  // }
-
   @ApiBearerAuth()
   @UseJwt()
-  @Delete(':hrPositionId')
+  @Delete(':hrAddressId')
   async deleteTax(
-    @Param('hrPositionId') hrPositionId: string,
+    @Param('hrAddressId') hrAddressId: string,
     @Req() { user }: URequest,
   ) {
     return await this.run(async () => {
-      return await this.hrPositionService.deleteOne(hrPositionId);
+      return await this.hrAddressService.deleteOne(hrAddressId);
     });
   }
 }

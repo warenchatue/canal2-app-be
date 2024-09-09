@@ -41,6 +41,9 @@ import { AssetRoomModule } from './features/assets/asset-room/asset-room.module'
 import { HrDepartmentModule } from './features/hr/hr-department/hr-department.module';
 import { HrServiceModule } from './features/hr/hr-service/hr-services.module';
 import { HrPositionModule } from './features/hr/hr-position/hr-position.module';
+import { HrAddressModule } from './features/hr/hr-address/hr-address.module';
+import { HrPersonnelModule } from './features/hr/hr-personnel/hr-personnel.module';
+import { HrJobModule } from './features/hr/hr-job/hr-job.module';
 
 const features = [
   AuthModule,
@@ -81,6 +84,9 @@ const features = [
   HrDepartmentModule,
   HrServiceModule,
   HrPositionModule,
+  HrAddressModule,
+  HrPersonnelModule,
+  HrJobModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {

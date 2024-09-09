@@ -15,29 +15,29 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { URequest } from 'src/common/shared/request';
+import { HrPersonnelService } from './hr-personnel.service';
 import { UseJwt } from '../../auth/auth.decorator';
-import { HrPersonnelService } from '../../hr/hr-personnel/hr-personnel.service';
-import { CreateHrPersonnelDto } from '../../hr/hr-personnel/dto/create-hr-personnel.dto';
-import { UpdateHrPersonnelDto } from '../../hr/hr-personnel/dto/update-hr-personnel.dto';
+import { CreateHrPersonnelDto } from './dto/create-hr-personnel.dto';
+import { UpdateHrPersonnelDto } from './dto/update-hr-personnel.dto';
 
 // import { FirebaseService } from '../firebase/firebase.service';
 
-@Controller('hr-personnels')
+@Controller('assets')
 @UseInterceptors(ClassSerializerInterceptor)
-@ApiTags('hrPersonnels')
+@ApiTags('Assets')
 export class HrPersonnelController extends BaseController {
   private logger = new Logger(HrPersonnelController.name);
 
-  constructor(private readonly hrPersonnelServices: HrPersonnelService) {
+  constructor(private readonly assetServices: HrPersonnelService) {
     super();
   }
 
-  async UpdateHrPersonnel(
+  async UpdateAsset(
     @Body() dto: UpdateHrPersonnelDto,
     @Req() { user }: URequest,
   ) {
     return await this.run(
-      async () => await this.hrPersonnelServices.update(user._id, dto),
+      async () => await this.assetServices.update(user._id, dto),
     );
   }
 
@@ -46,14 +46,14 @@ export class HrPersonnelController extends BaseController {
   @Get()
   async getAll() {
     return await this.run(async () => {
-      const result = await this.hrPersonnelServices.find();
+      const result = await this.assetServices.find();
       return result.map((e) => {
         const json = e.toJSON();
         json['_id'] = json['_id'].toString();
-        if (json['parent']) {
-          json['parent']['_id'] = json['parent']['_id'].toString();
-        }
-
+        json['category']['_id'] = json['category']['_id'].toString();
+        json['brand']['_id'] = json['brand']['_id'].toString();
+        json['model']['_id'] = json['model']['_id'].toString();
+        json['room']['_id'] = json['room']['_id'].toString();
         return json;
       });
     });
@@ -61,12 +61,10 @@ export class HrPersonnelController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Get(':hrPersonnelId')
-  async getAccount(@Param('hrPersonnelId') hrPersonnelId: string) {
+  @Get(':assetId')
+  async getAccount(@Param('assetId') assetId: string) {
     return await this.run(async () => {
-      const result = (
-        await this.hrPersonnelServices.findOne(hrPersonnelId)
-      ).toJSON();
+      const result = (await this.assetServices.findOne(assetId)).toJSON();
       console.log(result);
       return result;
     });
@@ -75,9 +73,9 @@ export class HrPersonnelController extends BaseController {
   @ApiBearerAuth()
   @UseJwt()
   @Post()
-  async createHrPersonnel(@Body() dto: CreateHrPersonnelDto) {
+  async createAsset(@Body() dto: CreateHrPersonnelDto) {
     try {
-      return (await this.hrPersonnelServices.create(dto)).toJSON();
+      return (await this.assetServices.create(dto)).toJSON();
     } catch (error) {
       sendError(error);
     }
@@ -85,13 +83,13 @@ export class HrPersonnelController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Put(':hrPersonnelId')
+  @Put(':assetId')
   async updateAccount(
-    @Param('hrPersonnelId') accountId: string,
+    @Param('assetId') accountId: string,
     @Body() dto: UpdateHrPersonnelDto,
   ) {
     try {
-      return (await this.hrPersonnelServices.update(accountId, dto)).toJSON();
+      return (await this.assetServices.update(accountId, dto)).toJSON();
     } catch (error) {
       sendError(error);
     }
@@ -99,10 +97,10 @@ export class HrPersonnelController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Delete(':hrPersonnelId')
-  async deleteHrPersonnel(@Param('hrPersonnelId') hrPersonnelId: string) {
+  @Delete(':assetId')
+  async deleteAsset(@Param('assetId') assetId: string) {
     return await this.run(async () => {
-      return await this.hrPersonnelServices.deleteOne(hrPersonnelId);
+      return await this.assetServices.deleteOne(assetId);
     });
   }
 }
