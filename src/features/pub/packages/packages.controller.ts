@@ -12,7 +12,7 @@ import {
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindQueryDto } from 'src/common/dto/find-query.dto';
-import { sendError } from 'src/common/helpers';
+import { sendError, syncDateWithHourCode } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { UseJwt } from '../../auth/auth.decorator';
 import { CreatePackageDto } from './dto/create-package.dto';
@@ -60,21 +60,17 @@ export class PackageController extends BaseController {
   }
 
   @Get()
-  async getAllPackages(
-    @Req() { user },
-    @Query() { states }: FindQueryDto<CampaignDocument>,
-  ) {
+  async getAllPackages() {
     try {
       const data = await this.packagesService.find();
       const totalItems = data.length;
       const totalAnnouncers = 0;
-      // const totalAnnouncersSet = new Set(totalAnnouncers);
       let totalSpots = 0;
-      const allSpots = data.map((e) => {
+      const allSpots = data.map((e: any) => {
         return e.plannings.length;
       });
       if (allSpots.length > 0) {
-        totalSpots = allSpots.reduce(function (a, b) {
+        totalSpots = allSpots.reduce(function (a: any, b: any) {
           return a + b;
         });
       }
@@ -84,7 +80,7 @@ export class PackageController extends BaseController {
       });
 
       if (allFiles.length > 0) {
-        totalFiles = allFiles.reduce(function (a, b) {
+        totalFiles = allFiles.reduce(function (a: any, b: any) {
           return a + b;
         });
       }
@@ -103,8 +99,50 @@ export class PackageController extends BaseController {
     }
   }
 
+  @Get('/paginate')
+  async getAllCampaignsPaginate(
+    @Query() query: FindQueryDto<CampaignDocument>,
+  ) {
+    try {
+      const data = await this.packagesService.findPaginate(query);
+      const totalItems = data.metadata.total;
+      const totalAnnouncers = 0;
+      let totalSpots = 0;
+      const allSpots = data.data.map((e: any) => {
+        return e.plannings.length;
+      });
+      if (allSpots.length > 0) {
+        totalSpots = allSpots.reduce(function (a: any, b: any) {
+          return a + b;
+        });
+      }
+      let totalFiles = 0;
+      const allFiles = data.data.map((e) => {
+        return e.products.length;
+      });
+
+      if (allFiles.length > 0) {
+        totalFiles = allFiles.reduce(function (a: any, b: any) {
+          return a + b;
+        });
+      }
+
+      return {
+        stats: {
+          totalItems,
+          totalAnnouncers: totalAnnouncers,
+          totalSpots,
+          totalFiles,
+        },
+        results: data,
+      };
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
   @Get(':packageId')
-  async getPackage(@Param('packageId') packageId: string, @Req() { user }) {
+  async getPackage(@Param('packageId') packageId: string) {
     try {
       return await this.packagesService.findOne(packageId);
     } catch (error) {
@@ -116,7 +154,6 @@ export class PackageController extends BaseController {
   async updatePackage(
     @Param('packageId') packageId: string,
     @Body() dto: UpdatePackageDto,
-    @Req() { user },
   ) {
     try {
       return await this.packagesService.updateOne(packageId, dto);
@@ -140,8 +177,53 @@ export class PackageController extends BaseController {
     }
   }
 
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':packageId/delete-tv-program/:tvProgramId')
+  async deleteTvProgram(
+    @Param('packageId') packageId: string,
+    @Param('tvProgramId') tvProgramId: string,
+  ) {
+    try {
+      await this.packagesService.deleteTvProgram(packageId, tvProgramId);
+      return await this.packagesService.findOne(packageId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':packageId/add-hour/:hourId')
+  async addHour(
+    @Param('packageId') packageId: string,
+    @Param('hourId') hourId: string,
+  ) {
+    try {
+      await this.packagesService.addHour(packageId, hourId);
+      return await this.packagesService.findOne(packageId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':packageId/delete-hour/:hourId')
+  async deleteHour(
+    @Param('packageId') packageId: string,
+    @Param('hourId') hourId: string,
+  ) {
+    try {
+      await this.packagesService.deleteHour(packageId, hourId);
+      return await this.packagesService.findOne(packageId);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
   @Put(':packageId/close')
-  async closePackage(@Param('packageId') packageId: string, @Req() { user }) {
+  async closePackage(@Param('packageId') packageId: string) {
     try {
       return await this.packagesService.closePackage(packageId);
     } catch (error) {
@@ -150,12 +232,36 @@ export class PackageController extends BaseController {
   }
 
   @Put(':packageId/reopen')
-  async reopenPackage(@Param('packageId') packageId: string, @Req() { user }) {
+  async reopenPackage(@Param('packageId') packageId: string) {
     try {
       return await this.packagesService.reopenPackage(packageId);
     } catch (error) {
       sendError(error);
     }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':packageId/sync')
+  async syncPlanning(@Param('packageId') packageId: string) {
+    return await this.run(async () => {
+      const myCampaign = await this.packagesService.findOne(packageId);
+      let total = 0;
+      for (const planning of myCampaign.plannings) {
+        const updatedDate = syncDateWithHourCode(
+          planning['date'],
+          planning['hour']['code'] ?? planning['hour']['name'],
+        );
+        // console.log('sync: ' + planning['date']);
+        // console.log('updated: ' + updatedDate[0]);
+        if (planning['date'] != updatedDate[0]) {
+          total++;
+          this.planningsService.updateDate(planning['_id'], updatedDate[0]);
+        }
+      }
+      console.log(total);
+      return total;
+    });
   }
 
   @Delete(':packageId')
@@ -173,7 +279,7 @@ export class PackageController extends BaseController {
           orderPackage.products[index]['_id'].toString(),
         );
       }
-      return await this.packagesService.deleteOne(packageId);
+      return await this.packagesService.deleteOne(packageId, user._id);
     } catch (error) {
       sendError(error);
     }

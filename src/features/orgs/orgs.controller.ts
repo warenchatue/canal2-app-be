@@ -19,9 +19,7 @@ import { UseJwt } from '../auth/auth.decorator';
 import { CreateOrgDto } from './dto/create-org.dto';
 import { Org } from './entities/org.entity';
 // eslint-disable-next-line prettier/prettier
-import {
-  GROUP_CREATED_EVENT,
-} from './orgs.handler';
+import { GROUP_CREATED_EVENT } from './orgs.handler';
 import { OrgsService } from './orgs.service';
 import { BaseController } from 'src/common/shared/base-controller';
 import { UpdateOrgDto } from './dto/update-org.dto';

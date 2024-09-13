@@ -4,7 +4,6 @@ import {
   Controller,
   Delete,
   Get,
-  Logger,
   Param,
   Post,
   Put,
@@ -29,8 +28,6 @@ import { manualValidatePlanningDto } from './dto/manual-validate.dto';
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('Plannings')
 export class PlanningsController extends BaseController {
-  private logger = new Logger(PlanningsController.name);
-
   constructor(
     private readonly planningsService: PlanningsService,
     private readonly packagesService: PackagesService,
@@ -305,6 +302,21 @@ export class PlanningsController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
+  @Delete('bulk-deletion/ids')
+  async bulkDeletion(@Body() dto: manualValidatePlanningDto) {
+    return await this.run(async () => {
+      for (const _id of dto._ids) {
+        const planning = await this.planningsService.deleteOne(_id);
+        if (planning) {
+          await this.packagesService.pullPlanning(dto.packageId, _id);
+        }
+      }
+      return true;
+    });
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
   @Post(':packageId')
   async createPlanning(
     @Param('packageId') packageId: string,
@@ -374,10 +386,7 @@ export class PlanningsController extends BaseController {
   @ApiBearerAuth()
   @UseJwt()
   @Delete(':planningId')
-  async deletePlanning(
-    @Param('planningId') planningId: string,
-    @Req() { user }: URequest,
-  ) {
+  async deletePlanning(@Param('planningId') planningId: string) {
     return await this.run(async () => {
       const planning = (
         await this.planningsService.findOne(planningId)

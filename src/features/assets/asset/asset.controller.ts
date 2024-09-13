@@ -47,9 +47,10 @@ export class AssetController extends BaseController {
       return result.map((e) => {
         const json = e.toJSON();
         json['_id'] = json['_id'].toString();
-        json['brand']['_id'] = json['brand']['_id'].toString();
         json['category']['_id'] = json['category']['_id'].toString();
+        json['brand']['_id'] = json['brand']['_id'].toString();
         json['model']['_id'] = json['model']['_id'].toString();
+        json['room']['_id'] = json['room']['_id'].toString();
         return json;
       });
     });

@@ -7,6 +7,8 @@ import { CreatePackageDto } from './dto/create-package.dto';
 import { UpdatePackageDto } from './dto/update-package.dto';
 import { Campaign, CampaignDocument } from './entities/package.entity';
 import { State } from 'src/common/shared/base-schema';
+import { FindQueryDto } from 'src/common/dto/find-query.dto';
+import { paginate } from 'nestjs-paginate-mongo';
 
 @Injectable()
 export class PackagesService extends ServiceDeleteAbstract<Campaign> {
@@ -38,6 +40,10 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
       {
         path: 'tvPrograms',
         model: 'TvProgram',
+      },
+      {
+        path: 'hours',
+        model: 'Hour',
       },
       {
         path: 'announcer',
@@ -131,12 +137,90 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
         model: 'Planning',
       },
     ];
+
     return this.packages
       .find()
-      .populate(population)
       .where('state')
       .in(states)
+      .populate(population)
       .exec();
+  }
+
+  findPaginate(
+    query: FindQueryDto<Campaign>,
+    states: State[] = [State.active],
+  ) {
+    const population = [
+      { path: 'creator', model: 'User' },
+      { path: 'manager', model: 'User' },
+      { path: 'org', model: 'Org', select: '_id code name email phone' },
+      { path: 'adminValidator', model: 'User' },
+      {
+        path: 'announcer',
+        model: 'Announcer',
+        select: '_id code name email phone',
+      },
+      {
+        path: 'order',
+        model: 'Order',
+        populate: [
+          {
+            path: 'announcer',
+            model: 'Announcer',
+            select: '_id code name email phone',
+          },
+        ],
+      },
+
+      {
+        path: 'invoice',
+        model: 'Invoice',
+        populate: [
+          {
+            path: 'announcer',
+            model: 'Announcer',
+            select: '_id code name email phone',
+          },
+        ],
+      },
+      {
+        path: 'products',
+        model: 'Product',
+      },
+      {
+        path: 'tvPrograms',
+        model: 'TvProgram',
+      },
+      {
+        path: 'hours',
+        model: 'Hour',
+      },
+      {
+        path: 'plannings',
+        model: 'Planning',
+      },
+    ];
+    const { search, perPage, page } = query;
+
+    const searchQuery = search
+      ? { 'announcer.name': { $regex: search, $options: 'i' } }
+      : {};
+
+    const packageFilter = {
+      ...searchQuery,
+      ...(states.length > 0 ? { state: { $in: states } } : {}),
+    };
+
+    return paginate(
+      this.packages
+        .find(packageFilter)
+        .sort({ ['createdAt']: -1 })
+        .populate(population),
+      {
+        page,
+        perPage,
+      },
+    );
   }
 
   findByAnnouncer(announcerId: string, states: State[] = [State.active]) {
@@ -170,6 +254,27 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
   addTvProgram(_id: string, tvProgramId: string) {
     return this.packages
       .findByIdAndUpdate(_id, { $push: { tvPrograms: tvProgramId } })
+      .orFail()
+      .exec();
+  }
+
+  deleteTvProgram(_id: string, tvProgramId: string) {
+    return this.packages
+      .findByIdAndUpdate(_id, { $pull: { tvPrograms: tvProgramId } })
+      .orFail()
+      .exec();
+  }
+
+  addHour(_id: string, hourId: string) {
+    return this.packages
+      .findByIdAndUpdate(_id, { $push: { hours: hourId } })
+      .orFail()
+      .exec();
+  }
+
+  deleteHour(_id: string, hourId: string) {
+    return this.packages
+      .findByIdAndUpdate(_id, { $pull: { hours: hourId } })
       .orFail()
       .exec();
   }
