@@ -9,8 +9,8 @@ export class AssetBrandHandler extends BaseHandler {
     super(AssetBrandHandler.name);
   }
 
-  @OnEvent('assetModel.created')
-  handleArticleCreated(payload: AssetBrand) {
-    this.logger.log(`AssetModel ${payload.name} created.`);
+  @OnEvent('assetBrand.created')
+  handleAssetBrandCreated(payload: AssetBrand) {
+    this.logger.log(`assetBrand ${payload.name} created.`);
   }
 }
