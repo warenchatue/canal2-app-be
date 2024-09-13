@@ -45,12 +45,27 @@ export class AssetController extends BaseController {
     return await this.run(async () => {
       const result = await this.assetServices.find();
       return result.map((e) => {
-        const json = e.toJSON();
-        json['_id'] = json['_id'].toString();
-        json['category']['_id'] = json['category']['_id'].toString();
-        json['brand']['_id'] = json['brand']['_id'].toString();
-        json['model']['_id'] = json['model']['_id'].toString();
-        json['room']['_id'] = json['room']['_id'].toString();
+        // Deep clone the object to ensure mutability
+        const json = JSON.parse(JSON.stringify(e.toJSON()));
+
+        // Check if _id exists before accessing it
+        if (json['_id']) {
+          json['_id'] = json['_id'].toString();
+        }
+
+        // Safely check for category, brand, model, and room before accessing _id
+        if (json['category'] && json['category']['_id']) {
+          json['category']['_id'] = json['category']['_id'].toString();
+        }
+        if (json['brand'] && json['brand']['_id']) {
+          json['brand']['_id'] = json['brand']['_id'].toString();
+        }
+        if (json['model'] && json['model']['_id']) {
+          json['model']['_id'] = json['model']['_id'].toString();
+        }
+        if (json['room'] && json['room']['_id']) {
+          json['room']['_id'] = json['room']['_id'].toString();
+        }
         return json;
       });
     });

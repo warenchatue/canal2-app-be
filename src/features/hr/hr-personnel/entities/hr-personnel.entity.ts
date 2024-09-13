@@ -32,7 +32,13 @@ export class HrPersonnel extends BaseSchema {
   @Prop()
   salary: number;
 
-  @Prop()
+  @Prop({
+    type: {
+      name: String,
+      phone: String,
+      relationship: String,
+    },
+  })
   emergencyContact: {
     name: string;
     phone: string;
