@@ -25,4 +25,8 @@ export class CreateAssetDto {
   @ApiPropertyOptional()
   @IsString()
   model: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  room: string;
 }

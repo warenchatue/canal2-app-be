@@ -39,12 +39,16 @@ export class AssetService extends DeletableMixin<Asset> {
           model: 'AssetCategory',
         },
         {
+          path: 'brand',
+          model: 'AssetBrand',
+        },
+        {
           path: 'model',
           model: 'AssetModel',
         },
         {
-          path: 'brand',
-          model: 'AssetBrand',
+          path: 'room',
+          model: 'AssetRoom',
         },
       ])
       .exec();

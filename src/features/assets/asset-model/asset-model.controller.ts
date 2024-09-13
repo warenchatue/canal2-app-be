@@ -59,7 +59,7 @@ export class AssetModelController extends BaseController {
   @ApiBearerAuth()
   @UseJwt()
   @Get(':assetModelId')
-  async getAccount(@Param('assetModelId') assetModelId: string) {
+  async getAssetModel(@Param('assetModelId') assetModelId: string) {
     return await this.run(async () => {
       const result = (
         await this.assetModelServices.findOne(assetModelId)
@@ -83,7 +83,7 @@ export class AssetModelController extends BaseController {
   @ApiBearerAuth()
   @UseJwt()
   @Put(':assetModelId')
-  async updateAccount(
+  async updateAssetModel(
     @Param('assetModelId') accountId: string,
     @Body() dto: UpdateAssetModelDto,
   ) {

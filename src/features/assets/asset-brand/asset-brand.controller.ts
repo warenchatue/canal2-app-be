@@ -83,7 +83,7 @@ export class AssetBrandController extends BaseController {
   @ApiBearerAuth()
   @UseJwt()
   @Put(':assetBrandId')
-  async updateAccount(
+  async updateAssetBrand(
     @Param('assetBrandId') accountId: string,
     @Body() dto: UpdateAssetBrandDto,
   ) {
