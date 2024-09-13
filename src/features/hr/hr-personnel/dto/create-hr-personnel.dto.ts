@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  IsArray,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -58,16 +59,17 @@ export class CreateHrPersonnelDto {
   @IsOptional()
   salary: number;
 
-  @ApiPropertyOptional({ type: EmergencyContactDto })
-  @ValidateNested()
-  @Type(() => EmergencyContactDto)
-  @IsOptional()
-  emergencyContact: EmergencyContactDto;
+  @ApiPropertyOptional({ type: [EmergencyContactDto] }) // Define it as an array in Swagger
+  @ValidateNested({ each: true }) // Validate each item in the array
+  @Type(() => EmergencyContactDto) // Transform each item to EmergencyContactDto
+  @IsArray() // Ensure it's an array
+  @IsOptional() // Make it optional if necessary
+  emergencyContact?: EmergencyContactDto[];
 
   @ApiPropertyOptional({ type: String })
   @IsString()
   @IsOptional()
-  managerId: string;
+  manager: string;
 
   @ApiPropertyOptional({
     enum: EmploymentStatus,
@@ -80,15 +82,15 @@ export class CreateHrPersonnelDto {
   @ApiPropertyOptional({ type: String })
   @IsString()
   @IsOptional()
-  positionId: string;
+  position: string;
 
   @ApiPropertyOptional({ type: String })
   @IsString()
   @IsOptional()
-  addressId: string;
+  address: string;
 
-  @ApiPropertyOptional({ type: String })
-  @IsString()
-  @IsOptional()
-  userId: string;
+  // @ApiPropertyOptional({ type: String })
+  // @IsString()
+  // @IsOptional()
+  // userId: string;
 }

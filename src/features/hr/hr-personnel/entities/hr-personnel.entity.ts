@@ -32,7 +32,13 @@ export class HrPersonnel extends BaseSchema {
   @Prop()
   salary: number;
 
-  @Prop()
+  @Prop({
+    type: {
+      name: String,
+      phone: String,
+      relationship: String,
+    },
+  })
   emergencyContact: {
     name: string;
     phone: string;
@@ -43,16 +49,16 @@ export class HrPersonnel extends BaseSchema {
   employmentStatus: EmploymentStatus;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => HrPersonnel })
-  managerId: sc.Types.ObjectId | string;
+  manager: sc.Types.ObjectId | string;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => HrPosition })
-  positionId: sc.Types.ObjectId | string;
+  position: sc.Types.ObjectId | string;
 
   @Prop({ type: sc.Types.ObjectId, ref: () => HrAddress })
-  addressId: sc.Types.ObjectId | string;
+  address: sc.Types.ObjectId | string;
 
-  @Prop({ type: sc.Types.ObjectId, ref: () => User })
-  userId: sc.Types.ObjectId | string;
+  // @Prop({ type: sc.Types.ObjectId, ref: () => User })
+  // userId: sc.Types.ObjectId | string;
 }
 
 export type HrPersonnelDocument = HrPersonnel & Document;
