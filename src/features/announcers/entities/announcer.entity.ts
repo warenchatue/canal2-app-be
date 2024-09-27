@@ -31,6 +31,9 @@ export class Announcer extends BaseSchema {
   name: string;
 
   @Prop()
+  supCode: string;
+
+  @Prop()
   city: string;
 
   @Prop()

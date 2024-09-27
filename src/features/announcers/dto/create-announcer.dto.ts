@@ -18,6 +18,9 @@ export class CreateAnnouncerDto {
   @ApiPropertyOptional({ example: 'admin@test.com' })
   email: string;
 
+  @ApiPropertyOptional({ example: 'FOOO0' })
+  supCode: string;
+
   @ApiPropertyOptional({ default: '+237690909090' })
   @IsPhoneNumber()
   phone: string;
