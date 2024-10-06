@@ -44,6 +44,7 @@ import { HrPositionModule } from './features/hr/hr-position/hr-position.module';
 import { HrAddressModule } from './features/hr/hr-address/hr-address.module';
 import { HrPersonnelModule } from './features/hr/hr-personnel/hr-personnel.module';
 import { HrJobModule } from './features/hr/hr-job/hr-job.module';
+import { ProgramPlanningsModule } from './features/tv-programs/programs-planning/programs-plannings.module';
 
 const features = [
   AuthModule,
@@ -87,6 +88,7 @@ const features = [
   HrAddressModule,
   HrPersonnelModule,
   HrJobModule,
+  ProgramPlanningsModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {
