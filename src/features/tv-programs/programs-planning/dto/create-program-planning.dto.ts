@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { HourProgramPlanningDto } from './hour-program-planning';
 
 export class CreateProgramPlanningDto {
   @ApiProperty({ default: '2023...' })
@@ -28,8 +29,11 @@ export class CreateProgramPlanningDto {
   isDefault: boolean;
 
   @ApiPropertyOptional({ example: '7:25' })
-  @IsNotEmpty()
-  hour?: string;
+  hours?: HourProgramPlanningDto[];
+
+  @ApiPropertyOptional()
+  @IsString()
+  dates: Date[];
 
   @ApiPropertyOptional({ example: 'id' })
   @IsNotEmpty()

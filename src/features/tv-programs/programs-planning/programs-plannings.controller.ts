@@ -23,8 +23,6 @@ import { getNotPlayDto } from './dto/get-not-play';
 import { autoValidatePlanningDto } from './dto/auto-validate.dto';
 import { manualValidatePlanningDto } from './dto/manual-validate.dto';
 import { PackagesService } from 'src/features/pub/packages/packages.service';
-import { forIn } from 'lodash';
-import { Planning } from '../../pub/plannings/entities/planning.entity';
 
 @Controller('programs-plannings')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -328,6 +326,7 @@ export class PlanningsController extends BaseController {
       for (let index = 0; index < dtos.length; index++) {
         const planning = await this.programPlanningsService.create({
           ...dtos[index],
+          hours: dtos[index].hours,
           code: makeId(4),
         });
         const endPlanning = await this.getPlanning(planning._id.toString());
@@ -374,6 +373,11 @@ export class PlanningsController extends BaseController {
           hour: newPlanning.hour.toString(),
           tvProgram: newPlanning.tvProgram.toString(),
           tvProgramHost: newPlanning.tvProgramHost?.toString() ?? undefined,
+          hours: newPlanning.hours.map((el) => {
+            const newDateEl = new Date(el.date);
+            newDateEl.setDate(newDateEl.getDate() + 7);
+            return { date: newDateEl.toISOString(), hour: el.hour };
+          }),
           description: newPlanning.description,
         });
         plannings.push(p);
