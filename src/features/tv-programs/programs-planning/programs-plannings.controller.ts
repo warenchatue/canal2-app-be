@@ -18,11 +18,13 @@ import { URequest } from 'src/common/shared/request';
 import { UseJwt } from '../../auth/auth.decorator';
 import { CreateProgramPlanningDto } from './dto/create-program-planning.dto';
 import { UpdatePlanningDto } from './dto/update-program-planning.dto';
-import { ProgramPlanningsService } from './plannings.service';
+import { ProgramPlanningsService } from './programs-plannings.service';
 import { getNotPlayDto } from './dto/get-not-play';
 import { autoValidatePlanningDto } from './dto/auto-validate.dto';
 import { manualValidatePlanningDto } from './dto/manual-validate.dto';
 import { PackagesService } from 'src/features/pub/packages/packages.service';
+import { forIn } from 'lodash';
+import { Planning } from '../../pub/plannings/entities/planning.entity';
 
 @Controller('programs-plannings')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -80,7 +82,6 @@ export class PlanningsController extends BaseController {
             totalToday: 0,
             resumeValues: [0, 0],
             statsValues: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            totalPackages: 0,
           },
           data: [],
         };
@@ -93,13 +94,6 @@ export class PlanningsController extends BaseController {
         }
         if (json['tvProgram']) {
           json['tvProgram']['_id'] = json['tvProgram']['_id'].toString();
-        }
-        if (json['product']) {
-          json['product']['_id'] = json['product']['_id'].toString();
-          json['product']['package']['_id'] =
-            json['product']['package']['_id'].toString();
-          json['product']['package']['products'] = [];
-          json['product']['package']['plannings'] = [];
         }
 
         return json;
@@ -155,14 +149,12 @@ export class PlanningsController extends BaseController {
       }).length;
       const totalToday = finalData.filter((e) => {
         return (
-          moment(e.date).format('DD/MM/yyyy') ==
-            moment().format('DD/MM/yyyy') &&
-          e.product?.package?.validator != null
+          moment(e.date).format('DD/MM/yyyy') == moment().format('DD/MM/yyyy')
         );
       }).length;
 
       if (isStat == true) {
-        const activeYear = '2023';
+        const activeYear = '2024';
         const yearMonths = [];
         const yearValues = [];
         const resumeValues = [];
@@ -202,7 +194,6 @@ export class PlanningsController extends BaseController {
           data: finalData,
         };
       }
-
       return {
         metaData: {
           totalItems,
@@ -230,11 +221,9 @@ export class PlanningsController extends BaseController {
       if (json['tvProgram']) {
         json['tvProgram']['_id'] = json['tvProgram']['_id'].toString();
       }
-      json['product']['_id'] = json['product']['_id'].toString();
-      json['product']['package']['_id'] =
-        json['product']['package']['_id'].toString();
-      json['product']['package']['products'] = [];
-      json['product']['package']['plannings'] = [];
+      if (json['tvProgramHost']) {
+        json['tvProgramHost']['_id'] = json['tvProgramHost']['_id'].toString();
+      }
       return json;
     });
   }
@@ -306,10 +295,7 @@ export class PlanningsController extends BaseController {
   async bulkDeletion(@Body() dto: manualValidatePlanningDto) {
     return await this.run(async () => {
       for (const _id of dto._ids) {
-        const planning = await this.programPlanningsService.deleteOne(_id);
-        if (planning) {
-          await this.packagesService.pullPlanning(dto.packageId, _id);
-        }
+        await this.programPlanningsService.deleteOne(_id);
       }
       return true;
     });
@@ -317,18 +303,13 @@ export class PlanningsController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Post(':packageId')
+  @Post('')
   async createPlanning(
-    @Param('packageId') packageId: string,
     @Body() dto: CreateProgramPlanningDto,
     // @Req() { user },
   ) {
     try {
       const planning = await await this.programPlanningsService.create(dto);
-      await this.packagesService.addPlanning(
-        packageId,
-        planning._id.toString(),
-      );
       return await this.getPlanning(planning._id.toString());
     } catch (error) {
       sendError(error);
@@ -337,29 +318,67 @@ export class PlanningsController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
-  @Post(':packageId/bulk')
+  @Post('/bulk')
   async createPlannings(
-    @Param('packageId') packageId: string,
     @Body() dtos: CreateProgramPlanningDto[],
     // @Req() { user },
   ) {
     try {
       const myPlannings = [];
       for (let index = 0; index < dtos.length; index++) {
-        const myCampaign = await this.packagesService.findOneNP(packageId);
         const planning = await this.programPlanningsService.create({
           ...dtos[index],
-          code: myCampaign.code + '_' + makeId(4),
+          code: makeId(4),
         });
-        await this.packagesService.addPlanning(
-          packageId,
-          planning._id.toString(),
-        );
         const endPlanning = await this.getPlanning(planning._id.toString());
         myPlannings.push(endPlanning);
       }
 
       return myPlannings;
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Post('/default-bulk')
+  async updateDefaultPlannings(
+    @Body() ids: string[],
+    // @Req() { user },
+  ) {
+    try {
+      await this.programPlanningsService.setDefaultForIds(ids);
+      return await this.programPlanningsService.findByIds(ids);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Post('/use-default-bulk')
+  async useeDefaultPlannings() {
+    try {
+      const allDefaults = await this.programPlanningsService.findDefaults();
+      const plannings = [];
+      for (const i in allDefaults) {
+        const newPlanning = allDefaults[i];
+        const newDate = new Date(newPlanning.date);
+        newDate.setDate(newDate.getDate() + 7);
+        const p = await this.programPlanningsService.createOne({
+          ...newPlanning,
+          isDefault: false,
+          position: newDate.toISOString(),
+          date: newDate.toISOString(),
+          hour: newPlanning.hour.toString(),
+          tvProgram: newPlanning.tvProgram.toString(),
+          tvProgramHost: newPlanning.tvProgramHost?.toString() ?? undefined,
+          description: newPlanning.description,
+        });
+        plannings.push(p);
+      }
+      return plannings;
     } catch (error) {
       sendError(error);
     }
@@ -388,14 +407,7 @@ export class PlanningsController extends BaseController {
   @Delete(':planningId')
   async deletePlanning(@Param('planningId') planningId: string) {
     return await this.run(async () => {
-      const planning = (
-        await this.programPlanningsService.findOne(planningId)
-      ).toJSON();
       const response = await this.programPlanningsService.deleteOne(planningId);
-      await this.packagesService.pullPlanning(
-        planning['product']['package']['_id'].toString(),
-        planningId,
-      );
       return response;
     });
   }

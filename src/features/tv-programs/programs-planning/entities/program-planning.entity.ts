@@ -14,6 +14,9 @@ export class ProgramPlanning extends BaseSchema {
   code: string;
 
   @Prop()
+  description: string;
+
+  @Prop()
   isManualPlay: boolean;
 
   @Prop()
@@ -25,11 +28,17 @@ export class ProgramPlanning extends BaseSchema {
   @Prop()
   isTvProgram: boolean;
 
+  @Prop()
+  isDefault: boolean;
+
   @Prop({ type: sc.Types.ObjectId, ref: 'Hour' })
   hour: sc.Types.ObjectId;
 
   @Prop({ type: sc.Types.ObjectId, ref: 'TvProgram' })
   tvProgram: sc.Types.ObjectId;
+
+  @Prop({ type: sc.Types.ObjectId, ref: 'User' })
+  tvProgramHost: sc.Types.ObjectId;
 
   @Prop()
   playedHour: string;

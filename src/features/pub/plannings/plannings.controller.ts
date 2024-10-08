@@ -162,7 +162,7 @@ export class PlanningsController extends BaseController {
       }).length;
 
       if (isStat == true) {
-        const activeYear = '2023';
+        const activeYear = '2024';
         const yearMonths = [];
         const yearValues = [];
         const resumeValues = [];

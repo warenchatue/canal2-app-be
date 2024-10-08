@@ -9,6 +9,9 @@ export class CreateProgramPlanningDto {
   @ApiPropertyOptional({ example: 'XAFG_7587_2Z7K' })
   code: string;
 
+  @ApiPropertyOptional({ example: 'description' })
+  description: string;
+
   @ApiPropertyOptional({ example: '2023' })
   position: Date;
 
@@ -22,7 +25,7 @@ export class CreateProgramPlanningDto {
 
   @ApiPropertyOptional({ default: false })
   @IsBoolean()
-  isTvProgram: boolean;
+  isDefault: boolean;
 
   @ApiPropertyOptional({ example: '7:25' })
   @IsNotEmpty()
@@ -32,11 +35,11 @@ export class CreateProgramPlanningDto {
   @IsNotEmpty()
   tvProgram?: string;
 
+  @ApiPropertyOptional({ example: 'id' })
+  @IsNotEmpty()
+  tvProgramHost?: string;
+
   @ApiPropertyOptional({ example: '7:28' })
   @IsNotEmpty()
   playedHour: string;
-
-  @ApiProperty({ example: 'dfdfd4f44dfdfd44dffdfdf7' })
-  @IsNotEmpty()
-  product: string;
 }

@@ -17,6 +17,9 @@ export class TvProgram extends BaseSchema {
   @Prop()
   description: string;
 
+  @Prop()
+  duration: string;
+
   @Prop({ type: sc.Types.ObjectId, ref: () => Org })
   org: sc.Types.ObjectId;
 

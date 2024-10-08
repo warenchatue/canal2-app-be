@@ -12,6 +12,9 @@ export class CreateTvProgramDto {
   @ApiProperty()
   category: string;
 
+  @ApiProperty()
+  duration: number;
+
   @ApiProperty({ example: [] })
   @IsArray()
   plannings: number[];

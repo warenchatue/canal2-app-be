@@ -3,7 +3,7 @@ import {
   ProgramPlanning,
   ProgramPlanningSchema,
 } from './entities/program-planning.entity';
-import { ProgramPlanningsService } from './plannings.service';
+import { ProgramPlanningsService } from './programs-plannings.service';
 import { PlanningsController } from './programs-plannings.controller';
 import { PlanningsHandler } from './plannings.handler';
 import { MongooseModule } from '@nestjs/mongoose';
