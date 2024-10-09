@@ -32,6 +32,9 @@ export class CreateProgramPlanningDto {
   hours?: HourProgramPlanningDto[];
 
   @ApiPropertyOptional()
+  procedures?: any[];
+
+  @ApiPropertyOptional()
   @IsString()
   dates: Date[];
 

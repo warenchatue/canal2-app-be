@@ -20,6 +20,9 @@ export class ProgramPlanning extends BaseSchema {
   hours: any[];
 
   @Prop()
+  procedures: any[];
+
+  @Prop()
   isManualPlay: boolean;
 
   @Prop()

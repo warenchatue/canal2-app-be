@@ -376,7 +376,11 @@ export class PlanningsController extends BaseController {
           hours: newPlanning.hours.map((el) => {
             const newDateEl = new Date(el.date);
             newDateEl.setDate(newDateEl.getDate() + 7);
-            return { date: newDateEl.toISOString(), hour: el.hour };
+            return {
+              date: newDateEl.toISOString(),
+              name: el.name,
+              hour: el.hour,
+            };
           }),
           description: newPlanning.description,
         });

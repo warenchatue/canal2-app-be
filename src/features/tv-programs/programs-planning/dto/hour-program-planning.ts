@@ -5,5 +5,8 @@ export class HourProgramPlanningDto {
   hour: string;
 
   @ApiProperty()
+  code: string;
+
+  @ApiProperty()
   date: string;
 }
