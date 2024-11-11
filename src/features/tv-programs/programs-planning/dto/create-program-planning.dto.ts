@@ -42,6 +42,10 @@ export class CreateProgramPlanningDto {
   @IsNotEmpty()
   tvProgram?: string;
 
+  @ApiPropertyOptional({ example: 'content' })
+  @IsNotEmpty()
+  content?: string;
+
   @ApiPropertyOptional({ example: 'id' })
   @IsNotEmpty()
   tvProgramHost?: string;

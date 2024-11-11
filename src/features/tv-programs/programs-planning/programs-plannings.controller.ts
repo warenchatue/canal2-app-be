@@ -23,6 +23,7 @@ import { getNotPlayDto } from './dto/get-not-play';
 import { autoValidatePlanningDto } from './dto/auto-validate.dto';
 import { manualValidatePlanningDto } from './dto/manual-validate.dto';
 import { PackagesService } from 'src/features/pub/packages/packages.service';
+import { PlanningContentDto } from './dto/planning-content.dto';
 
 @Controller('programs-plannings')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -348,6 +349,7 @@ export class PlanningsController extends BaseController {
   ) {
     try {
       await this.programPlanningsService.setDefaultForIds(ids);
+      // await this.programPlanningsService.deleteAll();
       return await this.programPlanningsService.findByIds(ids);
     } catch (error) {
       sendError(error);
@@ -403,6 +405,27 @@ export class PlanningsController extends BaseController {
     try {
       const planning = await (
         await this.programPlanningsService.update(accountId, dto)
+      ).toJSON();
+      return planning;
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Put(':planningId/content')
+  async updatePlanningContent(
+    @Param('planningId') planningId: string,
+    @Body() content: PlanningContentDto,
+    // @Req() { user },
+  ) {
+    try {
+      const planning = await (
+        await this.programPlanningsService.updateContent(
+          planningId,
+          content.content,
+        )
       ).toJSON();
       return planning;
     } catch (error) {

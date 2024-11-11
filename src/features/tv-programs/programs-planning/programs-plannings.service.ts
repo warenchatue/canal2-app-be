@@ -157,6 +157,13 @@ export class ProgramPlanningsService extends DeletableMixin<ProgramPlanning> {
       .exec();
   }
 
+  async updateContent(_id: string, content: string) {
+    return await this.plannings
+      .findOneAndUpdate({ _id }, { $set: { content: content } }, { new: true })
+      .orFail()
+      .exec();
+  }
+
   async updateDate(_id: string, date: string) {
     return await this.plannings
       .findOneAndUpdate({ _id }, { $set: { date: date } }, { new: true })

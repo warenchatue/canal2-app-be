@@ -23,6 +23,9 @@ export class ProgramPlanning extends BaseSchema {
   procedures: any[];
 
   @Prop()
+  content: string;
+
+  @Prop()
   isManualPlay: boolean;
 
   @Prop()
