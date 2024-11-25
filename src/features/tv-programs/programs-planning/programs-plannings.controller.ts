@@ -94,6 +94,10 @@ export class PlanningsController extends BaseController {
         if (json['tvProgram']) {
           json['tvProgram']['_id'] = json['tvProgram']['_id'].toString();
         }
+        if (json['tvProgramHost']) {
+          json['tvProgramHost']['_id'] =
+            json['tvProgramHost']['_id'].toString();
+        }
 
         return json;
       });

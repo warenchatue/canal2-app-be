@@ -203,7 +203,7 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
     const { search, perPage, page } = query;
 
     const searchQuery = search
-      ? { 'announcer.name': { $regex: search, $options: 'i' } }
+      ? { label: { $regex: search, $options: 'i' } }
       : {};
 
     const packageFilter = {

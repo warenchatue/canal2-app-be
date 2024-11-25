@@ -23,6 +23,14 @@ export class CreateTvProgramDto {
   @IsString()
   creator: string;
 
+  @ApiProperty()
+  @IsString()
+  host: string;
+
+  @ApiProperty()
+  @IsString()
+  host2: string;
+
   @ApiPropertyOptional()
   @IsString()
   hosts: string[];

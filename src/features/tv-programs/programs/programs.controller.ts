@@ -67,12 +67,20 @@ export class TvProgramController extends BaseController {
     try {
       const data = await this.tvProgramsService.find();
       const totalItems = data.length;
+      const final_result = data.map((e) => {
+        const json = e.toJSON();
+        json['_id'] = json['_id'].toString();
+        if (json['host']) {
+          json['host']['_id'] = json['host']['_id'].toString();
+        }
+        return json;
+      });
 
       return {
         metaData: {
           totalItems,
         },
-        data,
+        data: final_result,
       };
     } catch (error) {
       sendError(error);
