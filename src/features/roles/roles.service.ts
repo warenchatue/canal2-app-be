@@ -34,7 +34,7 @@ export class RolesService extends DeletableMixin<Role> {
   }
 
   find(states = [State.active]) {
-    return this.roles.find().where('state').in(states).sort({ code: 1 }).exec();
+    return this.roles.find().where('state').in(states).exec();
   }
 
   findAll() {
