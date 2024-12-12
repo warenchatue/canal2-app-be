@@ -98,6 +98,10 @@ export class PlanningsController extends BaseController {
           json['product']['_id'] = json['product']['_id'].toString();
           json['product']['package']['_id'] =
             json['product']['package']['_id'].toString();
+          if (json['product']['package']['org']) {
+            json['product']['package']['org'] =
+              json['product']['package']['org'].toString();
+          }
 
           json['product']['package']['products'] = [];
           json['product']['package']['plannings'] = [];
@@ -234,6 +238,10 @@ export class PlanningsController extends BaseController {
       json['product']['_id'] = json['product']['_id'].toString();
       json['product']['package']['_id'] =
         json['product']['package']['_id'].toString();
+      if (json['product']['package']['org']) {
+        json['product']['package']['org'] =
+          json['product']['package']['org'].toString();
+      }
       json['product']['package']['products'] = [];
       json['product']['package']['plannings'] = [];
       return json;
