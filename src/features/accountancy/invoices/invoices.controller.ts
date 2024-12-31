@@ -43,10 +43,10 @@ export class InvoicesController extends BaseController {
   @Post()
   async create(@Body() dto: CreateInvoiceDto, @Req() { user }) {
     try {
-      const allInvoices = await this.invoicesService.findAll();
+      const codeEl = 'FAC/' + moment().year();
+      const allInvoices = await this.invoicesService.findAllByYear(codeEl);
       return await this.run(async () => {
-        const invCode =
-          'FAC/' + moment().year() + '/' + genCode(allInvoices.length + 1);
+        const invCode = codeEl + '/' + genCode(allInvoices.length + 1);
         const result = await this.invoicesService.create(
           {
             ...dto,

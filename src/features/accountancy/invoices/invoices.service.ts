@@ -179,6 +179,11 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
     return this.invoices.find().exec();
   }
 
+  findAllByYear(code: string) {
+    const regex = new RegExp(code, 'i');
+    return this.invoices.find({ code: regex }).exec();
+  }
+
   findByAnnouncer(announcerId: string, states: State[] = [State.active]) {
     const population = [{ path: 'creator', ...USER_POPULATION }];
     return this.invoices

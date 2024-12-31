@@ -38,10 +38,10 @@ export class OrdersController extends BaseController {
   @Post()
   async create(@Body() dto: CreateOrderDto, @Req() { user }) {
     try {
-      const allOrders = await this.ordersService.findAll();
+      const codeEl = 'DEV/' + moment().year();
+      const allOrders = await this.ordersService.findAllByYear(codeEl);
       return await this.run(async () => {
-        const devCode =
-          'DEV/' + moment().year() + '/' + genCode(allOrders.length + 1);
+        const devCode = codeEl + '/' + genCode(allOrders.length + 1);
         const result = await this.ordersService.create(
           {
             ...dto,

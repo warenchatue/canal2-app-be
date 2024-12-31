@@ -145,6 +145,11 @@ export class OrdersService extends ServiceDeleteAbstract<Order> {
     return this.orders.find().exec();
   }
 
+  findAllByYear(code: string) {
+    const regex = new RegExp(code, 'i');
+    return this.orders.find({ code: regex }).exec();
+  }
+
   closeOrder(_id: string) {
     return this.orders.findByIdAndUpdate(_id, {
       $set: { closed: true },
