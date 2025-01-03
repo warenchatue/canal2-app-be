@@ -49,10 +49,27 @@ export class FindQueryDto<T> {
   @MinLength(3)
   search?: string;
 
+  @ApiPropertyOptional({ example: '' })
+  @IsOptional()
+  @IsString()
+  @MinLength(3)
+  startDate?: string;
+
+  @ApiPropertyOptional({ example: '' })
+  @IsOptional()
+  @IsString()
+  @MinLength(3)
+  endDate?: string;
+
   @ApiPropertyOptional({ example: false })
   @IsOptional()
   @IsBoolean()
   isPaginate?: boolean;
+
+  @ApiPropertyOptional({ example: false })
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 
   @ApiProperty()
   where: T;

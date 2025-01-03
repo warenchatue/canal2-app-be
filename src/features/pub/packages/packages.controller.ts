@@ -141,6 +141,86 @@ export class PackageController extends BaseController {
     }
   }
 
+  @Get('campaigns-followup')
+  async getAllReport(@Query() query: FindQueryDto<CampaignDocument>) {
+    try {
+      let data = await this.packagesService.find();
+      let totalNoInvoices = 0;
+      let totalActives = 0;
+      data = data.map((item: any) => {
+        totalNoInvoices += item.invoice ? 0 : 1;
+
+        const plannings = item.plannings.sort((a, b) => {
+          return a.date && b.date ? (a.date < b.date ? -1 : 1) : 0;
+        });
+
+        let durationDays = 0;
+        let totalDiffused = 0;
+        let startDate = '';
+        let endDate = '';
+        let isActive = false;
+
+        if (plannings.length > 0) {
+          const d2 = new Date(plannings[plannings.length - 1].date ?? '');
+          const d1 = new Date(plannings[0].date ?? '');
+          const diff = Math.abs(d2.getTime() - d1.getTime());
+          durationDays = Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
+
+          totalDiffused = plannings.filter(
+            (e) => e.isManualPlay === true || e.isAutoPlay === true,
+          ).length;
+
+          startDate = new Date(plannings[0].date ?? '').toLocaleDateString(
+            'fr-FR',
+          );
+          endDate = new Date(
+            plannings[plannings.length - 1].date ?? '',
+          ).toLocaleDateString('fr-FR');
+
+          if (new Date(endDate) >= new Date()) {
+            totalActives += 1;
+            isActive = true;
+          }
+        }
+
+        return {
+          ...item['_doc'],
+          isActive,
+          durationDays,
+          startDate,
+          endDate,
+          totalDiffused,
+        };
+      });
+      console.log(data[0]);
+      const { isActive } = query;
+      if (isActive == true) {
+        data = data.filter((e: any) => e.isActive === true);
+      }
+      const totalItems = data.length;
+      // let totalSpots = 0;
+      // const allSpots = data.map((e: any) => {
+      //   return e.plannings.length;
+      // });
+      // if (allSpots.length > 0) {
+      //   totalSpots = allSpots.reduce(function (a: any, b: any) {
+      //     return a + b;
+      //   });
+      // }
+
+      return {
+        metaData: {
+          totalItems,
+          totalNoInvoices: totalNoInvoices,
+          totalActives: totalActives,
+        },
+        data,
+      };
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
   @Get(':packageId')
   async getPackage(@Param('packageId') packageId: string) {
     try {
