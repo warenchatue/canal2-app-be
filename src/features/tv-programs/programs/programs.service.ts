@@ -28,6 +28,8 @@ export class TvProgramsService extends ServiceDeleteAbstract<TvProgram> {
   findOne(_id) {
     const population = [
       { path: 'creator', model: 'User' },
+      { path: 'host', model: 'User' },
+      { path: 'host2', model: 'User' },
       { path: 'category', model: 'ProgramCategory' },
       { path: 'org', model: 'Org' },
     ];
@@ -37,6 +39,8 @@ export class TvProgramsService extends ServiceDeleteAbstract<TvProgram> {
   find(states: State[] = [State.active]) {
     const population = [
       { path: 'creator', model: 'User' },
+      { path: 'host', model: 'User' },
+      { path: 'host2', model: 'User' },
       { path: 'category', model: 'ProgramCategory' },
       { path: 'org', model: 'Org' },
     ];

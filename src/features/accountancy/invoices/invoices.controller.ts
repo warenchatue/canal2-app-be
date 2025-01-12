@@ -14,7 +14,6 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindQueryDto } from 'src/common/dto/find-query.dto';
 import { genCode, sendError } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
-import { OrdersService } from 'src/features/orders/orders.service';
 import { UseJwt } from '../../auth/auth.decorator';
 import * as moment from 'moment';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
@@ -44,10 +43,10 @@ export class InvoicesController extends BaseController {
   @Post()
   async create(@Body() dto: CreateInvoiceDto, @Req() { user }) {
     try {
-      const allInvoices = await this.invoicesService.findAll();
+      const codeEl = 'FAC/' + moment().year();
+      const allInvoices = await this.invoicesService.findAllByYear(codeEl);
       return await this.run(async () => {
-        const invCode =
-          'FAC/' + moment().year() + '/' + genCode(allInvoices.length + 1);
+        const invCode = codeEl + '/' + genCode(allInvoices.length + 1);
         const result = await this.invoicesService.create(
           {
             ...dto,
@@ -93,6 +92,29 @@ export class InvoicesController extends BaseController {
           totalFiles,
         },
         data,
+      };
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @Get('/paginate')
+  async getAllInvoicesPaginate(
+    @Req() {},
+    @Query() query: FindQueryDto<InvoiceDocument>,
+  ) {
+    try {
+      const data = await this.invoicesService.findPaginate(query);
+      const totalItems = await this.invoicesService.countTotal();
+      const totalUnpaid = await this.invoicesService.countUnPaid();
+
+      return {
+        stats: {
+          totalItems,
+          totalAnnouncers: 0,
+          totalUnpaid,
+        },
+        results: data,
       };
     } catch (error) {
       sendError(error);

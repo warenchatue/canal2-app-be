@@ -29,7 +29,7 @@ export const DB_BACKUP_PATH =
   process.env.DB_BACKUP_PATH ?? '/home/jordan/db-backups/dinoes';
 
 // Default values
-export const PER_PAGE = 15;
+export const PER_PAGE = 10;
 
 export const MIN_APP_VERSION = 1.0;
 

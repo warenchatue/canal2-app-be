@@ -4,7 +4,6 @@ import {
   Controller,
   Delete,
   Get,
-  Logger,
   Param,
   Post,
   Put,
@@ -29,8 +28,6 @@ import { manualValidatePlanningDto } from './dto/manual-validate.dto';
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('Plannings')
 export class PlanningsController extends BaseController {
-  private logger = new Logger(PlanningsController.name);
-
   constructor(
     private readonly planningsService: PlanningsService,
     private readonly packagesService: PackagesService,
@@ -101,6 +98,11 @@ export class PlanningsController extends BaseController {
           json['product']['_id'] = json['product']['_id'].toString();
           json['product']['package']['_id'] =
             json['product']['package']['_id'].toString();
+          if (json['product']['package']['org']) {
+            json['product']['package']['org'] =
+              json['product']['package']['org'].toString();
+          }
+
           json['product']['package']['products'] = [];
           json['product']['package']['plannings'] = [];
         }
@@ -165,7 +167,7 @@ export class PlanningsController extends BaseController {
       }).length;
 
       if (isStat == true) {
-        const activeYear = '2023';
+        const activeYear = '2024';
         const yearMonths = [];
         const yearValues = [];
         const resumeValues = [];
@@ -236,6 +238,10 @@ export class PlanningsController extends BaseController {
       json['product']['_id'] = json['product']['_id'].toString();
       json['product']['package']['_id'] =
         json['product']['package']['_id'].toString();
+      if (json['product']['package']['org']) {
+        json['product']['package']['org'] =
+          json['product']['package']['org'].toString();
+      }
       json['product']['package']['products'] = [];
       json['product']['package']['plannings'] = [];
       return json;
@@ -300,6 +306,21 @@ export class PlanningsController extends BaseController {
       }
       const myCampaign = await this.packagesService.findOne(dto.packageId);
       return myCampaign.toJSON();
+    });
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Delete('bulk-deletion/ids')
+  async bulkDeletion(@Body() dto: manualValidatePlanningDto) {
+    return await this.run(async () => {
+      for (const _id of dto._ids) {
+        const planning = await this.planningsService.deleteOne(_id);
+        if (planning) {
+          await this.packagesService.pullPlanning(dto.packageId, _id);
+        }
+      }
+      return true;
     });
   }
 
@@ -374,10 +395,7 @@ export class PlanningsController extends BaseController {
   @ApiBearerAuth()
   @UseJwt()
   @Delete(':planningId')
-  async deletePlanning(
-    @Param('planningId') planningId: string,
-    @Req() { user }: URequest,
-  ) {
+  async deletePlanning(@Param('planningId') planningId: string) {
     return await this.run(async () => {
       const planning = (
         await this.planningsService.findOne(planningId)

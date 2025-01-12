@@ -4,7 +4,10 @@ import { State } from '../shared/base-schema';
 export abstract class ServiceDeleteAbstract<T> {
   public abstract findOne(_id: string);
 
-  async deleteOne(_id): Promise<
+  async deleteOne(
+    _id: string,
+    deletedBy?: string,
+  ): Promise<
     NonNullable<
       T &
         Document<any, any, any> & {
@@ -13,7 +16,7 @@ export abstract class ServiceDeleteAbstract<T> {
     >
   > {
     const item = await this.findOne(_id);
-
+    item.deletedBy = deletedBy;
     switch (item.state) {
       case State.active:
         item.state = State.trashed;

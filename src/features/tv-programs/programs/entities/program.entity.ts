@@ -17,6 +17,9 @@ export class TvProgram extends BaseSchema {
   @Prop()
   description: string;
 
+  @Prop()
+  duration: string;
+
   @Prop({ type: sc.Types.ObjectId, ref: () => Org })
   org: sc.Types.ObjectId;
 
@@ -31,6 +34,12 @@ export class TvProgram extends BaseSchema {
 
   @Prop({ type: sc.Types.ObjectId, ref: () => User })
   creator: sc.Types.ObjectId;
+
+  @Prop({ type: sc.Types.ObjectId, ref: () => User })
+  host: sc.Types.ObjectId;
+
+  @Prop({ type: sc.Types.ObjectId, ref: () => User })
+  host2: sc.Types.ObjectId;
 
   @Prop({ type: [{ type: sc.Types.ObjectId, ref: () => User }] })
   hosts: sc.Types.ObjectId[] | string[];

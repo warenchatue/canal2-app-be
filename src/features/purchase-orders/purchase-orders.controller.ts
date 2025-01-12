@@ -37,10 +37,10 @@ export class PurchaseOrdersController extends BaseController {
   @Post()
   async create(@Body() dto: CreatePurchaseOrderDto, @Req() { user }) {
     try {
-      const allPurchaseOrders = await this.ordersService.findAll();
+      const codeEl = 'BC/' + moment().year();
+      const allPurchaseOrders = await this.ordersService.findAllByYear(codeEl);
       return await this.run(async () => {
-        const devCode =
-          'BC/' + moment().year() + '/' + genCode(allPurchaseOrders.length + 1);
+        const devCode = codeEl + '/' + genCode(allPurchaseOrders.length + 1);
         const result = await this.ordersService.create(
           {
             ...dto,

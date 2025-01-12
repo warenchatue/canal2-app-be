@@ -67,6 +67,11 @@ export class PurchaseOrdersService extends ServiceDeleteAbstract<PurchaseOrder> 
     return this.orders.find().exec();
   }
 
+  findAllByYear(code: string) {
+    const regex = new RegExp(code, 'i');
+    return this.orders.find({ code: regex }).exec();
+  }
+
   closePurchaseOrder(_id: string) {
     return this.orders.findByIdAndUpdate(_id, {
       $set: { closed: true },

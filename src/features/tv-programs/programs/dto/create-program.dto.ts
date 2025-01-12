@@ -12,6 +12,9 @@ export class CreateTvProgramDto {
   @ApiProperty()
   category: string;
 
+  @ApiProperty()
+  duration: number;
+
   @ApiProperty({ example: [] })
   @IsArray()
   plannings: number[];
@@ -19,6 +22,14 @@ export class CreateTvProgramDto {
   @ApiProperty()
   @IsString()
   creator: string;
+
+  @ApiProperty()
+  @IsString()
+  host: string;
+
+  @ApiProperty()
+  @IsString()
+  host2: string;
 
   @ApiPropertyOptional()
   @IsString()
