@@ -17,7 +17,7 @@ export class DatabaseService {
     // Export collections using mongodump
     const dumpPath = `${outputPath}/dump`;
     const dbPath = `${dumpPath}/${database}`;
-    const zipPath = `${outputPath}/dinoes-db-${moment().format(
+    const zipPath = `${outputPath}/dinoes-db-staging-${moment().format(
       'yyyy-MM-DD-hh-mm',
     )}.zip`;
     execSync(
