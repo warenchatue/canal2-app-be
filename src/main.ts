@@ -22,7 +22,7 @@ async function bootstrap() {
     .setTitle('DinoES API')
     .setVersion(version)
     .addBearerAuth()
-    .setDescription('The Canal2 Spot System API')
+    .setDescription('The Digital Innova ERP System API')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
