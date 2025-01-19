@@ -36,6 +36,10 @@ export class CreateInvoiceDto {
   validator: string;
 
   @ApiPropertyOptional()
+  @IsString()
+  adminValidator?: string;
+
+  @ApiPropertyOptional()
   requiredAdminValidator: boolean;
 
   @ApiPropertyOptional()

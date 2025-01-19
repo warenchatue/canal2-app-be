@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -12,7 +13,7 @@ import {
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FindQueryDto } from 'src/common/dto/find-query.dto';
-import { sendError, syncDateWithHourCode } from 'src/common/helpers';
+import { genCode, sendError, syncDateWithHourCode } from 'src/common/helpers';
 import { BaseController } from 'src/common/shared/base-controller';
 import { UseJwt } from '../../auth/auth.decorator';
 import { CreatePackageDto } from './dto/create-package.dto';
@@ -41,13 +42,17 @@ export class PackageController extends BaseController {
   async create(@Body() dto: CreatePackageDto, @Req() { user }) {
     try {
       return await this.run(async () => {
+        const codeEl = 'CP';
+        const allICP = await this.packagesService.findAll();
+        const cpCode = codeEl + '-' + genCode(allICP.length + 1, 6);
         const result = await this.packagesService.create({
           ...dto,
           creator: user._id,
+          code: cpCode,
         });
 
         this.event.emit(ORDER_CREATED_EVENT, {
-          code: dto.code,
+          code: cpCode,
           accountId: user._id,
           completed: true,
         });
@@ -232,6 +237,18 @@ export class PackageController extends BaseController {
 
   @Put(':packageId')
   async updatePackage(
+    @Param('packageId') packageId: string,
+    @Body() dto: UpdatePackageDto,
+  ) {
+    try {
+      return await this.packagesService.updateOne(packageId, dto);
+    } catch (error) {
+      sendError(error);
+    }
+  }
+
+  @Patch(':packageId')
+  async updatePackagePartial(
     @Param('packageId') packageId: string,
     @Body() dto: UpdatePackageDto,
   ) {

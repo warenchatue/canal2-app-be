@@ -93,6 +93,10 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
     return this.packages.findById(_id).orFail().populate(population).exec();
   }
 
+  findAll() {
+    return this.packages.find().exec();
+  }
+
   find(states: State[] = [State.active]) {
     const population = [
       { path: 'creator', model: 'User' },

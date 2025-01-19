@@ -1,19 +1,11 @@
 version: '3'
 services:
-  # dinoes-db:
-  #   image: mongo:4.4.17
-  #   volumes:
-  #     - dinoes_data:/data/db
-  #   ports:
-  #     - 2720:27017
-  dinoes-be-dev:
-    container_name: dinoes-be
+  dinoes-be-staging:
+    container_name: dinoes-staging
     build:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - '8700:8700'
+      - '8800:8800'
     volumes:
       - .:/src:cached
-# volumes:
-#   dinoes_data:
