@@ -1,0 +1,11 @@
+version: '3'
+services:
+  dinoes-be-staging:
+    container_name: dinoes-be-staging
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '8800:8800'
+    volumes:
+      - .:/src:cached
