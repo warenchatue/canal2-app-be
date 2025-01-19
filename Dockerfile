@@ -2,7 +2,7 @@ FROM node:20.10-alpine as builder
 
 ENV NODE_ENV build
 USER node
-WORKDIR /home/dinoes-be-staging
+WORKDIR /home/dinoes-be
 COPY . .
 RUN rm -rf node_modules
 RUN yarn install
