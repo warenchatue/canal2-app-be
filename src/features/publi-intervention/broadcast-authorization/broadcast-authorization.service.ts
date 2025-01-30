@@ -34,12 +34,36 @@ export class BroadcastAuthorizationService {
     return query
       .skip((page - 1) * limit)
       .limit(limit)
+      .populate([
+        { path: 'announcer', model: 'Announcer' },
+        { path: 'invoice', model: 'Invoice' },
+        { path: 'campaign', model: 'Campaign' },
+        { path: 'nature', model: 'BroadcastAuthorizationNature' },
+        { path: 'paymentMethod', model: 'PaymentMethod' },
+        { path: 'validator', model: 'User' },
+        { path: 'adminValidator', model: 'User' },
+        { path: 'commercials', model: 'User' },
+        { path: 'productionPartner', model: 'ProductionPartner' },
+        { path: 'keyContact', model: 'User' },
+      ])
       .exec();
   }
 
   findOne(id: string) {
     return this.broadcastAuthorizationModel
       .findOne({ _id: id, deleted: false })
+      .populate([
+        { path: 'announcer', model: 'Announcer' },
+        { path: 'invoice', model: 'Invoice' },
+        { path: 'campaign', model: 'Campaign' },
+        { path: 'nature', model: 'BroadcastAuthorizationNature' },
+        { path: 'paymentMethod', model: 'PaymentMethod' },
+        { path: 'validator', model: 'User' },
+        { path: 'adminValidator', model: 'User' },
+        { path: 'commercials', model: 'User' },
+        { path: 'productionPartner', model: 'ProductionPartner' },
+        { path: 'keyContact', model: 'User' },
+      ])
       .exec();
   }
 

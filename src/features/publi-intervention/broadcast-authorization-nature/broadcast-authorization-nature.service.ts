@@ -38,12 +38,14 @@ export class BroadcastAuthorizationNatureService {
     return query
       .skip((page - 1) * limit)
       .limit(limit)
+      .populate([{ path: 'program', model: 'TVProgram' }])
       .exec();
   }
 
   findOne(id: string) {
     return this.broadcastAuthorizationNatureModel
       .findOne({ _id: id, deleted: false })
+      .populate([{ path: 'program', model: 'TVProgram' }])
       .exec();
   }
 
