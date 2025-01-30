@@ -33,6 +33,7 @@ const mockBroadcastAuthorizationModel = {
 
 describe('BroadcastAuthorizationService', () => {
   let service: BroadcastAuthorizationService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let model: Model<BroadcastAuthorization>;
 
   beforeEach(async () => {

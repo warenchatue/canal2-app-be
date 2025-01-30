@@ -26,6 +26,7 @@ const mockBroadcastAuthorizationNatureModel = {
 
 describe('BroadcastAuthorizationNatureService', () => {
   let service: BroadcastAuthorizationNatureService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let model: Model<BroadcastAuthorizationNature>;
 
   beforeEach(async () => {
