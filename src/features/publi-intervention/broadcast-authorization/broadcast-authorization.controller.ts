@@ -6,10 +6,12 @@ import {
   Put,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { BroadcastAuthorizationService } from './broadcast-authorization.service';
 import { CreateBroadcastAuthorizationDto } from './dto/create-broadcast-authorization.dto';
 import { UpdateBroadcastAuthorizationDto } from './dto/update-broadcast-authorization.dto';
+import { PaginationFilterBroadcastAuthorizationDto } from './dto/pagination-filter-broadcast-authorization.dto';
 
 @Controller('broadcast-authorization')
 export class BroadcastAuthorizationController {
@@ -19,7 +21,8 @@ export class BroadcastAuthorizationController {
 
   @Post()
   create(
-    @Body() createBroadcastAuthorizationDto: CreateBroadcastAuthorizationDto,
+    @Body()
+    createBroadcastAuthorizationDto: CreateBroadcastAuthorizationDto,
   ) {
     return this.broadcastAuthorizationService.create(
       createBroadcastAuthorizationDto,
@@ -27,8 +30,10 @@ export class BroadcastAuthorizationController {
   }
 
   @Get()
-  findAll() {
-    return this.broadcastAuthorizationService.findAll();
+  findAll(
+    @Query() paginationFilter: PaginationFilterBroadcastAuthorizationDto,
+  ) {
+    return this.broadcastAuthorizationService.findAll(paginationFilter);
   }
 
   @Get(':id')

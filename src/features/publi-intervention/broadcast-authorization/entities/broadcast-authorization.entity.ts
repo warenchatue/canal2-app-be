@@ -109,6 +109,9 @@ export class BroadcastAuthorization extends Document {
 
   @Prop()
   contactDetailsToShow: string;
+
+  @Prop({ default: false })
+  deleted: boolean;
 }
 
 export const BroadcastAuthorizationSchema = SchemaFactory.createForClass(

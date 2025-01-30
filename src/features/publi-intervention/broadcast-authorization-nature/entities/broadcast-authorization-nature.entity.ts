@@ -11,6 +11,9 @@ export class BroadcastAuthorizationNature extends Document {
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'TVProgram' })
   program: MongooseSchema.Types.ObjectId;
+
+  @Prop({ default: false })
+  deleted: boolean;
 }
 
 export const BroadcastAuthorizationNatureSchema = SchemaFactory.createForClass(
