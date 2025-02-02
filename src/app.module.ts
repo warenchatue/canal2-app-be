@@ -45,6 +45,8 @@ import { HrAddressModule } from './features/hr/hr-address/hr-address.module';
 import { HrPersonnelModule } from './features/hr/hr-personnel/hr-personnel.module';
 import { HrJobModule } from './features/hr/hr-job/hr-job.module';
 import { ProgramPlanningsModule } from './features/tv-programs/programs-planning/programs-plannings.module';
+import { BroadcastAuthorizationModule } from './features/publi-intervention/broadcast-authorization/broadcast-authorization.module';
+import { BroadcastAuthorizationNatureModule } from './features/publi-intervention/broadcast-authorization-nature/broadcast-authorization-nature.module';
 
 const features = [
   AuthModule,
@@ -108,6 +110,8 @@ const DbOpts: MongooseModuleOptions = {
       CONNECTION_TYPE === 'cert' ? DbOpts : {},
     ),
     ...features,
+    BroadcastAuthorizationModule,
+    BroadcastAuthorizationNatureModule,
   ],
   controllers: [],
   providers: [],
