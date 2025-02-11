@@ -5,13 +5,17 @@ import { CreateBroadcastAuthorizationNatureDto } from './dto/create-broadcast-au
 import { UpdateBroadcastAuthorizationNatureDto } from './dto/update-broadcast-authorization-nature.dto';
 import { PaginationFilterBroadcastAuthorizationNatureDto } from './dto/pagination-filter-broadcast-authorization-nature.dto';
 import { BroadcastAuthorizationNature } from './entities/broadcast-authorization-nature.entity';
+import { ServiceDeleteAbstract } from 'src/common/abstracts/service-delete.abstract';
+import { State } from 'src/common/shared/base-schema';
 
 @Injectable()
-export class BroadcastAuthorizationNatureService {
+export class BroadcastAuthorizationNatureService extends ServiceDeleteAbstract<BroadcastAuthorizationNature> {
   constructor(
     @InjectModel(BroadcastAuthorizationNature.name)
     private readonly broadcastAuthorizationNatureModel: Model<BroadcastAuthorizationNature>,
-  ) {}
+  ) {
+    super();
+  }
 
   create(
     createBroadcastAuthorizationNatureDto: CreateBroadcastAuthorizationNatureDto,
@@ -19,6 +23,15 @@ export class BroadcastAuthorizationNatureService {
     return this.broadcastAuthorizationNatureModel.create(
       createBroadcastAuthorizationNatureDto,
     );
+  }
+
+  findActive(states = [State.active]) {
+    return this.broadcastAuthorizationNatureModel
+      .find()
+      .populate([{ path: 'program', model: 'TVProgram' }])
+      .where('state')
+      .in(states)
+      .exec();
   }
 
   findAll(paginationFilter: PaginationFilterBroadcastAuthorizationNatureDto) {
@@ -59,10 +72,10 @@ export class BroadcastAuthorizationNatureService {
       })
       .exec();
   }
-
-  remove(id: string) {
-    return this.broadcastAuthorizationNatureModel
-      .findByIdAndUpdate(id, { deleted: true }, { new: true })
-      .exec();
-  }
 }
+//   remove(id: string) {
+//     return this.broadcastAuthorizationNatureModel
+//       .findByIdAndUpdate(id, { deleted: true }, { new: true })
+//       .exec();
+//   }
+// }

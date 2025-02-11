@@ -5,18 +5,42 @@ import { CreateBroadcastAuthorizationDto } from './dto/create-broadcast-authoriz
 import { UpdateBroadcastAuthorizationDto } from './dto/update-broadcast-authorization.dto';
 import { PaginationFilterBroadcastAuthorizationDto } from './dto/pagination-filter-broadcast-authorization.dto';
 import { BroadcastAuthorization } from './entities/broadcast-authorization.entity';
+import { ServiceDeleteAbstract } from 'src/common/abstracts/service-delete.abstract';
+import { State } from 'src/common/shared/base-schema';
 
 @Injectable()
-export class BroadcastAuthorizationService {
+export class BroadcastAuthorizationService extends ServiceDeleteAbstract<BroadcastAuthorization> {
   constructor(
     @InjectModel(BroadcastAuthorization.name)
     private readonly broadcastAuthorizationModel: Model<BroadcastAuthorization>,
-  ) {}
+  ) {
+    super();
+  }
 
   create(createBroadcastAuthorizationDto: CreateBroadcastAuthorizationDto) {
     return this.broadcastAuthorizationModel.create(
       createBroadcastAuthorizationDto,
     );
+  }
+
+  findActive(states = [State.active]) {
+    return this.broadcastAuthorizationModel
+      .find()
+      .populate([
+        { path: 'announcer', model: 'Announcer' },
+        { path: 'invoice', model: 'Invoice' },
+        { path: 'campaign', model: 'Campaign' },
+        { path: 'nature', model: 'BroadcastAuthorizationNature' },
+        { path: 'paymentMethod', model: 'PaymentMethod' },
+        { path: 'validator', model: 'User' },
+        { path: 'adminValidator', model: 'User' },
+        { path: 'commercials', model: 'User' },
+        { path: 'productionPartner', model: 'ProductionPartner' },
+        { path: 'keyContact', model: 'User' },
+      ])
+      .where('state')
+      .in(states)
+      .exec();
   }
 
   findAll(paginationFilter: PaginationFilterBroadcastAuthorizationDto) {
@@ -73,12 +97,14 @@ export class BroadcastAuthorizationService {
   ) {
     return this.broadcastAuthorizationModel
       .findByIdAndUpdate(id, updateBroadcastAuthorizationDto, { new: true })
-      .exec();
-  }
-
-  remove(id: string) {
-    return this.broadcastAuthorizationModel
-      .findByIdAndUpdate(id, { deleted: true }, { new: true })
+      .orFail()
       .exec();
   }
 }
+
+//   remove(id: string) {
+//     return this.broadcastAuthorizationModel
+//       .findByIdAndUpdate(id, { deleted: true }, { new: true })
+//       .exec();
+//   }
+//}
