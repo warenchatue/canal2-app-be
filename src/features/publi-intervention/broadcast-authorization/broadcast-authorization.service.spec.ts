@@ -113,7 +113,7 @@ describe('BroadcastAuthorizationService', () => {
   });
 
   it('should soft delete a broadcast authorization', async () => {
-    const result = await service.remove('someId');
+    const result = await service.deleteOne('someId');
     expect(result).toEqual(mockBroadcastAuthorization);
   });
 });
