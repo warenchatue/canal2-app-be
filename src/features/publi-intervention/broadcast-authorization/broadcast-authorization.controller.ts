@@ -14,18 +14,24 @@ import {
 import { BroadcastAuthorizationService } from './broadcast-authorization.service';
 import { CreateBroadcastAuthorizationDto } from './dto/create-broadcast-authorization.dto';
 import { UpdateBroadcastAuthorizationDto } from './dto/update-broadcast-authorization.dto';
-import { PaginationFilterBroadcastAuthorizationDto } from './dto/pagination-filter-broadcast-authorization.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { BaseController } from 'src/common/shared/base-controller';
 import { URequest } from 'src/common/shared/request';
 import { UseJwt } from '../../auth/auth.decorator'; // Corrected import path
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { FindQueryDto } from 'src/common/dto/find-query.dto';
+import { BroadcastAuthorizationDocument } from './entities/broadcast-authorization.entity';
+import { sendError } from 'src/common/helpers';
+
+// Corrected import path
 
 @Controller('broadcast-authorization')
-@UseInterceptors(ClassSerializerInterceptor)
+//@UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('BroadcastAuthorization')
 export class BroadcastAuthorizationController extends BaseController {
   constructor(
     private readonly broadcastAuthorizationService: BroadcastAuthorizationService,
+    private readonly event: EventEmitter2,
   ) {
     super();
   }
@@ -33,42 +39,66 @@ export class BroadcastAuthorizationController extends BaseController {
   @ApiBearerAuth()
   @UseJwt()
   @Post()
-  create(
-    @Body()
-    createBroadcastAuthorizationDto: CreateBroadcastAuthorizationDto,
-  ) {
-    return this.broadcastAuthorizationService.create(
-      createBroadcastAuthorizationDto,
-    );
+  async create(@Body() dto: CreateBroadcastAuthorizationDto, @Req() { user }) {
+    try {
+      return await this.run(async () => {
+        const result = await this.broadcastAuthorizationService.create(dto);
+        this.event.emit('broadcast-authorization-created', result);
+        return result;
+      });
+    } catch (error) {
+      sendError(error);
+    }
   }
 
-  @ApiBearerAuth()
-  @UseJwt()
   @Get()
-  findAll(
-    @Query() paginationFilter: PaginationFilterBroadcastAuthorizationDto,
+  async findAll(
+    @Req() { user },
+    @Query() { states }: FindQueryDto<BroadcastAuthorizationDocument>,
   ) {
-    return this.broadcastAuthorizationService.findAll(paginationFilter);
+    try {
+      const data = await this.broadcastAuthorizationService.findActive();
+      const totalitesm = data.length;
+      const final_result = data.map((e) => {
+        const json = e.toJSON();
+        return json;
+      });
+
+      return {
+        metaData: {
+          totalitesm,
+        },
+        data: final_result,
+      };
+    } catch (error) {
+      sendError(error);
+    }
   }
 
   @ApiBearerAuth()
   @UseJwt()
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.broadcastAuthorizationService.findOne(id);
+  async findOne(@Param('id') id: string, @Req() { user }) {
+    try {
+      return this.broadcastAuthorizationService.findOne(id);
+    } catch (error) {
+      sendError(error);
+    }
   }
 
   @ApiBearerAuth()
   @UseJwt()
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
-    @Body() updateBroadcastAuthorizationDto: UpdateBroadcastAuthorizationDto,
+    @Body()
+    dto: UpdateBroadcastAuthorizationDto,
   ) {
-    return this.broadcastAuthorizationService.update(
-      id,
-      updateBroadcastAuthorizationDto,
-    );
+    try {
+      return await this.broadcastAuthorizationService.update(id, dto);
+    } catch (error) {
+      sendError(error);
+    }
   }
 
   @ApiBearerAuth()

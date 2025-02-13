@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { EventEmitterModule } from '@nestjs/event-emitter'; // Import EventEmitterModule
 import { BroadcastAuthorizationService } from './broadcast-authorization.service';
 import { BroadcastAuthorizationController } from './broadcast-authorization.controller';
 import {
@@ -15,6 +16,7 @@ import {
         schema: BroadcastAuthorizationSchema,
       },
     ]),
+    EventEmitterModule.forRoot(), // Import and configure EventEmitterModule
   ],
   controllers: [BroadcastAuthorizationController],
   providers: [BroadcastAuthorizationService],

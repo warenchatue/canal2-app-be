@@ -96,14 +96,14 @@ export class BroadcastAuthorization extends BaseSchema {
   @Prop()
   contactDetails: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'ProductionPartner' })
-  productionPartner: MongooseSchema.Types.ObjectId;
+  @Prop()
+  productionPartner: string;
 
   @Prop()
   otherProductionPartner: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
-  keyContact: MongooseSchema.Types.ObjectId;
+  @Prop()
+  keyContact: string;
 
   @Prop()
   otherKeyContact: string;
