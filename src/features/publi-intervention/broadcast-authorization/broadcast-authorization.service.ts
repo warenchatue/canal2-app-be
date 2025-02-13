@@ -17,10 +17,21 @@ export class BroadcastAuthorizationService extends ServiceDeleteAbstract<Broadca
     super();
   }
 
-  create(createBroadcastAuthorizationDto: CreateBroadcastAuthorizationDto) {
-    return this.broadcastAuthorizationModel.create(
+  async create(
+    createBroadcastAuthorizationDto: CreateBroadcastAuthorizationDto,
+  ) {
+    const createdBroadcastAuth = await this.broadcastAuthorizationModel.create(
       createBroadcastAuthorizationDto,
     );
+
+    // Return the created document's ID and a success message
+    return {
+      statusCode: 201, // HTTP status code for successful creation
+      message: 'Broadcast authorization created successfully',
+      data: {
+        id: createdBroadcastAuth._id, // Return the created document's ID
+      },
+    };
   }
 
   findActive(states = [State.active]) {

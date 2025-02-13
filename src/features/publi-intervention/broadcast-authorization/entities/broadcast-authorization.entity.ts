@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
+import { BaseSchema } from 'src/common/shared/base-schema';
 
 @Schema({ timestamps: true })
-export class BroadcastAuthorization extends Document {
+export class BroadcastAuthorization extends BaseSchema {
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'Announcer',
@@ -114,6 +115,7 @@ export class BroadcastAuthorization extends Document {
   deleted: boolean;
 }
 
+export type BroadcastAuthorizationDocument = BroadcastAuthorization & Document;
 export const BroadcastAuthorizationSchema = SchemaFactory.createForClass(
   BroadcastAuthorization,
 );
