@@ -42,6 +42,9 @@ export class AccountingDoc extends BaseSchema {
   @Prop({ type: sc.Types.ObjectId, ref: 'Journal' })
   journal: sc.Types.ObjectId;
 
+  @Prop({ type: sc.Types.ObjectId, ref: 'ExpenseCategory' })
+  category: sc.Types.ObjectId;
+
   @Prop({ type: sc.Types.ObjectId, ref: 'Org' })
   org: sc.Types.ObjectId;
 

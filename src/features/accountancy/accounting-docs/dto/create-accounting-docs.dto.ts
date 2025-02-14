@@ -28,6 +28,10 @@ export class CreateAccountingDocDto {
 
   @ApiPropertyOptional()
   @IsString()
+  category: string;
+
+  @ApiPropertyOptional()
+  @IsString()
   validator: string;
 
   @ApiPropertyOptional()

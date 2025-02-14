@@ -47,6 +47,8 @@ import { HrJobModule } from './features/hr/hr-job/hr-job.module';
 import { ProgramPlanningsModule } from './features/tv-programs/programs-planning/programs-plannings.module';
 import { BroadcastAuthorizationModule } from './features/publi-intervention/broadcast-authorization/broadcast-authorization.module';
 import { BroadcastAuthorizationNatureModule } from './features/publi-intervention/broadcast-authorization-nature/broadcast-authorization-nature.module';
+import { ExpenseCategory } from './features/accountancy/expenses-category/entities/expense-category.entity';
+import { ExpenseCategoryModule } from './features/accountancy/expenses-category/expenses-category.module';
 
 const features = [
   AuthModule,
@@ -91,6 +93,7 @@ const features = [
   HrPersonnelModule,
   HrJobModule,
   ProgramPlanningsModule,
+  ExpenseCategoryModule,
 ];
 
 const DbOpts: MongooseModuleOptions = {

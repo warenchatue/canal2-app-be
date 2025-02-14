@@ -28,6 +28,7 @@ export class AccountingDocsService extends ServiceDeleteAbstract<AccountingDoc> 
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'beneficiary', model: 'User' },
+      { path: 'category', model: 'ExpenseCategory' },
       { path: 'authorizer', model: 'User' },
       { path: 'validator', model: 'User' },
       { path: 'org', model: 'Org' },
@@ -45,6 +46,7 @@ export class AccountingDocsService extends ServiceDeleteAbstract<AccountingDoc> 
     const population = [
       { path: 'creator', model: 'User' },
       { path: 'beneficiary', model: 'User' },
+      { path: 'category', model: 'ExpenseCategory' },
       { path: 'authorizer', model: 'User' },
       { path: 'validator', model: 'User' },
       { path: 'org', model: 'Org' },
