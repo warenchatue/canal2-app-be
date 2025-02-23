@@ -26,6 +26,7 @@ import { TransactionsService } from 'src/features/transactions/transactions.serv
 import { TransactionType } from 'src/features/transactions/entities/transaction.entity';
 import { throwError } from 'rxjs';
 import { CreateTaxItemDto } from './dto/create-tax-item.dto';
+import { State } from 'src/common/shared/base-schema';
 
 @ApiBearerAuth()
 @ApiTags('Invoices')
@@ -279,6 +280,19 @@ export class InvoicesController extends BaseController {
     } catch (error) {
       sendError(error);
     }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Get('/all/by/code')
+  async getOrderByCode(@Query('invoiceCode') invoiceCode: string) {
+    return await this.run(async () => {
+      const result = await this.invoicesService.findLightByCode(
+        [State.active],
+        invoiceCode,
+      );
+      return result;
+    });
   }
 
   @Delete(':invoiceId')

@@ -97,6 +97,22 @@ export class PackagesService extends ServiceDeleteAbstract<Campaign> {
     return this.packages.find().exec();
   }
 
+  findLightByCode(states = [State.active], code: string) {
+    const regex = new RegExp(code, 'i');
+    return this.packages
+      .find({ code: regex }, { code: 1 })
+      .where('state')
+      .in(states)
+      .transform((docs) => {
+        return docs.map((doc) => ({
+          _id: doc._id.toString(),
+          id: doc._id.toString(),
+          name: doc.code,
+        }));
+      })
+      .exec();
+  }
+
   find(states: State[] = [State.active]) {
     const population = [
       { path: 'creator', model: 'User' },

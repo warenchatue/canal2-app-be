@@ -23,6 +23,7 @@ import { PackagesService } from './packages.service';
 import { PlanningsService } from '../../pub/plannings/plannings.service';
 import { ProductService } from '../../products/products.service';
 import { ORDER_CREATED_EVENT } from './packages.handler';
+import { State } from 'src/common/shared/base-schema';
 
 @ApiBearerAuth()
 @ApiTags('Packages')
@@ -302,6 +303,19 @@ export class PackageController extends BaseController {
     } catch (error) {
       sendError(error);
     }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Get('/all/by/code')
+  async getOrderByCode(@Query('campaignCode') campaignCode: string) {
+    return await this.run(async () => {
+      const result = await this.packagesService.findLightByCode(
+        [State.active],
+        campaignCode,
+      );
+      return result;
+    });
   }
 
   @ApiBearerAuth()

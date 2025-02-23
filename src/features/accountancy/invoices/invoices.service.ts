@@ -179,6 +179,22 @@ export class InvoicesService extends ServiceDeleteAbstract<Invoice> {
     return this.invoices.find().exec();
   }
 
+  findLightByCode(states = [State.active], code: string) {
+    const regex = new RegExp(code, 'i');
+    return this.invoices
+      .find({ code: regex }, { code: 1 })
+      .where('state')
+      .in(states)
+      .transform((docs) => {
+        return docs.map((doc) => ({
+          _id: doc._id.toString(),
+          id: doc._id.toString(),
+          name: doc.code,
+        }));
+      })
+      .exec();
+  }
+
   findAllByYear(code: string) {
     const regex = new RegExp(code, 'i');
     return this.invoices.find({ code: regex }).exec();
