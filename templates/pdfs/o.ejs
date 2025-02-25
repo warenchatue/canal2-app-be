@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>Commande <%= order.name %></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            background: #fff;
+        }
+        .container {
+            width: 100%;
+            margin: auto;
+            padding: 8px;
+        }
+        .header {
+            text-align: center;
+            background-color: #f2f2f2;
+            margin-bottom: 16px;
+            font-weight: 500;
+            padding: 8px;
+        }
+        .section {
+            margin-bottom: 16px;
+        }
+        .section-content {
+            display: table;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+        .row {
+            display: table-row;
+        }
+        .key, .value {
+            display: table-cell;
+            padding: 4px 0;
+        }
+        .key {
+            width: 45%;
+            font-weight: bold;
+        }
+        .value {
+            width: 54%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        table, th, td {
+            border: 1px solid #111;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header"><%= order.name %></div>
+
+    <div class="section">
+        <div class="section-content">
+            <div class="row">
+                <div class="key">Compte :</div>
+                <div class="value"><%= order.techAccountName %></div>
+            </div>
+            <div class="row">
+                <div class="key">Type de devis :</div>
+                <div class="value"><%= order.hkQuotationType %></div>
+            </div>
+            <div class="row">
+                <div class="key">Nombre de pièce comptée :</div>
+                <div class="value"><%= order.orderCount %></div>
+            </div>
+            <div class="row">
+                <div class="key">Express ?</div>
+                <div class="value">Non</div>
+            </div>
+            <div class="row">
+                <div class="key">Pour être rendu le :</div>
+                <div class="value"><%= shippingDate %></div>
+            </div>
+            <div class="row">
+                <div class="key">Date de traitement :</div>
+                <div class="value"><%= processingDate %></div>
+            </div>
+            <div class="row">
+                <div class="key">Commentaire :</div>
+                <div class="value"><%= order.comment %></div>
+            </div>
+            <div class="row">
+                <div class="key">Statut :</div>
+                <div class="value"><%= order.status %></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title"><strong>Produits selectionnés</strong></div>
+        <table>
+            <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Nombre de pièces</th>
+                <th>Qté Livrée</th>
+                <th>Qté Juste</th>
+                <th>Status</th>
+                <th>Commentaire</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% order.orderLines.forEach(line => { %>
+                <tr>
+                    <td><%= line.product %></td>
+                    <td><%= line.orderCount %></td>
+                    <td><%= line.numberShipped %></td>
+                    <td><%= line.qtyJust %></td>
+                    <td><%= line.status %></td>
+                    <td></td>
+                </tr>
+            <% }) %>
+
+            <tr>
+                <td colspan="5" style="text-align: right;"><strong>Nbr d'article(s)</strong></td>
+                <td><%= order.orderLines.length %></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

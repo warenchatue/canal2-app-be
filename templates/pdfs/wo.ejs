@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bon de livraison <%= workOrder.hkWorkOrderNumber %></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            background: #fff;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .header {
+            width: 100%;
+        }
+
+        .header .left,
+        .header .right {
+            display: inline-block;
+            vertical-align: top;
+            width: 48%;
+        }
+
+        .header .right>div {
+            float: right;
+        }
+
+        .header .qr img {
+            width: 128px;
+            height: 128px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .header .qr h4 {
+            margin: 0;
+            width: 128px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h2><%= workOrder.account.name %></h2>
+<div class="header">
+    <div class="left">
+        <div>
+            <p><%= workOrder.account.shippingStreet %></p>
+            <p><%= workOrder.account.shippingPostalCode %> <%= workOrder.account.shippingCity %></p>
+        </div>
+        <div>
+            <p>Bon de livraison n°<%= workOrder.hkWorkOrderNumber %> du <%= creationDate %></p>
+            <p>Date de livraison: <%= shippingDate %></p>
+        </div>
+    </div>
+    <div class="qr right">
+        <div>
+            <img src="<%= qrcodeData %>" alt="QR Code" />
+            <h4><%= workOrder.hkWorkOrderNumber %></h4>
+        </div>
+    </div>
+</div>
+<div>
+    <h3>Produits sélectionnés</h3>
+    <table>
+        <tr>
+            <th>Département</th>
+            <th>Client</th>
+            <th>Produit</th>
+            <th>Quantité</th>
+        </tr>
+        <% products.forEach(product => { %>
+            <tr>
+                <td><%= product.department?.name %></td>
+                <td><%= product.clientName %></td>
+                <td><%= product.productName %></td>
+                <td><%= product.quantity %></td>
+            </tr>
+        <% }) %>
+        <tr>
+            <th colspan="3">Quantité totale</th>
+            <th><%= total %></th>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
