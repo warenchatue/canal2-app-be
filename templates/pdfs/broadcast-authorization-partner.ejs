@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Partners Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            background: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            max-width: 130px;
+        }
+
+        .reserved-section {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+
+        .reserved-section .provider {
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .production-title {
+            text-align: center;
+            font-weight: bold;
+            color: #ff0000;
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        .section {
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .section-content {
+            margin-left: 10px;
+        }
+
+        .timing-table {
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .signature-section {
+            margin-top: 40px;
+            text-align: right;
+        }
+
+        .commercial-director {
+            margin-bottom: 60px;
+        }
+
+        .form-fields {
+            margin-top: 60px;
+        }
+
+        .form-field {
+            margin-bottom: 20px;
+        }
+
+        .form-field-title {
+            margin-bottom: 10px;
+        }
+
+        .form-field-line {
+            border-bottom: 1px solid #000;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="<%= typeof logoUrl !== 'undefined' ? logoUrl : '' %>" alt="Canal 2 International" class="logo">
+        </div>
+
+        <div class="reserved-section">
+            <div>PARTIE RESERVE AU PRESTATAIRE : <span class="provider"><%= typeof otherProductionPartner !== 'undefined' ? otherProductionPartner : 'EDEA' %></span></div>
+        </div>
+
+        <div class="production-title">PRODUCTION</div>
+
+        <div class="section">
+            <div class="section-title">ANNONCEUR :</div>
+            <div class="section-content"><%= typeof announcer !== 'undefined' ? announcer.name : '' %></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">CONTACT CLIENT :</div>
+            <div class="section-content"><%= typeof contactDetails !== 'undefined' ? contactDetails : '' %></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">POINT FOCAL :</div>
+            <div class="section-content"><%= typeof keyContact !== 'undefined' ? keyContact : '' %></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">LIEU DE COUVERTURE :</div>
+            <div class="section-content"><%= typeof location !== 'undefined' ? location : '' %></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">DATE :</div>
+            <div class="section-content"><%= typeof date !== 'undefined' ? new Date(date).toLocaleDateString('fr-FR', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}) : '' %></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">COMMERCIAL EN CHARGE /SERVICE :</div>
+            <div class="section-content"><%= typeof serviceInCharge !== 'undefined' ? serviceInCharge : '' %></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">ESPACE DE DIFFUSION</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">NATURE DE LA PRESTATION</div>
+            <div class="section-content"><%= typeof natureDescription !== 'undefined' ? natureDescription : '' %></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">HEURE PREVUE :</div>
+            <div class="section-content"><%= typeof hour !== 'undefined' ? hour : '' %></div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">HEURE EFFECTIVE</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">TIMING</div>
+        </div>
+
+        <div class="signature-section">
+            <div class="commercial-director">Le directeur commercial</div>
+        </div>
+
+        <div class="form-fields">
+            <div class="form-field">
+                <div class="form-field-title">Nom du journaliste</div>
+                <div class="form-field-line"></div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field-title">Nom du cameraman</div>
+                <div class="form-field-line"></div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field-title">Date effective de diffusion</div>
+                <div class="form-field-line"></div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-field-title">Nom et signature du service concerné</div>
+                <div class="form-field-line"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
