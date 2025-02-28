@@ -11,19 +11,25 @@ export class PdfService {
 
   async generatePdf(content: string): Promise<Readable | null> {
     try {
-      this.logger.debug(
-        'Generating PDF with content length: ' + content.length,
-      );
+      this.logger.debug('Generating PDF with content length: ' + content.length);
 
-      // Use a type assertion to bypass TypeScript's type checking for the content
-      const pdfStream = wkhtmltopdf(content as any, {
+      // Prepend 'data:text/html,' to ensure wkhtmltopdf treats it as raw HTML
+      const htmlContent = `data:text/html,${encodeURIComponent(content)}`;
+
+      // Use a type assertion to bypass TypeScript's type checking
+      const pdfStream = wkhtmltopdf(htmlContent as any, {
         pageSize: 'A4',
         orientation: 'Portrait',
         dpi: 300,
-        marginTop: '10mm', // Convert to string with unit
-        marginBottom: '10mm', // Convert to string with unit
-        marginLeft: '10mm', // Convert to string with unit
-        marginRight: '10mm', // Convert to string with unit
+        marginTop: '10mm',
+        marginBottom: '10mm',
+        marginLeft: '10mm',
+        marginRight: '10mm',
+      });
+
+      // Handle errors from the wkhtmltopdf process
+      pdfStream.on('error', (err) => {
+        this.logger.error('Error generating PDF:', err);
       });
 
       return pdfStream;

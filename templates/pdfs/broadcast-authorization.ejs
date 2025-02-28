@@ -213,38 +213,4 @@
             <% } %>
         </div>
 
-        <div class="client">CLIENT : <%= typeof announcer !== 'undefined' && announcer ? announcer.name : '_______________' %></div>
-
-        <div class="contact">
-            <div class="bold">NUMEROS DE TELEPHONE A AFFICHER :</div>
-            <%= typeof contactDetailsToShow !== 'undefined' ? contactDetailsToShow : '_______________' %>
-        </div>
-
-        <div class="contact">
-            <div class="bold">CONTACT COMMERCIAL : ESPACE :</div>
-            <%= typeof serviceInCharge !== 'undefined' ? serviceInCharge : '_______________' %>
-        </div>
-
-        <div class="date-time">
-            <div class="bold">DATE : <%= typeof date !== 'undefined' ? new Date(date).toLocaleDateString('fr-FR') : '___/___/____' %></div>
-        </div>
-
-        <div class="date-time">
-            <div class="bold">HEURE : <%= typeof hour !== 'undefined' ? hour : '___:___' %></div>
-        </div>
-
-        <div class="signatures">
-            <div class="signature">
-                <div class="bold">VISA DIRECTION COMMERCIALE</div>
-                <div class="signature-line"></div>
-            </div>
-            <div class="signature">
-                <div class="bold">DIRECTEUR GENERAL</div>
-                <div class="signature-line"></div>
-            </div>
-        </div>
-
-        <div class="page-number">1</div>
-    </div>
-</body>
-</html>
+        <div class="client">CLIENT :
