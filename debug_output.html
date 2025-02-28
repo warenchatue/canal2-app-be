@@ -143,94 +143,92 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="<%= typeof logoUrl !== 'undefined' ? logoUrl : '' %>" alt="Canal 2 International" class="logo">
+            <img src="/path/to/logo.png" alt="Canal 2 International" class="logo">
             <div></div>
         </div>
 
         <div class="title">AUTORISATION DE DIFFUSION</div>
 
         <div class="section">
-            <div class="announcer">ANNONCEUR : <%= typeof announcer !== 'undefined' && announcer ? announcer.name : 'N/A' %></div>
+            <div class="announcer">ANNONCEUR : 1001 TAPIS</div>
             
             <div>Nature de l'annonce :</div>
             <div class="nature-columns">
                 <div class="nature-column">
                     <ul>
-                        <li <%= typeof natureDescription !== 'undefined' && natureDescription.includes('Nous Chez vous') ? 'class="bold"' : '' %>>Nous Chez vous !</li>
-                        <li <%= typeof natureDescription !== 'undefined' && natureDescription.includes('canal matin') ? 'class="bold"' : '' %>>canal matin</li>
-                        <li <%= typeof natureDescription !== 'undefined' && natureDescription.includes('Anniversaire avec photo') ? 'class="bold"' : '' %>>Anniversaire avec photo</li>
-                        <li <%= typeof natureDescription !== 'undefined' && natureDescription.includes('Publi info') ? 'class="bold"' : '' %>>Publi info</li>
+                        <li >Nous Chez vous !</li>
+                        <li >canal matin</li>
+                        <li >Anniversaire avec photo</li>
+                        <li >Publi info</li>
                     </ul>
-                    <div <%= typeof natureDescription !== 'undefined' && natureDescription.includes('Requiem') ? 'class="bold"' : '' %>>Requiem / <%= typeof natureDescription !== 'undefined' && natureDescription.includes('Décès') ? 'class="bold"' : '' %>Décès</div>
+                    <div >Requiem / Décès</div>
                 </div>
                 <div class="nature-column">
                     <ul>
-                        <li <%= typeof natureDescription !== 'undefined' && natureDescription.includes('Décès avec photo') ? 'class="bold"' : '' %>>Décès avec photo</li>
-                        <li <%= typeof natureDescription !== 'undefined' && natureDescription.includes('PAD') ? 'class="bold"' : '' %>>PAD *</li>
-                        <li <%= typeof natureDescription !== 'undefined' && natureDescription.includes('C Comment') ? 'class="bold"' : '' %>>C Comment ?</li>
-                        <li <%= typeof natureDescription !== 'undefined' && natureDescription.includes('Jambo TV') ? 'class="bold"' : '' %>>Jambo TV</li>
-                        <li <%= typeof natureDescription !== 'undefined' && natureDescription.includes('Documentaire') ? 'class="bold"' : '' %>>Documentaire</li>
+                        <li >Décès avec photo</li>
+                        <li >PAD *</li>
+                        <li >C Comment ?</li>
+                        <li >Jambo TV</li>
+                        <li >Documentaire</li>
                     </ul>
                 </div>
             </div>
             
-            <% if (typeof natureDescription !== 'undefined' && natureDescription) { %>
-                <div><strong>Description spécifique:</strong> <%= natureDescription %></div>
-            <% } %>
+            
+                <div><strong>Description spécifique:</strong> Live Radio Interview</div>
+            
         </div>
 
         <div class="duration">
-            Durée de la prestation du ___/___/____ au <%= typeof endDate !== 'undefined' ? new Date(endDate).toLocaleDateString('fr-FR') : '___/___/____' %>
+            Durée de la prestation du ___/___/____ au 01/04/2025
         </div>
 
         <div class="antenna">MISE À L'ANTENNE :</div>
 
         <div class="taf">
-            <span class="bold">TAF :</span> Intervention de <%= typeof duration !== 'undefined' ? duration : '___' %> min 
-            <span class="bold"><%= typeof description !== 'undefined' ? description : '' %></span> à 
-            <span class="bold"><%= typeof hour !== 'undefined' ? hour : '___' %></span>
+            <span class="bold">TAF :</span> Intervention de 60 min 
+            <span class="bold">Morning talk show featuring product launch discussion</span> à 
+            <span class="bold">10:00</span>
         </div>
 
         <div class="section">
             <div class="bold">INTERVENANTS :</div>
-            <% if (typeof participants !== 'undefined' && participants.length > 0) { %>
-                <%= participants.join(', ') %>
-            <% } else { %>
-                _______________
-            <% } %>
+            
+                John Doe, Jane Smith, Robert Johnson
+            
         </div>
 
         <div class="questions">
             <div class="bold">QUESTIONS :</div>
-            <% if (typeof questions !== 'undefined' && questions.length > 0) { %>
-                <% questions.forEach(function(question, index) { %>
-                    <div class="question"><%= question %></div>
-                <% }); %>
-            <% } else { %>
-                <div class="question">_______________________________________________________</div>
-                <div class="question">_______________________________________________________</div>
-                <div class="question">_______________________________________________________</div>
-            <% } %>
+            
+                
+                    <div class="question">What inspired the product?</div>
+                
+                    <div class="question">How does it benefit users?</div>
+                
+                    <div class="question">What are the future plans?</div>
+                
+            
         </div>
 
-        <div class="client">CLIENT : <%= typeof announcer !== 'undefined' && announcer ? announcer.name : '_______________' %></div>
+        <div class="client">CLIENT : 1001 TAPIS</div>
 
         <div class="contact">
             <div class="bold">NUMEROS DE TELEPHONE A AFFICHER :</div>
-            <%= typeof contactDetailsToShow !== 'undefined' ? contactDetailsToShow : '_______________' %>
+            public@studio.com | +1234567890
         </div>
 
         <div class="contact">
             <div class="bold">CONTACT COMMERCIAL : ESPACE :</div>
-            <%= typeof serviceInCharge !== 'undefined' ? serviceInCharge : '_______________' %>
+            Marketing Department
         </div>
 
         <div class="date-time">
-            <div class="bold">DATE : <%= typeof date !== 'undefined' ? new Date(date).toLocaleDateString('fr-FR') : '___/___/____' %></div>
+            <div class="bold">DATE : 01/03/2025</div>
         </div>
 
         <div class="date-time">
-            <div class="bold">HEURE : <%= typeof hour !== 'undefined' ? hour : '___:___' %></div>
+            <div class="bold">HEURE : 10:00</div>
         </div>
 
         <div class="signatures">

@@ -7,6 +7,7 @@ import {
   BroadcastAuthorization,
   BroadcastAuthorizationSchema,
 } from './entities/broadcast-authorization.entity';
+import { PdfModule } from 'src/features/providers/pdf/pdf.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import {
       },
     ]),
     EventEmitterModule.forRoot(), // Import and configure EventEmitterModule
+    PdfModule,
   ],
   controllers: [BroadcastAuthorizationController],
   providers: [BroadcastAuthorizationService],
