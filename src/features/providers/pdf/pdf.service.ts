@@ -16,10 +16,8 @@ export class PdfService {
       );
 
       // Prepend 'data:text/html,' to ensure wkhtmltopdf treats it as raw HTML
-      const htmlContent = `data:text/html,${encodeURIComponent(content)}`;
-
       // Use a type assertion to bypass TypeScript's type checking
-      const pdfStream = wkhtmltopdf(htmlContent as any, {
+      const pdfStream = wkhtmltopdf(content, {
         pageSize: 'A4',
         orientation: 'Portrait',
         dpi: 300,
@@ -43,25 +41,17 @@ export class PdfService {
 
   async generateTemplate(
     template:
-      | 'wo'
-      | 'o'
       | 'other'
       | 'broadcast-authorization'
       | 'broadcast-authorization-partner',
     data: object,
   ): Promise<string> {
     try {
-      let file: string;
+      let file: string = undefined;
       const rootDir = path.resolve(process.cwd());
       let templatePath: string;
 
       switch (template) {
-        case 'wo':
-          templatePath = path.join(rootDir, 'templates/pdfs/wo.ejs');
-          break;
-        case 'o':
-          templatePath = path.join(rootDir, 'templates/pdfs/o.ejs');
-          break;
         case 'broadcast-authorization':
           templatePath = path.join(
             rootDir,
