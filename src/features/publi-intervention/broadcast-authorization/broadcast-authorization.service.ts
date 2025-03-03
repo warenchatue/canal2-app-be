@@ -90,4 +90,29 @@ export class BroadcastAuthorizationService extends ServiceDeleteAbstract<Broadca
       .orFail()
       .exec();
   }
+
+  async validateAuthorization(id: string, userId: string) {
+    return this.broadcastAuthorization
+      .findByIdAndUpdate(
+        id,
+        {
+          validated: true,
+          validatedBy: userId,
+        },
+        { new: true },
+      )
+      .populate([
+        { path: 'announcer', model: 'Announcer' },
+        { path: 'invoice', model: 'Invoice' },
+        { path: 'campaign', model: 'Campaign' },
+        { path: 'nature', model: 'BroadcastAuthorizationNature' },
+        { path: 'paymentMethod', model: 'PaymentMethod' },
+        { path: 'validator', model: 'User' },
+        { path: 'adminValidator', model: 'User' },
+        { path: 'commercials', model: 'User' },
+        { path: 'validatedBy', model: 'User' },
+      ])
+      .orFail()
+      .exec();
+  }
 }

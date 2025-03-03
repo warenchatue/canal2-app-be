@@ -15,8 +15,7 @@ export class PdfService {
         'Generating PDF with content length: ' + content.length,
       );
 
-      // Prepend 'data:text/html,' to ensure wkhtmltopdf treats it as raw HTML
-      // Use a type assertion to bypass TypeScript's type checking
+      // Use improved options with enableLocalFileAccess
       const pdfStream = wkhtmltopdf(content, {
         pageSize: 'A4',
         orientation: 'Portrait',
@@ -25,6 +24,7 @@ export class PdfService {
         marginBottom: '10mm',
         marginLeft: '10mm',
         marginRight: '10mm',
+        enableLocalFileAccess: true, // Add this to allow access to local files
       });
 
       // Handle errors from the wkhtmltopdf process
@@ -153,10 +153,37 @@ export class PdfService {
 
   private formatBroadcastAuthorizationData(data: any): any {
     // Create a properly formatted data object for the template
-    const formattedData = {
-      // Add a default logo URL or use from environment config
-      logoUrl: process.env.LOGO_URL || '/path/to/logo.png',
+    const rootDir = path.resolve(process.cwd());
+    const logoPath = path.join(rootDir, 'resources/logos/logo.png');
 
+    let logoUrl = process.env.LOGO_URL;
+
+    try {
+      // If no environment URL is set, use base64 encoding of the logo
+      if (!logoUrl) {
+        this.logger.debug('No LOGO_URL found, using base64 encoded image');
+
+        // Check if the logo file exists
+        if (!fs.existsSync(logoPath)) {
+          this.logger.error(`Logo file not found at path: ${logoPath}`);
+          throw new Error(`Logo file not found at path: ${logoPath}`);
+        }
+
+        // Read and convert logo to base64
+        const logoData = fs.readFileSync(logoPath);
+        const logoBase64 = Buffer.from(logoData).toString('base64');
+        logoUrl = `data:image/png;base64,${logoBase64}`;
+        this.logger.debug('Logo encoded as base64 successfully');
+      }
+    } catch (e) {
+      this.logger.error(`Error processing logo: ${e.message}`);
+      // Fallback to a default "image not found" placeholder
+      logoUrl = '';
+    }
+
+    const formattedData = {
+      // Use the base64 encoded logo or URL from environment
+      logoUrl,
       // Core fields from the broadcast authorization
       announcer: data.announcer || { name: 'N/A' },
       natureDescription: data.natureDescription || '',
