@@ -191,46 +191,6 @@ export class BroadcastAuthorizationController extends BaseController {
     }
   }
 
-  async formatBroadcastAuthorizationData(data: any) {
-    // Create a properly formatted data object for the template
-    const formattedData = {
-      // Add a default logo URL or use from environment config
-      logoUrl: process.env.LOGO_URL || '/path/to/logo.png',
-
-      // Core fields from the broadcast authorization
-      announcer: data.announcer || { name: 'N/A' },
-      natureDescription: data.natureDescription || '',
-      endDate: data.endDate ? new Date(data.endDate) : new Date(),
-      duration: data.duration || '',
-      description: data.description || '',
-      hour: data.hour || '',
-      date: data.date ? new Date(data.date) : new Date(),
-
-      // Participants and questions with fallbacks
-      participants: Array.isArray(data.participants) ? data.participants : [],
-      questions: Array.isArray(data.questions) ? data.questions : [],
-
-      // Contact information
-      contactDetailsToShow: data.contactDetailsToShow || '',
-      serviceInCharge: data.serviceInCharge || '',
-
-      // Additional fields that might be in the template
-      startDate: data.startDate ? new Date(data.startDate) : new Date(),
-      realHour: data.realHour || '',
-      hours: Array.isArray(data.hours) ? data.hours : [],
-      realHours: Array.isArray(data.realHours) ? data.realHours : [],
-      note: data.note || '',
-      location: data.location || '',
-      productionPartner: data.productionPartner || '',
-      keyContact: data.keyContact || '',
-    };
-
-    this.logger.debug(
-      `Formatted data keys: ${Object.keys(formattedData).join(', ')}`,
-    );
-    return formattedData;
-  }
-
   @ApiBearerAuth()
   @UseJwt()
   @Get(':id/generate-pdf')
@@ -249,11 +209,7 @@ export class BroadcastAuthorizationController extends BaseController {
   @ApiResponse({ status: 500, description: 'Error generating PDF' })
   async generatePdf(
     @Param('id') id: string,
-    @Query('templateType')
-    templateType:
-      | 'other'
-      | 'broadcast-authorization'
-      | 'broadcast-authorization-partner',
+    @Query('templateType') templateType = 'standard',
     @Res() res: Response,
   ) {
     try {
@@ -278,18 +234,16 @@ export class BroadcastAuthorizationController extends BaseController {
       );
 
       // Generate the PDF
-      const content = await this.pdfService.generateTemplate(
+      const pdfStream = await this.pdfService.generateBroadcastAuthorizationPdf(
+        broadcastAuth,
         templateType,
-        this.formatBroadcastAuthorizationData(broadcastAuth),
       );
-
-      const pdfStream = await this.pdfService.generatePdf(content);
 
       if (!pdfStream) {
         this.logger.error(
           `Failed to generate PDF for broadcast authorization ${id}`,
         );
-        return res.status(500).json({ message: 'Error generating PDF Buffer' });
+        return res.status(500).json({ message: 'Error generating PDF' });
       }
 
       // Set headers for PDF download
