@@ -14,14 +14,12 @@ export class BroadcastAuthorization extends BaseSchema {
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'Invoice',
-    required: true,
   })
   invoice: MongooseSchema.Types.ObjectId;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'Campaign',
-    required: true,
   })
   campaign: MongooseSchema.Types.ObjectId;
 
@@ -60,7 +58,7 @@ export class BroadcastAuthorization extends BaseSchema {
   @Prop([String])
   hours: string[];
 
-  @Prop([String])
+  @Prop()
   realHours: string[];
 
   @Prop()
@@ -69,10 +67,10 @@ export class BroadcastAuthorization extends BaseSchema {
   @Prop()
   description: string;
 
-  @Prop([String])
+  @Prop()
   participants: string[];
 
-  @Prop([String])
+  @Prop()
   questions: string[];
 
   @Prop()

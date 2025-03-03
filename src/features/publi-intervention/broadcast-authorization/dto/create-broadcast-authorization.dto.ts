@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsString,
   IsNotEmpty,
@@ -14,12 +14,12 @@ export class CreateBroadcastAuthorizationDto {
   @IsNotEmpty()
   announcer: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsNotEmpty()
-  invoice: string;
+  invoice?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsNotEmpty()
   campaign: string;
@@ -29,22 +29,22 @@ export class CreateBroadcastAuthorizationDto {
   @IsNotEmpty()
   nature: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   natureDescription: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsDate()
   @IsOptional()
   date: Date;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsDate()
   @IsOptional()
   startDate: Date;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsDate()
   @IsOptional()
   endDate: Date;
@@ -64,17 +64,17 @@ export class CreateBroadcastAuthorizationDto {
   @IsOptional()
   hour: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsArray()
   @IsOptional()
   hours: string[];
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsArray()
   @IsOptional()
   realHours: string[];
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   realHour: string;
@@ -84,47 +84,47 @@ export class CreateBroadcastAuthorizationDto {
   @IsOptional()
   description: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsArray()
   @IsOptional()
   participants: string[];
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsArray()
   @IsOptional()
   questions: string[];
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   note: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   serviceInCharge: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   validator: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   adminValidator: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsNotEmpty()
   location: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsArray()
   @IsOptional()
   commercials: string[];
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   contactDetails: string;
@@ -134,22 +134,22 @@ export class CreateBroadcastAuthorizationDto {
   @IsOptional()
   productionPartner: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   otherProductionPartner: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   keyContact: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   otherKeyContact: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   contactDetailsToShow: string;

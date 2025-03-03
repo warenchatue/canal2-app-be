@@ -11,7 +11,9 @@ export class PdfService {
 
   async generatePdf(content: string): Promise<Readable | null> {
     try {
-      this.logger.debug('Generating PDF with content length: ' + content.length);
+      this.logger.debug(
+        'Generating PDF with content length: ' + content.length,
+      );
 
       // Prepend 'data:text/html,' to ensure wkhtmltopdf treats it as raw HTML
       const htmlContent = `data:text/html,${encodeURIComponent(content)}`;
@@ -49,7 +51,7 @@ export class PdfService {
     data: object,
   ): Promise<string> {
     try {
-      let file: string;
+      let file: string = undefined;
       const rootDir = path.resolve(process.cwd());
       let templatePath: string;
 
