@@ -16,10 +16,8 @@ export class PdfService {
       );
 
       // Prepend 'data:text/html,' to ensure wkhtmltopdf treats it as raw HTML
-      const htmlContent = `data:text/html,${encodeURIComponent(content)}`;
-
       // Use a type assertion to bypass TypeScript's type checking
-      const pdfStream = wkhtmltopdf(htmlContent as any, {
+      const pdfStream = wkhtmltopdf(content, {
         pageSize: 'A4',
         orientation: 'Portrait',
         dpi: 300,
