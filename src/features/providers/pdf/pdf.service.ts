@@ -43,8 +43,6 @@ export class PdfService {
 
   async generateTemplate(
     template:
-      | 'wo'
-      | 'o'
       | 'other'
       | 'broadcast-authorization'
       | 'broadcast-authorization-partner',
@@ -56,12 +54,6 @@ export class PdfService {
       let templatePath: string;
 
       switch (template) {
-        case 'wo':
-          templatePath = path.join(rootDir, 'templates/pdfs/wo.ejs');
-          break;
-        case 'o':
-          templatePath = path.join(rootDir, 'templates/pdfs/o.ejs');
-          break;
         case 'broadcast-authorization':
           templatePath = path.join(
             rootDir,
