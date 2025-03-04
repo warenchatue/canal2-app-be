@@ -111,6 +111,12 @@ export class BroadcastAuthorization extends BaseSchema {
 
   @Prop({ default: false })
   deleted: boolean;
+
+  @Prop({ default: false })
+  validated: boolean;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
+  validatedBy: MongooseSchema.Types.ObjectId;
 }
 
 export type BroadcastAuthorizationDocument = BroadcastAuthorization & Document;

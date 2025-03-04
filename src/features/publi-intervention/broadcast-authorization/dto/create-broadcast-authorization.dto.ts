@@ -6,6 +6,7 @@ import {
   IsDate,
   IsArray,
   IsNumber,
+  IsBoolean,
 } from 'class-validator';
 
 export class CreateBroadcastAuthorizationDto {
@@ -153,4 +154,14 @@ export class CreateBroadcastAuthorizationDto {
   @IsString()
   @IsOptional()
   contactDetailsToShow: string;
+
+  @ApiPropertyOptional()
+  @IsBoolean()
+  @IsOptional()
+  validated?: boolean;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  validatedBy?: string;
 }
