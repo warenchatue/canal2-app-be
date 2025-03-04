@@ -11,6 +11,8 @@ import {
   Logger,
   HttpStatus,
   HttpException,
+  Request,
+  ForbiddenException,
 } from '@nestjs/common';
 import { BroadcastAuthorizationService } from './broadcast-authorization.service';
 import { Response } from 'express';
@@ -274,6 +276,69 @@ export class BroadcastAuthorizationController extends BaseController {
           .status(500)
           .json({ message: 'Error generating PDF', error: error.message });
       }
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Post(':id/validate')
+  @ApiOperation({
+    summary: 'Validate a broadcast authorization (Admin and Super Admin only)',
+  })
+  @ApiParam({ name: 'id', description: 'Broadcast authorization ID' })
+  @ApiResponse({ status: 200, description: 'Successfully validated' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Insufficient permissions',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Broadcast authorization not found',
+  })
+  async validateAuthorization(@Param('id') id: string, @Request() req) {
+    try {
+      return await this.run(async () => {
+        // Get current user from the JWT token
+        const userId = req.user._id;
+
+        // Check if user has appRole with either 'admin' or 'super-admin' tag
+        const userRoleTag = req.user.appRole?.tag;
+
+        if (userRoleTag !== 'admin' && userRoleTag !== 'super-admin') {
+          this.logger.warn(
+            `Unauthorized validation attempt by user ${userId} with role ${userRoleTag}`,
+          );
+          throw new ForbiddenException(
+            'Only administrators can validate broadcast authorizations',
+          );
+        }
+
+        const result =
+          await this.broadcastAuthorizationService.validateAuthorization(
+            id,
+            userId,
+          );
+
+        if (!result) {
+          throw new HttpException(
+            'Broadcast authorization not found',
+            HttpStatus.NOT_FOUND,
+          );
+        }
+
+        this.event.emit('broadcast-authorization-validated', result);
+        return {
+          statusCode: 200,
+          message: 'Broadcast authorization validated successfully',
+          data: result,
+        };
+      });
+    } catch (error) {
+      this.logger.error(
+        `Error validating broadcast authorization ${id}: ${error.message}`,
+        error.stack,
+      );
+      sendError(error);
     }
   }
 }
