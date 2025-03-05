@@ -135,7 +135,7 @@ export class PdfService {
       }
 
       // For debugging: save the HTML content to a file
-      const debugPath = path.join(process.cwd(), 'debug_output.html');
+      const debugPath = path.join(process.cwd(), 'debug-output.html');
       fs.writeFileSync(debugPath, content);
       this.logger.debug(`Saved debug HTML to: ${debugPath}`);
 

@@ -10,7 +10,6 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
-debug_output.html
 
 # OS
 .DS_Store
@@ -38,3 +37,4 @@ debug_output.html
 # Custom
 .env*
 .eslintcache
+debug-output.html
