@@ -11,22 +11,42 @@
             background: #fff;
             margin: 0;
             padding: 20px;
+            color: #000;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
+            width: 794px; /* A4 width in pixels (approximate) */
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 30px;
+            margin-bottom: 60px;
         }
 
         .logo {
             max-width: 130px;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .header-text {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .header-address {
+            margin-bottom: 5px;
+        }
+
+        .header-email {
+            margin-bottom: 5px;
         }
 
         .reserved-section {
@@ -90,12 +110,49 @@
             border-bottom: 1px solid #000;
             height: 20px;
         }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 0;
+        }
+
+        .footer-text {
+            margin-bottom: 10px;
+        }
+
+        .footer-divider {
+            border-top: 2px solid #1b9e77;
+            margin: 15px auto;
+            width: 100%;
+        }
+
+        .footer-contact {
+            margin-bottom: 10px;
+        }
+
+        .footer-legal {
+            margin-bottom: 10px;
+            padding-top: 0;
+        }
+
+        .page-number {
+            text-align: right;
+            margin-top: 15px;
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header from the previous document -->
         <div class="header">
             <img src="<%= typeof logoUrl !== 'undefined' ? logoUrl : '' %>" alt="Canal 2 International" class="logo">
+            <div class="header-right">
+                <div class="header-text">Canal2 International</div>
+                <div class="header-address">Siège social: Avenue de l'indépendance, derrière le monument du cinquantenaire</div>
+                <div class="header-email">Courriel : dircom@cana2international.net</div>
+            </div>
         </div>
 
         <div class="reserved-section">
@@ -181,6 +238,16 @@
                 <div class="form-field-line"></div>
             </div>
         </div>
+
+        <!-- Footer from the previous document -->
+        <div class="footer">
+            <div class="footer-text">Toute l'équipe de Canal2 International vous dit merci !</div>
+            <div class="footer-divider"></div>
+            <div class="footer-contact">Téléphone : (+237) 657797171 / 672676799 . https://www.canal2international.net</div>
+            <div class="footer-legal">N° Contribuable: M030300016713S - RC: 2003B224 ;</div>
+        </div>
+
+        <div class="page-number">Page 1/1</div>
     </div>
 </body>
 </html>
