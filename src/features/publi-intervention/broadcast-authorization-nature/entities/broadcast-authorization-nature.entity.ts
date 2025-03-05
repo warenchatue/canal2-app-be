@@ -11,6 +11,9 @@ export class BroadcastAuthorizationNature extends BaseSchema {
   @Prop({ required: true })
   type: string;
 
+  @Prop({ required: false })
+  code: string;
+
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'TvProgram',
