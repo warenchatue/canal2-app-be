@@ -79,11 +79,11 @@ export class BroadcastAuthorization extends BaseSchema {
   @Prop()
   serviceInCharge: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
-  validator: MongooseSchema.Types.ObjectId;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Org' })
+  org: MongooseSchema.Types.ObjectId;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
-  adminValidator: MongooseSchema.Types.ObjectId;
+  validator: MongooseSchema.Types.ObjectId;
 
   @Prop({ required: true })
   location: string;
