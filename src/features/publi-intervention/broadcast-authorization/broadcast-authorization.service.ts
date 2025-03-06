@@ -38,8 +38,8 @@ export class BroadcastAuthorizationService extends ServiceDeleteAbstract<Broadca
         { path: 'campaign', model: 'Campaign' },
         { path: 'nature', model: 'BroadcastAuthorizationNature' },
         { path: 'paymentMethod', model: 'PaymentMethod' },
+        { path: 'org', model: 'Org' },
         { path: 'validator', model: 'User' },
-        { path: 'adminValidator', model: 'User' },
         { path: 'commercials', model: 'User' },
       ])
       .where('state')
@@ -56,8 +56,8 @@ export class BroadcastAuthorizationService extends ServiceDeleteAbstract<Broadca
         { path: 'campaign', model: 'Campaign' },
         { path: 'nature', model: 'BroadcastAuthorizationNature' },
         { path: 'paymentMethod', model: 'PaymentMethod' },
+        { path: 'org', model: 'Org' },
         { path: 'validator', model: 'User' },
-        { path: 'adminValidator', model: 'User' },
         { path: 'commercials', model: 'User' },
       ])
       .lean()
@@ -73,8 +73,8 @@ export class BroadcastAuthorizationService extends ServiceDeleteAbstract<Broadca
         { path: 'campaign', model: 'Campaign' },
         { path: 'nature', model: 'BroadcastAuthorizationNature' },
         { path: 'paymentMethod', model: 'PaymentMethod' },
+        { path: 'org', model: 'Org' },
         { path: 'validator', model: 'User' },
-        { path: 'adminValidator', model: 'User' },
         { path: 'commercials', model: 'User' },
       ])
       .orFail()
@@ -107,8 +107,8 @@ export class BroadcastAuthorizationService extends ServiceDeleteAbstract<Broadca
         { path: 'campaign', model: 'Campaign' },
         { path: 'nature', model: 'BroadcastAuthorizationNature' },
         { path: 'paymentMethod', model: 'PaymentMethod' },
+        { path: 'org', model: 'Org' },
         { path: 'validator', model: 'User' },
-        { path: 'adminValidator', model: 'User' },
         { path: 'commercials', model: 'User' },
         { path: 'validatedBy', model: 'User' },
       ])

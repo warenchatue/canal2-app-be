@@ -108,12 +108,12 @@ export class CreateBroadcastAuthorizationDto {
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  validator: string;
+  org: string;
 
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  adminValidator: string;
+  validator: string;
 
   @ApiPropertyOptional()
   @IsString()

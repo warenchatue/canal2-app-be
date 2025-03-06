@@ -15,5 +15,10 @@ export class CreateBroadcastAuthorizationNatureDto {
   @ApiProperty()
   @IsString()
   @IsOptional()
+  code: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
   program_id: string;
 }
