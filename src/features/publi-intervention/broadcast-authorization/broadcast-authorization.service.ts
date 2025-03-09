@@ -47,6 +47,18 @@ export class BroadcastAuthorizationService extends ServiceDeleteAbstract<Broadca
       .exec();
   }
 
+  findAllLightNP(states = [State.active]) {
+    const BroadCasAuthFilter = {
+      ...{ state: { $in: states } },
+      campaign: { $exists: true, $ne: null },
+    };
+    return this.broadcastAuthorization
+      .find(BroadCasAuthFilter)
+      .select('campaign')
+      .lean() // "Converts the results into native JavaScript objects (faster)." 🚀
+      .then((results) => results.map((doc) => doc.campaign.toString()));
+  }
+
   findAll() {
     return this.broadcastAuthorization
       .find({ deleted: false })

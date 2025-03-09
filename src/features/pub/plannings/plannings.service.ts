@@ -7,11 +7,19 @@ import { CreatePlanningDto } from './dto/create-planning.dto';
 import { UpdatePlanningDto } from './dto/update-planning.dto';
 import { Planning, PlanningDocument } from './entities/planning.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import {
+  Product,
+  ProductDocument,
+  ProductType,
+} from 'src/features/products/entities/product.entity';
 @Injectable()
 export class PlanningsService extends DeletableMixin<Planning> {
   constructor(
     @InjectModel(Planning.name)
     private readonly plannings: Model<PlanningDocument>,
+    @InjectModel(Product.name)
+    private readonly products: Model<ProductDocument>,
+
     private readonly event: EventEmitter2,
   ) {
     super();
@@ -81,6 +89,87 @@ export class PlanningsService extends DeletableMixin<Planning> {
       .find()
       .where('state')
       .in(states)
+      .populate([
+        {
+          path: 'hour',
+          model: 'Hour',
+        },
+        {
+          path: 'tvProgram',
+          model: 'TvProgram',
+        },
+        {
+          path: 'product',
+          model: 'Product',
+          populate: {
+            path: 'package',
+            model: 'Campaign',
+            populate: [
+              {
+                path: 'creator',
+                model: 'User',
+              },
+              {
+                path: 'manager',
+                model: 'User',
+              },
+              {
+                path: 'announcer',
+                model: 'Announcer',
+              },
+              {
+                path: 'order',
+                model: 'Order',
+                populate: [
+                  {
+                    path: 'announcer',
+                    model: 'Announcer',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ])
+      .exec();
+  }
+
+  async findFilter(
+    states: State[] = [State.active],
+    campaignIds: string[] = [],
+  ) {
+    // Define planningFilter with an explicit type
+    const planningFilter: {
+      state: { $in: State[] };
+      product?: { $in: string[] };
+    } = {
+      state: { $in: states },
+    };
+
+    if (Array.isArray(campaignIds) && campaignIds.length) {
+      // Step 1: Find products linked to the specified campaignIds
+      const productIds = await this.products
+        .find({
+          package: { $in: campaignIds },
+          type: { $nin: [ProductType.BA, ProductType.SPOT] },
+        })
+        .select('_id')
+        .lean()
+        .then((results) => results.map((doc) => doc._id.toString()));
+
+      console.log(productIds);
+
+      if (productIds.length) {
+        // Step 2: Add product filter dynamically
+        planningFilter.product = { $in: productIds };
+      }
+      console.log(planningFilter);
+    }
+
+    // Step 3: Fetch plannings with population
+    return this.plannings
+      .find()
+      .where(planningFilter)
       .populate([
         {
           path: 'hour',

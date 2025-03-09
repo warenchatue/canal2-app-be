@@ -7,6 +7,8 @@ export enum ProductType {
   BA = 'BA',
   SPOT = 'SPOT',
   TvProgram = 'TvProgram',
+  PUBR = 'PUBR',
+  PAD = 'PAD',
 }
 
 @Schema({ timestamps: true })

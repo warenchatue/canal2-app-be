@@ -23,6 +23,8 @@ import { getNotPlayDto } from './dto/get-not-play';
 import { autoValidatePlanningDto } from './dto/auto-validate.dto';
 import { PackagesService } from '../packages/packages.service';
 import { manualValidatePlanningDto } from './dto/manual-validate.dto';
+import { BroadcastAuthorizationService } from '../../publi-intervention/broadcast-authorization/broadcast-authorization.service';
+import { State } from 'src/common/shared/base-schema';
 
 @Controller('plannings')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -31,6 +33,7 @@ export class PlanningsController extends BaseController {
   constructor(
     private readonly planningsService: PlanningsService,
     private readonly packagesService: PackagesService,
+    private readonly broadcastAuthorizationService: BroadcastAuthorizationService,
   ) {
     super();
   }
@@ -59,10 +62,36 @@ export class PlanningsController extends BaseController {
 
   @ApiBearerAuth()
   @UseJwt()
+  @Get('publi/today')
+  async getPlanningPUBLIToday() {
+    return this.getPlannings(false, true, true);
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
+  @Get('all/publi')
+  async getPlanningAllPUBLI() {
+    return this.getPlannings(false, false, true);
+  }
+
+  @ApiBearerAuth()
+  @UseJwt()
   @Get()
-  async getPlannings(isStat = false, isToday = false) {
+  async getPlannings(isStat = false, isToday = false, isPUBLI = false) {
     return await this.run(async () => {
-      let result = await this.planningsService.find();
+      let result;
+      if (isPUBLI) {
+        const broadcastAuthorizationCampaigns =
+          await this.broadcastAuthorizationService.findAllLightNP();
+        console.log(broadcastAuthorizationCampaigns);
+        result = await this.planningsService.findFilter(
+          [State.active],
+          broadcastAuthorizationCampaigns,
+        );
+        console.log(result);
+      } else {
+        result = await this.planningsService.find();
+      }
       if (isToday) {
         result = result.filter((e) => {
           return (
