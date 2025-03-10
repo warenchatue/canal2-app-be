@@ -29,6 +29,13 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
+      # Step to remove Docker-related files
+      - name: Remove Docker files
+        run: |
+          find . -name "Dockerfile*" -exec rm -f {} +
+          find . -name ".dockerignore" -exec rm -f {} +
+          find . -name "docker-compose*.yml" -exec rm -f {} +
+
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
 
@@ -71,4 +78,3 @@ jobs:
           app-name: 'canal2-diffusion-backend'
           slot-name: 'Production'
           package: .
-          
